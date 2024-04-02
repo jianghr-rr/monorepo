@@ -4,6 +4,9 @@
     "pipeline": {
       "test": {},
       "test-unit": {},
+      "lint": {
+        "env": ["TIMING"]
+      },
       "lint-styles": {},
       "typecheck": {},
       "build-storybook": {},

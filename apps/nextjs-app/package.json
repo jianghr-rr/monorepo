@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.cjs,.mjs,.mdx,.graphql --cache --cache-location ../../.cache/eslint/nextjs-app.eslintcache"
   },
   "dependencies": {
     "react": "^18",
@@ -14,6 +14,10 @@
     "next": "14.1.4"
   },
   "devDependencies": {
+    "@emotion/cache": "11.11.0",
+    "@emotion/react": "11.11.4",
+    "@emotion/server": "11.11.0",
+    "@emotion/styled": "11.11.0",
     "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
@@ -22,6 +26,7 @@
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "eslint": "^8",
-    "eslint-config-next": "14.1.4"
+    "eslint-config-next": "14.1.4",
+    "@bid-np/eslint-config-bases": "workspace:*"
   }
 }
