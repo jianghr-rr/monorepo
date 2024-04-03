@@ -9,24 +9,41 @@
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.cjs,.mjs,.mdx,.graphql --cache --cache-location ../../.cache/eslint/nextjs-app.eslintcache"
   },
   "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.1.4"
+    "picocolors": "1.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "next": "14.1.4",
+    "next-auth": "4.24.7",
+    "i18next": "23.10.1",
+    "next-i18next": "15.2.0",
+    "react-i18next": "14.1.0",
+    "zod": "3.22.4"
   },
   "devDependencies": {
+    "@bid-np/common-i18n": "workspace:^",
+    "@bid-np/eslint-config-bases": "workspace:*",
     "@emotion/cache": "11.11.0",
     "@emotion/react": "11.11.4",
     "@emotion/server": "11.11.0",
     "@emotion/styled": "11.11.0",
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10.0.1",
-    "postcss": "^8",
-    "tailwindcss": "^3.3.0",
-    "eslint": "^8",
+    "@types/node": "20.11.30",
+    "@types/react": "18.2.73",
+    "@types/react-dom": "18.2.22",
+    "@httpx/assert": "0.7.0",
+    "@httpx/dsn-parser": "1.7.0",
+    "@httpx/exception": "3.0.5",
+    "@httpx/json-api": "0.5.18",
+    "@mui/icons-material": "5.15.14",
+    "@mui/material": "5.15.14",
+    "@tanstack/react-query": "5.28.9",
+    "autoprefixer": "10.4.19",
+    "postcss": "8.4.38",
+    "rooks": "7.14.1",
+    "tailwindcss": "3.4.3",
+    "typescript": "5.4.3",
+    "next-seo": "6.5.0",
+    "eslint": "8.57.0",
     "eslint-config-next": "14.1.4",
-    "@bid-np/eslint-config-bases": "workspace:*"
+    "eslint-plugin-tailwindcss": "3.15.1"
   }
 }

@@ -17,7 +17,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: 'tsconfig.json',
   },
-  ignorePatterns: [...getDefaultIgnorePatterns(), '.next', '.out', ".eslintrc.cjs", "vite.config.ts"],
+  ignorePatterns: [...getDefaultIgnorePatterns(), '.next', '.out'],
   extends: [
     '@bid-np/eslint-config-bases/typescript',
     '@bid-np/eslint-config-bases/sonar',

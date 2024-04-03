@@ -24,6 +24,10 @@
       "@/pages/*": ["./pages/*"],
       "@/public/*": ["../public/*"],
       "@/themes/*": ["./themes/*"],
+      "@bid-ng/common-i18n": ["../../../packages/common-i18n/src/index"],
+      "@bid-ng/common-i18n/locales/*": [
+        "../../../packages/common-i18n/src/locales/*"
+      ],
     },
     // "types": ["vitest/globals", "@testing-library/jest-dom/vitest"]
   },
