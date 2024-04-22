@@ -7,7 +7,8 @@
  * unknown[] 或 any[] 表示数组，
  * (...args: any[]) => any表示函数这样。
  * 
- * 我们同样要避免使用{}。{}意味着任何非 null / undefined 的值，从这个层面上看，使用它和使用 any 一样恶劣。
+ * 我们同样要避免使用{}。
+ * {}意味着任何非 null / undefined 的值，从这个层面上看，使用它和使用 any 一样恶劣。
  */
 // const tmp1: Object = undefined;
 // const tmp2: Object = null;
