@@ -20,37 +20,40 @@
       "~/*": [
         "./*"
       ],
-      "~/app/*": [
+      "app/*": [
         "./app/*"
       ],
-      "~/test-utils": [
+      "test-utils": [
         "../config/tests/test-utils"
       ],
-      "~/config/*": [
+      "config/*": [
         "./config/*"
       ],
-      "~/lib/*": [
+      "lib/*": [
         "./lib/*"
       ],
-      "~/components/*": [
+      "components/*": [
         "./components/*"
       ],
-      "~/server/*": [
+      "ui/*": [
+        "./components/ui/*"
+      ],
+      "server/*": [
         "./server/*"
       ],
-      "~/features/*": [
+      "features/*": [
         "./features/*"
       ],
-      "~/layouts/*": [
+      "layouts/*": [
         "./layouts/*"
       ],
-      "~/pages/*": [
+      "pages/*": [
         "./pages/*"
       ],
-      "~/public/*": [
+      "public/*": [
         "../public/*"
       ],
-      "~/themes/*": [
+      "themes/*": [
         "./themes/*"
       ],
       "@bid-ng/common-i18n": [
@@ -69,7 +72,8 @@
   },
   "exclude": [
     "**/node_modules",
-    "**/.*/*"
+    "**/.*/*",
+    "./components/ui"
   ],
   "include": [
     ".eslintrc.*",
