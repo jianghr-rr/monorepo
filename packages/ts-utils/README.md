@@ -16,7 +16,7 @@ A package holding some basic typescript utilities: typeguards, assertions...
 From any package or apps:
 
 ```bash
-yarn add @your-org/ts-utils@"workspace:^"
+yarn add @your-org/ts-utils@"workspace:*"
 ```
 
 ## Enable aliases

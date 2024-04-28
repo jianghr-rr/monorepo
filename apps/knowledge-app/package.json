@@ -1,11 +1,11 @@
 {
-  "name": "nextjs-app",
+  "name": "knowledge-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "next dev -p 4001",
+    "build": "next build -p 4001",
+    "start": "next start -p 4001",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.cjs,.mjs,.mdx,.graphql --cache --cache-location ../../.cache/eslint/nextjs-app.eslintcache"
   },
   "dependencies": {
@@ -20,12 +20,7 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
-    "@bid-np/common-i18n": "workspace:*",
     "@bid-np/eslint-config-bases": "workspace:*",
-    "@emotion/cache": "11.11.0",
-    "@emotion/react": "11.11.4",
-    "@emotion/server": "11.11.0",
-    "@emotion/styled": "11.11.0",
     "@types/node": "20.11.30",
     "@types/react": "18.2.73",
     "@types/react-dom": "18.2.22",

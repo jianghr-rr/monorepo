@@ -16,7 +16,7 @@ organization into namespaces fits well with i18next/react-i18next/next-18next.
 Add the workspace dependency to the consuming app or package.
 
 ```bash
-yarn add @your-org/common-locales:"workspace:^"
+yarn add @your-org/common-locales:"workspace:*"
 ```
 
 Add the paths in the app tsconfig.json.

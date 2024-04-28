@@ -43,9 +43,135 @@ importers:
       turbo: 1.13.0
       typescript: 5.4.3
 
+  apps/knowledge-app:
+    specifiers:
+      '@bid-np/eslint-config-bases': workspace:*
+      '@httpx/assert': 0.7.0
+      '@httpx/dsn-parser': 1.7.0
+      '@httpx/exception': 3.0.5
+      '@httpx/json-api': 0.5.18
+      '@mui/icons-material': 5.15.14
+      '@mui/material': 5.15.14
+      '@tanstack/react-query': 5.28.9
+      '@types/node': 20.11.30
+      '@types/react': 18.2.73
+      '@types/react-dom': 18.2.22
+      autoprefixer: 10.4.19
+      eslint: 8.57.0
+      eslint-config-next: 14.1.4
+      eslint-plugin-tailwindcss: 3.15.1
+      i18next: 23.10.1
+      next: 14.1.4
+      next-auth: 4.24.7
+      next-i18next: 15.2.0
+      next-seo: 6.5.0
+      picocolors: 1.0.0
+      postcss: 8.4.38
+      react: 18.2.0
+      react-dom: 18.2.0
+      react-i18next: 14.1.0
+      rooks: 7.14.1
+      tailwindcss: 3.4.3
+      typescript: 5.4.3
+      zod: 3.22.4
+    dependencies:
+      i18next: 23.10.1
+      next: 14.1.4_biqbaboplfbrettd7655fr4n2y
+      next-auth: 4.24.7_h6dj7hpgrjuca5cqek3dk6bqim
+      next-i18next: 15.2.0_p255ezx5tqibbskogbe625lmvq
+      picocolors: 1.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-i18next: 14.1.0_7a5hznwdpdzuvqpxb6t6vb3lom
+      zod: 3.22.4
+    devDependencies:
+      '@bid-np/eslint-config-bases': link:../../packages/eslint-config-bases
+      '@httpx/assert': 0.7.0
+      '@httpx/dsn-parser': 1.7.0
+      '@httpx/exception': 3.0.5
+      '@httpx/json-api': 0.5.18
+      '@mui/icons-material': 5.15.14_k7jfwvhcfgsgkvxu22pyntnaqm
+      '@mui/material': 5.15.14_jpxe6q6pjdlfydiod746fxru2y
+      '@tanstack/react-query': 5.28.9_react@18.2.0
+      '@types/node': 20.11.30
+      '@types/react': 18.2.73
+      '@types/react-dom': 18.2.22
+      autoprefixer: 10.4.19_postcss@8.4.38
+      eslint: 8.57.0
+      eslint-config-next: 14.1.4_etjje6qigiul5ehv6jbvvk4jai
+      eslint-plugin-tailwindcss: 3.15.1_tailwindcss@3.4.3
+      next-seo: 6.5.0_h6dj7hpgrjuca5cqek3dk6bqim
+      postcss: 8.4.38
+      rooks: 7.14.1_biqbaboplfbrettd7655fr4n2y
+      tailwindcss: 3.4.3
+      typescript: 5.4.3
+
+  apps/main-app:
+    specifiers:
+      '@bid-np/eslint-config-bases': workspace:*
+      '@httpx/assert': 0.7.0
+      '@httpx/dsn-parser': 1.7.0
+      '@httpx/exception': 3.0.5
+      '@httpx/json-api': 0.5.18
+      '@mui/icons-material': 5.15.14
+      '@mui/material': 5.15.14
+      '@tanstack/react-query': 5.28.9
+      '@types/node': 20.11.30
+      '@types/react': 18.2.73
+      '@types/react-dom': 18.2.22
+      autoprefixer: 10.4.19
+      eslint: 8.57.0
+      eslint-config-next: 14.1.4
+      eslint-plugin-tailwindcss: 3.15.1
+      i18next: 23.10.1
+      next: 14.1.4
+      next-auth: 4.24.7
+      next-i18next: 15.2.0
+      next-seo: 6.5.0
+      picocolors: 1.0.0
+      postcss: 8.4.38
+      react: 18.2.0
+      react-dom: 18.2.0
+      react-i18next: 14.1.0
+      rooks: 7.14.1
+      tailwindcss: 3.4.3
+      typescript: 5.4.3
+      zod: 3.22.4
+    dependencies:
+      i18next: 23.10.1
+      next: 14.1.4_biqbaboplfbrettd7655fr4n2y
+      next-auth: 4.24.7_h6dj7hpgrjuca5cqek3dk6bqim
+      next-i18next: 15.2.0_p255ezx5tqibbskogbe625lmvq
+      picocolors: 1.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-i18next: 14.1.0_7a5hznwdpdzuvqpxb6t6vb3lom
+      zod: 3.22.4
+    devDependencies:
+      '@bid-np/eslint-config-bases': link:../../packages/eslint-config-bases
+      '@httpx/assert': 0.7.0
+      '@httpx/dsn-parser': 1.7.0
+      '@httpx/exception': 3.0.5
+      '@httpx/json-api': 0.5.18
+      '@mui/icons-material': 5.15.14_k7jfwvhcfgsgkvxu22pyntnaqm
+      '@mui/material': 5.15.14_jpxe6q6pjdlfydiod746fxru2y
+      '@tanstack/react-query': 5.28.9_react@18.2.0
+      '@types/node': 20.11.30
+      '@types/react': 18.2.73
+      '@types/react-dom': 18.2.22
+      autoprefixer: 10.4.19_postcss@8.4.38
+      eslint: 8.57.0
+      eslint-config-next: 14.1.4_etjje6qigiul5ehv6jbvvk4jai
+      eslint-plugin-tailwindcss: 3.15.1_tailwindcss@3.4.3
+      next-seo: 6.5.0_h6dj7hpgrjuca5cqek3dk6bqim
+      postcss: 8.4.38
+      rooks: 7.14.1_biqbaboplfbrettd7655fr4n2y
+      tailwindcss: 3.4.3
+      typescript: 5.4.3
+
   apps/nextjs-app:
     specifiers:
-      '@bid-np/common-i18n': workspace:^
+      '@bid-np/common-i18n': workspace:*
       '@bid-np/eslint-config-bases': workspace:*
       '@emotion/cache': 11.11.0
       '@emotion/react': 11.11.4
@@ -142,7 +268,7 @@ importers:
 
   packages/common-i18n:
     specifiers:
-      '@bid-np/eslint-config-bases': workspace:^
+      '@bid-np/eslint-config-bases': workspace:*
       '@types/node': 20.11.30
       cross-env: 7.0.3
       eslint: 8.57.0
@@ -237,7 +363,7 @@ importers:
 
   packages/ts-utils:
     specifiers:
-      '@bid-np/eslint-config-bases': workspace:^
+      '@bid-np/eslint-config-bases': workspace:*
       '@size-limit/file': 11.1.2
       '@types/node': 20.11.30
       '@vitest/coverage-v8': 1.4.0
@@ -2020,9 +2146,43 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.24.4
-      '@mui/material': 5.15.14_mwaqwnj3ik52tevqlpvt2l73ja
+      '@mui/material': 5.15.14_jpxe6q6pjdlfydiod746fxru2y
       '@types/react': 18.2.73
       react: 18.2.0
+    dev: true
+
+  /@mui/material/5.15.14_jpxe6q6pjdlfydiod746fxru2y:
+    resolution: {integrity: sha512-kEbRw6fASdQ1SQ7LVdWR5OlWV3y7Y54ZxkLzd6LV5tmz+NpO3MJKZXSfgR0LHMP7meKsPiMm4AuzV0pXDpk/BQ==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      '@emotion/react': ^11.5.0
+      '@emotion/styled': ^11.3.0
+      '@types/react': ^17.0.0 || ^18.0.0
+      react: ^17.0.0 || ^18.0.0
+      react-dom: ^17.0.0 || ^18.0.0
+    peerDependenciesMeta:
+      '@emotion/react':
+        optional: true
+      '@emotion/styled':
+        optional: true
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.24.4
+      '@mui/base': 5.0.0-beta.40_jpxe6q6pjdlfydiod746fxru2y
+      '@mui/core-downloads-tracker': 5.15.15
+      '@mui/system': 5.15.15_glxuhseaxnynb3wl34vdbiopru
+      '@mui/types': 7.2.14_@types+react@18.2.73
+      '@mui/utils': 5.15.14_glxuhseaxnynb3wl34vdbiopru
+      '@types/react': 18.2.73
+      '@types/react-transition-group': 4.4.10
+      clsx: 2.1.0
+      csstype: 3.1.3
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-is: 18.2.0
+      react-transition-group: 4.4.5_biqbaboplfbrettd7655fr4n2y
     dev: true
 
   /@mui/material/5.15.14_mwaqwnj3ik52tevqlpvt2l73ja:
@@ -2100,6 +2260,26 @@ packages:
       react: 18.2.0
     dev: true
 
+  /@mui/styled-engine/5.15.14_react@18.2.0:
+    resolution: {integrity: sha512-RILkuVD8gY6PvjZjqnWhz8fu68dVkqhM5+jYWfB5yhlSQKg+2rHkmEwm75XIeAqI3qwOndK6zELK5H6Zxn4NHw==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      '@emotion/react': ^11.4.1
+      '@emotion/styled': ^11.3.0
+      react: ^17.0.0 || ^18.0.0
+    peerDependenciesMeta:
+      '@emotion/react':
+        optional: true
+      '@emotion/styled':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.24.4
+      '@emotion/cache': 11.11.0
+      csstype: 3.1.3
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: true
+
   /@mui/system/5.15.15_e6qtnkfy2x67ie426olmhyx5ii:
     resolution: {integrity: sha512-aulox6N1dnu5PABsfxVGOZffDVmlxPOVgj56HrUnJE8MCSh8lOvvkd47cebIVQQYAjpwieXQXiDPj5pwM40jTQ==}
     engines: {node: '>=12.0.0'}
@@ -2121,6 +2301,34 @@ packages:
       '@emotion/styled': 11.11.0_xfkd4dvrz3a5v3iij734l3bwmm
       '@mui/private-theming': 5.15.14_glxuhseaxnynb3wl34vdbiopru
       '@mui/styled-engine': 5.15.14_du4nnvrnrjyzg4oqgc4iw4l76a
+      '@mui/types': 7.2.14_@types+react@18.2.73
+      '@mui/utils': 5.15.14_glxuhseaxnynb3wl34vdbiopru
+      '@types/react': 18.2.73
+      clsx: 2.1.0
+      csstype: 3.1.3
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: true
+
+  /@mui/system/5.15.15_glxuhseaxnynb3wl34vdbiopru:
+    resolution: {integrity: sha512-aulox6N1dnu5PABsfxVGOZffDVmlxPOVgj56HrUnJE8MCSh8lOvvkd47cebIVQQYAjpwieXQXiDPj5pwM40jTQ==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      '@emotion/react': ^11.5.0
+      '@emotion/styled': ^11.3.0
+      '@types/react': ^17.0.0 || ^18.0.0
+      react: ^17.0.0 || ^18.0.0
+    peerDependenciesMeta:
+      '@emotion/react':
+        optional: true
+      '@emotion/styled':
+        optional: true
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.24.4
+      '@mui/private-theming': 5.15.14_glxuhseaxnynb3wl34vdbiopru
+      '@mui/styled-engine': 5.15.14_react@18.2.0
       '@mui/types': 7.2.14_@types+react@18.2.73
       '@mui/utils': 5.15.14_glxuhseaxnynb3wl34vdbiopru
       '@types/react': 18.2.73
@@ -2614,7 +2822,7 @@ packages:
   /@types/conventional-commits-parser/5.0.0:
     resolution: {integrity: sha512-loB369iXNmAZglwWATL+WRe+CRMmmBPtpolYzIebFaX4YA3x+BEfLqhUAV9WanycKI3TG1IMr5bMJDajDKLlUQ==}
     dependencies:
-      '@types/node': 18.0.2
+      '@types/node': 20.11.30
     dev: true
 
   /@types/debug/4.1.12:
