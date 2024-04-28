@@ -22,3 +22,17 @@ export default function RootLayout({
     </html>
   );
 }
+
+// function render() {}
+
+// // 独立运行时
+// if (typeof window === 'object' && !window.__POWERED_BY_QIANKUN__) {
+//   render();
+// }
+
+// export async function bootstrap() {
+//   console.log('next app bootstraped');
+// }
+
+// export async function mount(props) {}
+// export async function unmount(props) {}

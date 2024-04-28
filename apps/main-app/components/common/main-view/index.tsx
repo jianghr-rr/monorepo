@@ -1,4 +1,6 @@
+'use client';
 import type { AppMetadata } from 'qiankun';
+import { useEffect } from 'react';
 
 import { Microconfig } from '~/micro/register-micro-apps-config';
 
@@ -32,7 +34,9 @@ export default function Main(props: Props) {
     });
   };
 
-  register().catch(console.error);
+  useEffect(() => {
+    register().catch(console.error);
+  }, []);
 
   return <main id="mainView">{props.children}</main>;
 }
