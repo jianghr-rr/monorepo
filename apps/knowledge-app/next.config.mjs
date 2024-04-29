@@ -1,19 +1,10 @@
 /** @type {import('next').NextConfig} */
-const packageName = 'knowledge';
 
 const nextConfig = {
-  //   assetPrefix: process.env.ASSET_PREFIX || '', // 子应用的资源路径，
+  assetPrefix: process.env.ASSET_PREFIX || 'http://localhost:4001', // 子应用的资源路径，
   //   reactStrictMode: true,
   //   swcMinify: true,
   //   crossOrigin: 'anonymous',
-  webpack: (config) => {
-    // config.output.library = `${packageName}-[name]`;
-    // config.output.libraryTarget = 'umd';
-    config.output.chunkLoadingGlobal = `webpackJsonp_${packageName}`;
-
-    return config;
-  },
-
   //   webpack: (
   //     config,
   //     { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }
@@ -54,27 +45,3 @@ const nextConfig = {
 };
 
 export default nextConfig;
-
-// /** @type {import('next').NextConfig} */
-
-// const packageName = 'knowledge';
-
-// const nextConfig = {
-//   webpack: (
-//     config,
-//     { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }
-//   ) => {
-//     // Important: return the modified config
-//     config.webpack = {
-//       ...config.webpack,
-//       output: {
-//         library: `${packageName}-[name]`,
-//         libraryTarget: 'umd',
-//         chunkLoadingGlobal: `webpackJsonp_${packageName}`,
-//       },
-//     };
-//     return config;
-//   },
-// };
-
-// export default nextConfig;
