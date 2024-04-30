@@ -23,7 +23,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)', // 适用所有路由
+        source: '/:path*', // 适用所有路由
         headers: [
           {
             key: 'Content-Security-Policy',
@@ -33,7 +33,10 @@ const nextConfig = {
             key: 'Access-Control-Allow-Origin',
             value: '*',
           },
-          { key: 'Access-Control-Allow-Methods', value: 'GET,POST,OPTIONS' },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET,POST,OPTIONS',
+          },
           {
             key: 'Access-Control-Allow-Headers',
             value: 'Origin, X-Requested-With, Content-Type, Accept',
