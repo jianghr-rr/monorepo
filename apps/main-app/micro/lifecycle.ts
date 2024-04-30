@@ -1,0 +1,25 @@
+interface AppWindow extends Window {
+  __WUJIE: {
+    id: string;
+  };
+}
+
+const lifecycles = {
+  beforeLoad: (appWindow: AppWindow) =>
+    console.log(`${appWindow.__WUJIE.id} beforeLoad 生命周期`),
+  beforeMount: (appWindow: AppWindow) =>
+    console.log(`${appWindow.__WUJIE.id} beforeMount 生命周期`),
+  afterMount: (appWindow: AppWindow) =>
+    console.log(`${appWindow.__WUJIE.id} afterMount 生命周期`),
+  beforeUnmount: (appWindow: AppWindow) =>
+    console.log(`${appWindow.__WUJIE.id} beforeUnmount 生命周期`),
+  afterUnmount: (appWindow: AppWindow) =>
+    console.log(`${appWindow.__WUJIE.id} afterUnmount 生命周期`),
+  activated: (appWindow: AppWindow) =>
+    console.log(`${appWindow.__WUJIE.id} activated 生命周期`),
+  deactivated: (appWindow: AppWindow) =>
+    console.log(`${appWindow.__WUJIE.id} deactivated 生命周期`),
+  loadError: (url: string, e: Error) => console.log(`${url} 加载失败`, e),
+};
+
+export default lifecycles;
