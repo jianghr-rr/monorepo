@@ -1,49 +1,59 @@
-'use client';
+// 'use client';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { useEffect } from 'react';
-import WujieReact from 'wujie-react';
+// import { useEffect } from 'react';
+// import WujieReact from 'wujie-react';
 import HomeNav from '~/components/home-nav';
-import hostMap from '~/micro/hostmap';
-import lifecycle from '~/micro/lifecycle';
-import plugins from '~/micro/plugin';
+// import db from '~/db/db'; // 导入数据库连接模块
+// import hostMap from '~/micro/hostmap';
+// import lifecycle from '~/micro/lifecycle';
+// import plugins from '~/micro/plugin';
 // const { setupApp, preloadApp } = WujieReact;
 // const isProduction = process.env.NODE_ENV === 'production';
 // bus.$on('click', (msg) => window.alert(msg));
 
 function Home() {
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const degrade =
-        window.localStorage.getItem('degrade') === 'true' ||
-        !window.Proxy ||
-        !window.CustomElementRegistry;
-      const { setupApp, preloadApp } = WujieReact;
-      /**
-       * 配置应用，主要是设置默认配置
-       * preloadApp、startApp的配置会基于这个配置做覆盖
-       */
-      setupApp({
-        name: 'knowledge',
-        url: hostMap('//localhost:4001/'),
-        exec: true,
-        fetch: (url: RequestInfo, options: any) => {
-          return window.fetch(url, { ...options, credentials: 'omit' });
-        },
-        plugins,
-        // prefix: { 'prefix-dialog': '/dialog', 'prefix-location': '/location' },
-        degrade,
-        ...lifecycle,
-      } as any);
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+  //     const degrade =
+  //       window.localStorage.getItem('degrade') === 'true' ||
+  //       !window.Proxy ||
+  //       !window.CustomElementRegistry;
+  //     const { setupApp, preloadApp } = WujieReact;
+  //     /**
+  //      * 配置应用，主要是设置默认配置
+  //      * preloadApp、startApp的配置会基于这个配置做覆盖
+  //      */
+  //     setupApp({
+  //       name: 'knowledge',
+  //       url: hostMap('//localhost:4001/'),
+  //       exec: true,
+  //       fetch: (url: RequestInfo, options: any) => {
+  //         return window.fetch(url, { ...options, credentials: 'omit' });
+  //       },
+  //       plugins,
+  //       // prefix: { 'prefix-dialog': '/dialog', 'prefix-location': '/location' },
+  //       degrade,
+  //       ...lifecycle,
+  //     } as any);
 
-      if (window.localStorage.getItem('preload') !== 'false') {
-        preloadApp({
-          name: 'knowledge',
-          url: '//localhost:4001/',
-        });
-      }
-    }
-  });
+  //     if (window.localStorage.getItem('preload') !== 'false') {
+  //       preloadApp({
+  //         name: 'knowledge',
+  //         url: '//localhost:4001/',
+  //       });
+  //     }
+  //   }
+
+  //   // 示例查询
+  //   db.query('SELECT * FROM emplyees')
+  //     .then(([rows, fields]) => {
+  //       console.log(rows); // 打印查询结果
+  //     })
+  //     .catch((err) => {
+  //       console.error(err); // 处理查询错误
+  //     });
+  // }, []);
 
   return (
     <main className="flex min-h-screen flex-col justify-center text-center">
