@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import { getAll, type IEmployeesRow } from '~/db/employees/index';
+import { getAll } from '~lib/employees';
 
 export default async function Page() {
   const req = await getAll();
   console.log('req:::', req);
   return (
     <>
-      {req?.map((item: IEmployeesRow | undefined) => {
+      {req?.map((item) => {
         return (
           <Link key={item?.id} href={`/employees/${item?.id}`}>
             {item?.name}
