@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 4000",
-    "build": "next build -p 4000",
+    "build": "next build",
     "start": "next start -p 4000",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.cjs,.mjs,.mdx,.graphql --cache --cache-location ../../.cache/eslint/nextjs-app.eslintcache",
     "migrations:generate": "drizzle-kit generate:mysql --config=drizzle.config.ts",
@@ -16,6 +16,7 @@
     "@radix-ui/react-dropdown-menu": "2.0.6",
     "@radix-ui/react-slot": "1.0.2",
     "@types/ua-parser-js": "0.7.39",
+    "@tailwindcss/typography": "0.5.13",
     "class-variance-authority": "^0.7.0",
     "clsx": "2.1.1",
     "drizzle-kit": "0.20.18",

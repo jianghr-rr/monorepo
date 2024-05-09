@@ -4,10 +4,10 @@ import { getSession } from '~lib/auth/session';
 
 export default async function Home() {
   const session = await getSession();
-
+  console.log('session::', session);
   return (
-    <main className="bg-dark flex min-h-screen items-center justify-center text-white">
-      {!session ? <AuthCard /> : <SignOutButton />}
+    <main className="flex min-h-screen items-center justify-center">
+      {!session ? <AuthCard /> : <SignOutButton user={session?.user} />}
     </main>
   );
 }

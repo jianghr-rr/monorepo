@@ -1,13 +1,23 @@
 import { drizzle } from 'drizzle-orm/mysql2';
 import mysql from 'mysql2/promise';
 
+if (
+  !process.env.MYSQL_HOST ||
+  !process.env.MYSQL_POST ||
+  !process.env.MYSQL_USER ||
+  !process.env.MYSQL_PASSWORD ||
+  !process.env.MYSQL_DATABASE
+) {
+  throw new Error('no mysql config');
+}
+
 // 创建数据库连接池
 const poolConnection = mysql.createPool({
-  host: '127.0.0.1',
-  port: 3306,
-  user: 'root',
-  password: '123456',
-  database: 'knowledge',
+  host: process.env.MYSQL_HOST,
+  port: Number(process.env.MYSQL_POST),
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
