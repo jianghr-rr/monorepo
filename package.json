@@ -12,7 +12,9 @@
     "deps:update": "npx npm-check-updates@latest --configFileName ncurc.yml -u --workspaces --root --mergeConfig",
     "g:lint": "TIMING=1 turbo run lint --cache-dir=.cache/turbo --color",
     "g:lint-staged-files": "lint-staged --allow-empty",
-    "g:lint-styles": "turbo run lint-styles --cache-dir=.cache/turbo --color"
+    "g:lint-styles": "turbo run lint-styles --cache-dir=.cache/turbo --color",
+    "build-main-app": "turbo run build-main-app",
+    "migrations-generate-main-app": "turbo run migrations-generate-main-app"
   },
   "dependencies": {
     "cross-env": "7.0.3"
