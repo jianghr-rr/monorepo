@@ -3,7 +3,10 @@
     "globalDependencies": ["**/.env.*local", "**/tsconfig*.json"],
     "pipeline": {
       "test": {},
+      "dev": {},
       "test-unit": {},
+      "build": {},
+      "migrations:generate": {},
       "lint": {
         "env": ["TIMING"]
       },
@@ -11,6 +14,18 @@
       "typecheck": {},
       "build-storybook": {},
       "clean": {
+        "cache": false
+      },
+      "build-main-app": {
+        "dependsOn": ["main-app#build"],
+        "cache": false
+      },
+      "dev-main-app": {
+        "dependsOn": ["main-app#dev"],
+        "cache": false
+      },
+      "migrations-generate-main-app": {
+        "dependsOn": ["main-app#migrations:generate"],
         "cache": false
       }
     }
