@@ -31,7 +31,7 @@ jobs:
             echo '------ docker rm done ------' ;
             docker build -t  knowledge-web-docker . ;
             echo '------ docker build done ------'
-            docker run -d -p 0.0.0.0:4000:4000  knowledge-web-docker ;
+            docker run -d -p 4000:4000  knowledge-web-docker ;
             echo '------ docker run done ------' ;
             '
           rm -rf private_key
