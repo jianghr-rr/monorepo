@@ -25,13 +25,13 @@ jobs:
             echo '------ cd done ------' ;
             git checkout poc ;
             git checkout . ;
-            git pull origin poc ;
+            git pull origin poc;
             echo '------ git pull done ------';
-            docker rm $(docker stop $(docker ps -a -q --filter ancestor= knowledge-web-docker)) ;
+            docker rm $(docker stop $(docker ps -a -q --filter ancestor=knowledge-web-docker));
             echo '------ docker rm done ------' ;
-            docker build -t  knowledge-web-docker . ;
+            docker build -t knowledge-web-docker . ;
             echo '------ docker build done ------'
-            docker run -d -p 4000:4000  knowledge-web-docker ;
+            docker run -d -p 0.0.0.0:4000:4000 knowledge-web-docker;
             echo '------ docker run done ------' ;
             '
           rm -rf private_key
