@@ -21,7 +21,9 @@ export const AuthCard = () => {
   return (
     <Card className="flex w-full max-w-sm flex-col px-8 py-10">
       <CardTitle className="pb-1">Welcome back</CardTitle>
-      <CardDescription className="pb-8">Sign in to continue</CardDescription>
+      <CardDescription className="pb-8">
+        来自github action的自动部署
+      </CardDescription>
       <div className="flex flex-col space-y-2">
         <Button
           variant="outline"
