@@ -21,12 +21,12 @@ jobs:
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
             # Now we have got the access of EC2 and we will start the deploy .
-            cd ~/project/monorepo/ ;
+            cd /project/monorepo/;
             echo '------ cd done ------' ;
             git checkout poc ;
             git checkout . ;
             git pull origin poc ;
-            echo '------ git pull done ------' ;
+            echo '------ git pull done ------';
             docker rm $(docker stop $(docker ps -a -q --filter ancestor= knowledge-web-docker)) ;
             echo '------ docker rm done ------' ;
             docker build -t  knowledge-web-docker . ;
