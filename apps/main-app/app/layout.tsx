@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { inter, lexend } from '~/app/fonts';
+import Navbar from '~/components/nav-bar';
 import { ThemeProvider } from '~/components/theme-provider';
 import './globals.css';
 
@@ -25,7 +26,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <Navbar />
+          <main className="mx-auto max-w-6xl px-8 py-20 ">{children}</main>
         </ThemeProvider>
       </body>
     </html>
