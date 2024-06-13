@@ -104,5 +104,6 @@ const error = (error: { error?: Error }) => {
   return <div>{error.error?.message}</div>;
 };
 export default error;
-
 ```
+## Nested Layouts 嵌套布局
+create app/drinks/layout.tsx  
