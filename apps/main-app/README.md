@@ -35,3 +35,12 @@ const HomePage = () => {
 export default HomePage;
 
 ```
+## Nested Routes 嵌套路由
+- app/about/info/page.tsx
+- 如果一个URL中没有page.js将导致 404
+``` javaScript
+const AboutInfoPage = () => {
+  return <h1 className='text-7xl'>AboutInfoPage</h1>;
+};
+export default AboutInfoPage;
+```
