@@ -107,3 +107,78 @@ export default error;
 ```
 ## Nested Layouts 嵌套布局
 create app/drinks/layout.tsx  
+``` javaScript
+import type { ReactNode } from 'react';
+export default function DrinksLayout({ children }: { children: ReactNode }) {
+  return (
+    <div className="max-w-xl ">
+      <div className="mockup-code mb-8">
+        <pre data-prefix="$">
+          <code>npx create-next-app@latest nextjs-tutorial</code>
+        </pre>
+      </div>
+      {children}
+    </div>
+  );
+}
+```  
+## Dynamic Routes 动态路由
+app/drinks/[id]/page.js  
+``` javaScript
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import Image from 'next/image';
+import Link from 'next/link';
+const url = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
+// import drinkImg from './drink.jpg';
+const getSingleDrink = async (id: string) => {
+  const res = await fetch(`${url}${id}`);
+  if (!res.ok) {
+    throw new Error('Failed to fetch a drink...');
+  }
+  return res.json();
+};
+
+const SingleDrinkPage = async ({ params }: { params: { id: string } }) => {
+  const data: any = await getSingleDrink(params.id);
+  const title = data?.drinks[0]?.strDrink;
+  const imgSrc = data?.drinks[0]?.strDrinkThumb;
+
+  return (
+    <div>
+      <Link href="/drinks" className="btn btn-primary mb-12 mt-8">
+        back to drinks
+      </Link>
+
+      <Image
+        src={imgSrc}
+        width={300}
+        height={300}
+        className="mb-4 size-48 rounded-lg shadow-lg"
+        priority
+        alt={title}
+      />
+      {/* <Image src={drinkImg} className='w-48 h-48 rounded-lg' alt='drink' /> */}
+      <h1 className="mb-8 text-4xl">{title}</h1>
+    </div>
+  );
+};
+export default SingleDrinkPage;
+
+```
+## Next Image Component 图像组件
+Next.js Image 组件扩展了 HTML  元素，具有自动图像优化功能：
+- 大小优化：使用 WebP 和 AVIF 等现代图像格式，自动为每个设备提供正确大小的图像。
+- 视觉稳定性：防止在加载图像时自动切换布局。
+- 更快的页面加载：图像只有在使用本机浏览器延迟加载进入视口时才会加载，并带有可选的模糊占位符。
+- 灵活性：按需调整图像大小，即使对于存储在远程服务器上的图像也是如此
+### Remote Images 远程图像
+- 若要使用远程图像，src 属性应为 URL 字符串。
+- 由于Next.js在构建过程中无法访问远程文件，因此您需要手动提供宽度、高度和可选的 blurDataURL。
+- width 和 height 属性用于推断图像的正确纵横比，并避免图像加载时出现布局偏移。宽度和高度不决定图像文件的呈现大小。
+- 要安全地允许优化图像，请在 next.config.js 中定义支持的 URL 模式列表。尽可能具体，以防止恶意使用。
+- priority 属性，确定要加载的图像的优先级
+### Remote Images - Responsive 远程图像 - 响应式
+- fill属性允许您按其父元素调整图像大小
+- sizes 属性可帮助浏览器根据用户的设备和屏幕尺寸选择最合适的图像大小进行加载，从而提高网站性能和用户体验。

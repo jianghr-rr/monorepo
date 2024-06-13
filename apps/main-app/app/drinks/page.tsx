@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import DrinksList from '~/components/drinks-list';
 const url = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=a';
 
 const fetchDrinks = async () => {
@@ -14,11 +16,11 @@ const fetchDrinks = async () => {
 };
 
 const DrinksPage = async () => {
-  const data = await fetchDrinks();
+  const data: { drinks: any[] } = await fetchDrinks();
   console.log(data);
   return (
     <div>
-      <h1 className="text-7xl">DrinksPage</h1>
+      <DrinksList drinks={data?.drinks} />
     </div>
   );
 };
