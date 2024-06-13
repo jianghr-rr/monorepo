@@ -1,15 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+import 'server-only';
 import { eq } from 'drizzle-orm';
 import { getServerSession } from 'next-auth';
+import { cache } from 'react';
 import { db } from '~/db';
 import { users } from '~/db/schema';
 import { authOptions } from '~lib/auth/auth-options';
 
-export const getSession = async () => {
+export const getSessionFn = async () => {
   return await getServerSession(authOptions);
 };
 
-export const getCurrentUser = async () => {
+export const getSession = cache(getSessionFn);
+
+export const getCurrentUserFn = async () => {
   const session = await getServerSession(authOptions);
 
   if (session?.user) {
@@ -28,3 +32,5 @@ export const getCurrentUser = async () => {
 
   return null;
 };
+
+export const getCurrentUser = cache(getCurrentUserFn);
