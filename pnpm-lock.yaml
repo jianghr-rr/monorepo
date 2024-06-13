@@ -64,6 +64,7 @@ importers:
       autoprefixer: 10.4.19
       class-variance-authority: ^0.7.0
       clsx: 2.1.1
+      daisyui: 3.9.4
       drizzle-kit: 0.20.18
       drizzle-orm: 0.30.10
       eslint: 8.57.0
@@ -89,7 +90,6 @@ importers:
       tailwindcss-animate: 1.0.7
       typescript: 5.4.3
       ua-parser-js: 1.0.37
-      wujie-react: 1.0.22
       zod: 3.22.4
     dependencies:
       '@paralleldrive/cuid2': 2.2.2
@@ -99,6 +99,7 @@ importers:
       '@types/ua-parser-js': 0.7.39
       class-variance-authority: 0.7.0
       clsx: 2.1.1
+      daisyui: 3.9.4
       drizzle-kit: 0.20.18
       drizzle-orm: 0.30.10_xvurrujid5n5sg3t5g3o4g2nlu
       i18next: 23.10.1
@@ -116,7 +117,6 @@ importers:
       tailwind-merge: 2.3.0
       tailwindcss-animate: 1.0.7_tailwindcss@3.4.3
       ua-parser-js: 1.0.37
-      wujie-react: 1.0.22_react@18.2.0
       zod: 3.22.4
     devDependencies:
       '@bid-np/eslint-config-bases': link:../../packages/eslint-config-bases
@@ -4394,6 +4394,10 @@ packages:
       color-string: 1.9.1
     dev: true
 
+  /colord/2.9.3:
+    resolution: {integrity: sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==}
+    dev: false
+
   /colorette/2.0.20:
     resolution: {integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==}
     dev: true
@@ -4586,6 +4590,13 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
 
+  /css-selector-tokenizer/0.8.0:
+    resolution: {integrity: sha512-Jd6Ig3/pe62/qe5SBPTN8h8LeUg/pT4lLgtavPf7updwwHpvFzxvOQBHYj2LZDMjUnBzgvIUSjRcf6oT5HzHFg==}
+    dependencies:
+      cssesc: 3.0.0
+      fastparse: 1.1.2
+    dev: false
+
   /css.escape/1.5.1:
     resolution: {integrity: sha512-YUifsXXuknHlUsmlgyY0PKzgPOr7/FjCePfHNt0jxm83wHZi44VDMQ7/fGNkjY3/jV1MC+1CmZbaHzugyeRtpg==}
     dev: true
@@ -4626,6 +4637,19 @@ packages:
     dependencies:
       es5-ext: 0.10.64
       type: 2.7.3
+    dev: false
+
+  /daisyui/3.9.4:
+    resolution: {integrity: sha512-fvi2RGH4YV617/6DntOVGcOugOPym9jTGWW2XySb5ZpvdWO4L7bEG77VHirrnbRUEWvIEVXkBpxUz2KFj0rVnA==}
+    engines: {node: '>=16.9.0'}
+    dependencies:
+      colord: 2.9.3
+      css-selector-tokenizer: 0.8.0
+      postcss: 8.4.38
+      postcss-js: 4.0.1_postcss@8.4.38
+      tailwindcss: 3.4.3
+    transitivePeerDependencies:
+      - ts-node
     dev: false
 
   /damerau-levenshtein/1.0.8:
@@ -6108,6 +6132,10 @@ packages:
     dependencies:
       punycode: 1.4.1
     dev: true
+
+  /fastparse/1.1.2:
+    resolution: {integrity: sha512-483XLLxTVIwWK3QTrMGRqUfUpoOs/0hbQrl2oz4J0pAcm3A3bu84wxTFqGqkJzewCLdME38xJLJAxBABfQT8sQ==}
+    dev: false
 
   /fastq/1.17.1:
     resolution: {integrity: sha512-sRVD3lWVIXWg6By68ZN7vho9a1pQcN/WBFaAAsDDFzlJjvoGx0P8z7V1t72grFJfJhu3YPZBuu25f7Kaw2jN1w==}
@@ -11175,22 +11203,6 @@ packages:
       utf-8-validate:
         optional: true
     dev: true
-
-  /wujie-react/1.0.22_react@18.2.0:
-    resolution: {integrity: sha512-ZJZRHXEfC26wakxiuVSApD1W688wRVD8tfU/KXj4QNmBYPl5xfucTNJuesub4xiLos99HqlRzAjjSAeBXch4rA==}
-    peerDependencies:
-      react: '>=16.0.0'
-    dependencies:
-      prop-types: 15.8.1
-      react: 18.2.0
-      wujie: 1.0.22
-    dev: false
-
-  /wujie/1.0.22:
-    resolution: {integrity: sha512-gzx13fp9hgTHdV9XetkVmp794uDSR93Zs9jLr891RaWRuMiLFoxh3Pe4qbmW604SxI8nMTHeIRydbgC7YxQ50Q==}
-    dependencies:
-      '@babel/runtime': 7.24.4
-    dev: false
 
   /y18n/4.0.3:
     resolution: {integrity: sha1-tfJZyCzW4zaSHv17/Yv1YN6e7t8=}

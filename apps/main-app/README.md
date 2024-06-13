@@ -47,4 +47,18 @@ export default AboutInfoPage;
 ## Challenge 挑战
 创建以下页面
 client, drinks, drizzle-example, query and tasks  
-## Tailwind and DaisyUI Tailwind 和 DaisyUI
+## Tailwind 和 DaisyUI
+- 建议将样式名放在全局样式下
+### 安装两个库
+``` bash
+npm i -D daisyui@latest
+npm i -D @tailwindcss/typography
+```
+tailwind.config.js
+``` javaScript
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  ...
+  plugins: [require('@tailwindcss/typography'), require('daisyui')]
+};
+```  

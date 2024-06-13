@@ -19,6 +19,7 @@
     "@types/ua-parser-js": "0.7.39",
     "class-variance-authority": "^0.7.0",
     "clsx": "2.1.1",
+    "daisyui": "3.9.4",
     "drizzle-kit": "0.20.18",
     "drizzle-orm": "0.30.10",
     "i18next": "23.10.1",
@@ -36,7 +37,6 @@
     "tailwind-merge": "2.3.0",
     "tailwindcss-animate": "1.0.7",
     "ua-parser-js": "1.0.37",
-    "wujie-react": "1.0.22",
     "zod": "3.22.4"
   },
   "devDependencies": {
