@@ -1,3 +1,17 @@
+import Link from 'next/link';
+
+const HomePage = () => {
+  return (
+    <div>
+      <h1 className="text-7xl">HomePage</h1>
+      <Link href="/about" className="text-2xl">
+        about page
+      </Link>
+    </div>
+  );
+};
+export default HomePage;
+
 // import { AuthCard } from '~components/auth-card';
 // import { SignOutButton } from '~components/sign-out-button';
 // import { getSession } from '~lib/auth/session';
@@ -12,12 +26,3 @@
 //     </main>
 //   );
 // }
-
-const HomePage = () => {
-  return (
-    <div>
-      <h1 className="text-7xl">HomePage</h1>
-    </div>
-  );
-};
-export default HomePage;

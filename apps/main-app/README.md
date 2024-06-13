@@ -16,3 +16,22 @@ const HomePage = () => {
 };
 export default HomePage;
 ```
+## Link Component 链接组件
+- 在项目中导航
+- 从“next/link”主页导入链接
+``` javaScript
+import Link from 'next/link';
+
+const HomePage = () => {
+  return (
+    <div>
+      <h1 className='text-7xl'>HomePage</h1>
+      <Link href='/about' className='text-2xl'>
+        about page
+      </Link>
+    </div>
+  );
+};
+export default HomePage;
+
+```
