@@ -62,3 +62,7 @@ module.exports = {
   plugins: [require('@tailwindcss/typography'), require('daisyui')]
 };
 ```  
+## 布局和模板
+- layout.js
+- template.js
+layout.js在路由切换时不会重新加载，所以如果需要rerender功能，使用template.js
