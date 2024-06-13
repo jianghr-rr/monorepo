@@ -83,3 +83,26 @@ layout.js在路由切换时不会重新加载，所以如果需要rerender功能
 - 只需添加 Async 并开始使用 await 
 - DB 也一样
 - Next.js扩展了原生 Web fetch（） API，允许服务器上的每个请求设置自己的持久缓存语义。
+## Loading Component 加载组件
+特殊文件loading.js可帮助您使用 React Suspense 创建有意义的加载 UI。  
+drinks/loading.tsx
+``` javaScript
+const loading = () => {
+  return <span className="loading"></span>;
+};
+export default loading;
+```
+## Error Component 错误组件
+error.js文件约定允许您在嵌套路由中正常处理意外的运行时错误。  
+drinks/error.tsx
+``` javaScript
+'use client';
+
+const error = (error: { error?: Error }) => {
+  console.log(error);
+  // return <div>there was an error...</div>;
+  return <div>{error.error?.message}</div>;
+};
+export default error;
+
+```
