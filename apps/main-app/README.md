@@ -44,3 +44,7 @@ const AboutInfoPage = () => {
 };
 export default AboutInfoPage;
 ```
+## Challenge 挑战
+创建以下页面
+client, drinks, drizzle-example, query and tasks  
+## Tailwind and DaisyUI Tailwind 和 DaisyUI
