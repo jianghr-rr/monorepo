@@ -66,3 +66,20 @@ module.exports = {
 - layout.js
 - template.js
 layout.js在路由切换时不会重新加载，所以如果需要rerender功能，使用template.js
+## 服务器组件与客户端组件
+- 默认情况下，NEXT.JS 使用服务器组件!!!
+- 要使用客户端组件，您可以添加 React “use client” 指令
+### 服务器组件
+好处:
+- data fetching 数据获取
+- security 安全
+- caching 缓存
+- bundle size 捆绑大小
+### 客户端组件
+好处:
+- 交互性：客户端组件可以使用状态、效果和事件侦听器，这意味着它们可以向用户提供即时反馈并更新 UI。
+- 浏览器 API：客户端组件可以访问浏览器 API，例如地理位置或 localStorage，允许您为特定用例构建 UI。
+## 在服务器组件中获取数据
+- 只需添加 Async 并开始使用 await 
+- DB 也一样
+- Next.js扩展了原生 Web fetch（） API，允许服务器上的每个请求设置自己的持久缓存语义。
