@@ -182,3 +182,71 @@ Next.js Image 组件扩展了 HTML  元素，具有自动图像优化功能：
 ### Remote Images - Responsive 远程图像 - 响应式
 - fill属性允许您按其父元素调整图像大小
 - sizes 属性可帮助浏览器根据用户的设备和屏幕尺寸选择最合适的图像大小进行加载，从而提高网站性能和用户体验。
+## More Routing 更多路由
+- Private Folders _folder 私人文件夹 _folder
+- Route Groups (dashboard) 路由组（仪表板）
+- Dynamic Routes 动态路由
+  - [...folder] - Catch-all route segment
+  - [[...folder]] Optional catch-all route segment (used by Clerk)
+create app/(dashboard)/auth/[sign-in]  
+``` javaScript
+const SignInPage = () => {
+  //   console.log(params);
+  return <h1 className="text-7xl">SignInPage</h1>;
+};
+export default SignInPage;
+```
+## mysql
+连接mysql数据库
+``` bash
+npm install mysql2 --save-dev
+npm install drizzle-orm --save-dev
+npm install drizzle-kit --save-dev
+```
+db/index.ts
+``` javaScript
+import { drizzle } from 'drizzle-orm/mysql2';
+import mysql from 'mysql2/promise';
+
+if (
+  !process.env.MYSQL_HOST ||
+  !process.env.MYSQL_POST ||
+  !process.env.MYSQL_USER ||
+  !process.env.MYSQL_PASSWORD ||
+  !process.env.MYSQL_DATABASE
+) {
+  throw new Error('no mysql config');
+}
+
+// 创建数据库连接池
+const poolConnection = mysql.createPool({
+  host: process.env.MYSQL_HOST,
+  port: Number(process.env.MYSQL_POST),
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
+
+export const db = drizzle(poolConnection);
+```
+.env
+``` bash
+MYSQL_HOST=xxx
+MYSQL_POST=xxx
+MYSQL_USER=xxx
+MYSQL_PASSWORD=xxx
+MYSQL_DATABASE=xxx
+```
+创建表及更新
+``` bash
+  "migrations:generate": "drizzle-kit generate:mysql --config=drizzle.config.ts",
+  "migrations:drop": "drizzle-kit drop --config=drizzle.config.ts",
+  "db:push": "drizzle-kit push:mysql --config=drizzle.config.ts"
+```
+``` bash
+npm run db:push
+npm run migrations:generate
+```
