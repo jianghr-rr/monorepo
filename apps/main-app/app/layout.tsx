@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { inter, lexend } from '~/app/fonts';
-import Navbar from '~/components/nav-bar';
-import { ThemeProvider } from '~/components/theme-provider';
+import HomeNav from '~/components/home-nav';
+import { AppProviders } from '~/providers/app-providers';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -20,15 +20,10 @@ export default function RootLayout({
       className={`h-full scroll-smooth ${inter.variable} ${inter.className} ${lexend.className}`}
     >
       <body className="flex h-full flex-col">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Navbar />
-          <main className="mx-auto max-w-6xl px-8 py-20 ">{children}</main>
-        </ThemeProvider>
+        <AppProviders>
+          <HomeNav />
+          <main className="mx-auto max-w-6xl px-8 py-24 ">{children}</main>
+        </AppProviders>
       </body>
     </html>
   );

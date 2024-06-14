@@ -9,7 +9,7 @@ const links = [
 
 const Navbar = () => {
   return (
-    <nav className="bg-base-300 py-4">
+    <nav>
       <div className="navbar mx-auto max-w-6xl flex-col px-8 sm:flex-row">
         <li>
           <Link href="/" className="btn btn-primary">

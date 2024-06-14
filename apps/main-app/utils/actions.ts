@@ -10,9 +10,6 @@ import { task } from '~/db/schema';
 interface FormData {
   get(key: string): FormDataEntryValue | null;
 }
-interface PrevState {
-  message: string;
-}
 
 export const getAllTasks = async () => {
   return await db.select().from(task);
