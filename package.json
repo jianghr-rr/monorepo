@@ -16,7 +16,8 @@
     "g:lint-styles": "turbo run lint-styles --cache-dir=.cache/turbo --color",
     "build-main-app": "turbo run build-main-app",
     "migrations-generate-main-app": "turbo run migrations-generate-main-app",
-    "start-main": "turbo run start-main"
+    "start-main": "turbo run start-main",
+    "start-blog": "turbo run start-blog"
   },
   "dependencies": {
     "cross-env": "7.0.3"

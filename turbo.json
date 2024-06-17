@@ -28,6 +28,10 @@
       "start-main": {
         "dependsOn": ["main-app#dev"],
         "cache": false
+      },
+      "start-blog": {
+        "dependsOn": ["blog-app#dev"],
+        "cache": false
       }
     }
   }
