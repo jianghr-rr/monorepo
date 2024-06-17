@@ -1,11 +1,12 @@
 import { dir } from 'i18next';
 import type { ReactNode } from 'react';
 import { inter, lexend } from '~/app/[locale]/fonts';
+import CodeSnippet from '~/components/code-snippet';
 import HomeNav from '~/components/home-nav';
 import i18nConfig from '~/i18nConfig';
 import { AppProviders } from '~/providers/app-providers';
 import initTranslations from '../i18n';
-import 'highlight.js/styles/github.css';
+// import 'highlight.js/styles/github.css';
 import './globals.css';
 
 const i18nNamespaces = ['home'];
@@ -20,24 +21,6 @@ export async function generateMetadata({
     title: t('page.title'),
   };
 }
-
-// export async function generateMetadata({
-//   params: { lng, ns },
-// }: {
-//   params: { lng: string; ns: string };
-// }) {
-//   if (languages.indexOf(lng) < 0) lng = fallbackLng;
-//   const { t } = await useTranslation(lng, ns);
-//   return {
-//     title: t('title'),
-//     content:
-//       'A playground to explore new Next.js 13/14 app directory features such as nested layouts, instant loading states, streaming, and component level data fetching.',
-//   };
-// }
-// export const metadata = {
-//   title: '智能知识库',
-//   description: '知识库',
-// };
 
 interface LayoutProps {
   children: ReactNode;
@@ -68,6 +51,7 @@ const RootLayout = async function ({
           locale={locale}
           resources={resources}
         >
+          <CodeSnippet />
           <HomeNav />
           <main className="grow overflow-y-auto">{children}</main>
         </AppProviders>

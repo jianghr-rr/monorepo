@@ -43,7 +43,9 @@ async function FabricLayout({
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={82}>
-          <div className="relative flex h-screen flex-col p-4">{children}</div>
+          <div className="relative box-border flex h-full flex-col overflow-auto p-4">
+            {children}
+          </div>
         </ResizablePanel>
       </ResizablePanelGroup>
     </TranslationsProvider>
