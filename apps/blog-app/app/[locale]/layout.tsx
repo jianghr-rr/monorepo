@@ -5,6 +5,7 @@ import HomeNav from '~/components/home-nav';
 import i18nConfig from '~/i18nConfig';
 import { AppProviders } from '~/providers/app-providers';
 import initTranslations from '../i18n';
+import 'highlight.js/styles/github.css';
 import './globals.css';
 
 const i18nNamespaces = ['home'];
@@ -68,7 +69,7 @@ const RootLayout = async function ({
           resources={resources}
         >
           <HomeNav />
-          <main className="mx-auto max-w-6xl px-8 py-24 ">{children}</main>
+          <main className="grow overflow-y-auto">{children}</main>
         </AppProviders>
       </body>
     </html>

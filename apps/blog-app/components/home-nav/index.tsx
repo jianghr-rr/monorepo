@@ -4,7 +4,7 @@ import Navbar from './nav-bar';
 
 export default function HomeNav() {
   return (
-    <div className="text-secondary-foreground fixed inset-x-0 top-0 flex">
+    <div className="text-secondary-foreground inset-x-0 top-0 flex">
       <div className="flex-0 p-2 text-start">
         <Navbar />
       </div>

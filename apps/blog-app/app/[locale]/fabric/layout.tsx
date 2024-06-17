@@ -1,14 +1,28 @@
+import dynamic from 'next/dynamic';
 import type { ReactNode } from 'react';
 import initTranslations from '~/app/i18n';
 import TranslationsProvider from '~/components/translations-provider';
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from '~/components/ui/resizable';
 
-const i18nNamespaces = ['about', 'test'];
+const i18nNamespaces = ['fabric'];
 
-async function About({
+const DynamicSidebar = dynamic<{
+  children: ReactNode;
+}>(() => import('./@sidebar/page'), {
+  ssr: false,
+});
+
+async function FabricLayout({
   params: { locale },
+  sidebar,
   children,
 }: {
   params: { locale: string };
+  sidebar: ReactNode;
   children: ReactNode;
 }) {
   const { resources } = await initTranslations(locale, i18nNamespaces);
@@ -19,9 +33,21 @@ async function About({
       locale={locale}
       resources={resources}
     >
-      {children}
+      <ResizablePanelGroup direction="horizontal" className="h-screen">
+        <ResizablePanel defaultSize={18}>
+          <div className="bg-muted text-muted-foreground flex h-screen flex-col p-2">
+            <div className="flex-auto overflow-y-auto">
+              <DynamicSidebar>{sidebar}</DynamicSidebar>
+            </div>
+          </div>
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={82}>
+          <div className="relative flex h-screen flex-col p-4">{children}</div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </TranslationsProvider>
   );
 }
 
-export default About;
+export default FabricLayout;

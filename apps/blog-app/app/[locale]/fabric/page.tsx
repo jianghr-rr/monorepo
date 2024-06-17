@@ -5,5 +5,5 @@ import { useTranslation } from 'react-i18next';
 export default function FabricPage() {
   const { t } = useTranslation();
 
-  return <div>{t('title')}</div>;
+  return <h1 className="mb-8 text-center text-5xl font-bold">{t('title')}</h1>;
 }
