@@ -1,5 +1,6 @@
 import { Github } from 'lucide-react';
 import { Button } from '~ui/button';
+import LanguageChanger from '../language-changer';
 import ChangeTheme from './change-theme';
 import Navbar from './nav-bar';
 
@@ -15,6 +16,7 @@ export default function HomeNav() {
             <Github className="size-4" />
           </Button>
           <ChangeTheme />
+          <LanguageChanger />
         </div>
       </div>
     </div>
