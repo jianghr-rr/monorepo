@@ -18,7 +18,7 @@ const Navbar = () => {
     () => [
       { href: '/', label: t('home') },
       { href: '/fabric', label: t('fabric') },
-      { href: '/blog', label: t('blog') },
+      // { href: '/blog', label: t('blog') },
       { href: '/patterns', label: t('patterns') },
     ],
     [t]

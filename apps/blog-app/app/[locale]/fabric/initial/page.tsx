@@ -32,6 +32,28 @@ export default function FabricPage() {
     <div>
       <h3>{t('initial')}</h3>
       <canvas ref={canvasRef} width={600} height={400} />
+      <p>安装fabric:</p>
+      <Highlight language="javascript">
+        {`
+npm install @types/fabric@5.3.7 --save
+npm install fabric@5.3.0 --save
+        `}
+      </Highlight>
+      <p>nextjs的配置:</p>
+      <Highlight language="javascript">
+        {`
+webpack: (config) => {
+  config.externals.push({
+    'utf-8-validate': 'commonjs utf-8-validate',
+    bufferutil: 'commonjs bufferutil',
+    canvas: 'commonjs canvas',
+  });
+  // config.infrastructureLogging = { debug: /PackFileCache/ };
+  return config;
+},
+        `}
+      </Highlight>
+      <p>react的初始化代码:</p>
       <Highlight language="javascript">{`
 useEffect(() => {
   const canvas = new fabric.Canvas(canvasRef.current, {
