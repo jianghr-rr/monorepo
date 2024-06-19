@@ -3,11 +3,10 @@ import type { ReactNode } from 'react';
 
 export default function MDXWrapper({ children }: { children?: ReactNode }) {
   const { theme } = useTheme();
-  console.log('theme', theme);
 
   return (
     <div
-      className={`prose ${theme === 'dark' ? 'prose-dark' : 'prose-light'} mx-auto my-8`}
+      className={`prose ${theme === 'dark' ? 'prose-dark' : 'prose-light'} my-8 w-full`}
     >
       {children}
     </div>

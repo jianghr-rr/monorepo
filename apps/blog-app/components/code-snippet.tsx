@@ -21,6 +21,31 @@ const CodeSnippet = () => {
     }
   }, [theme]);
 
+  useEffect(() => {
+    let link: HTMLLinkElement;
+    if (theme === 'light') {
+      link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = '/styles/prism-tomorrow.min.css';
+      document.head.appendChild(link);
+      return () => {
+        document.head.removeChild(link);
+      };
+    }
+
+    if (theme === 'dark') {
+      link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = '/styles/prism-okaidia.min.css';
+      document.head.appendChild(link);
+      return () => {
+        document.head.removeChild(link);
+      };
+    }
+  }, [theme]);
+
   return null;
 };
 

@@ -1,0 +1,70 @@
+# JS模块化
+## 目标
+- 了解JS模块化的历史
+- 掌握不同模块化的原理和实现
+- 初步了解整体前端模块化，工程化的脉络
+## 模块化的历史
+JS一开始为了表单的提交 + 页面动效果，并没有模块化的概念或者命名空间的概念，后面才有的模块化需求。比如:  
+1. 需要在页面中加载不同的JS
+2. 多种JS文件被分在不同的文件中
+3. 不同的文件被同一个模版引用
+``` javascript
+<script src='xxx/jquery.js'></script>
+<script src='xxx/main.js'></script>
+<script src='xxx/xxx.js'></script>
+```  
+文件分离是模块化的第一步。  
+问题：  
+1. 全局作用域的污染
+2. 文件分散
+### 模块化的成长期 - IIEF(语法测的优化)
+``` javascript
+var count = 0;
+var increase = function() {
+    ++count;
+}
+var reset = funtion() {
+    count = 0;
+}
+
+increase();
+reset();
+```
+利用函数块级作用域
+``` javascript
+(function() {
+    // ...
+});
+```
+立即执行
+``` javascript
+(function() {
+    // ...
+})();
+```
+定义一个最简单的模块
+``` javascript
+var simpleModule = (function() {
+    var count = 0;
+    var increase = function() {
+        ++count;
+    }
+    var reset = funtion() {
+        count = 0;
+    }
+    return {
+        increase: increase,
+        reset: reset
+    }
+})();
+
+simpleModule.increase();
+simpleModule.reset():
+```
+如果模块依赖其他模块需要怎么做？  
+> 作为参数传入
+``` javascript
+var simpleModule = (function(moduleA, moduleB) {
+    // ...
+})(moduleA, moduleB);
+```

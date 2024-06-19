@@ -94,7 +94,7 @@ const config = {
         },
         dark: {
           css: {
-            'h1, strong': {
+            'h1, strong, p': {
               color: theme('colors.gray.100'),
             },
             color: theme('colors.gray.100'),

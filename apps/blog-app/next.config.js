@@ -1,6 +1,12 @@
 const withMDX = require('@next/mdx')({
   extension: /\.mdx?$/,
+  options: {
+    rehypePlugins: [
+      require('@mapbox/rehype-prism'), // 使用rehype-prism插件来处理代码高亮
+    ],
+  },
 });
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
