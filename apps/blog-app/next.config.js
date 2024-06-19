@@ -1,6 +1,10 @@
+const withMDX = require('@next/mdx')({
+  extension: /\.mdx?$/,
+});
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   transpilePackages: ['next-international', 'international-types'],
   eslint: {
     ignoreDuringBuilds: true,
@@ -35,4 +39,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = withMDX(nextConfig);

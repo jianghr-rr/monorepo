@@ -6,7 +6,6 @@ import HomeNav from '~/components/home-nav';
 import i18nConfig from '~/i18nConfig';
 import { AppProviders } from '~/providers/app-providers';
 import initTranslations from '../i18n';
-// import 'highlight.js/styles/github.css';
 import './globals.css';
 
 const i18nNamespaces = ['home'];

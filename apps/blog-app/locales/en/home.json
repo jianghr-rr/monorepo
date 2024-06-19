@@ -1,6 +1,7 @@
 {
   "home": "home",
   "patterns": "patterns",
+  "interview": "interview",
   "page": {
     "title": "blog"
   }

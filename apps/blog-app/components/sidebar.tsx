@@ -27,7 +27,7 @@ const SideBar: FC<SideBarProps> = ({ links }) => {
             <NavigationMenuItem key={link.href} className="w-full">
               <Link href={link.href} legacyBehavior passHref>
                 <NavigationMenuLink
-                  className={`${navigationMenuTriggerStyle()} ${pathname.includes(link.href) && link.href !== '/' ? ' text-primary-400' : ''} ${
+                  className={`${navigationMenuTriggerStyle()} ${pathname?.includes(link.href) && link.href !== '/' ? ' text-primary-400' : ''} ${
                     pathname === '/' && link.href === '/'
                       ? ' text-primary-400'
                       : ''

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+'use client';
+import { MDXProvider } from '@mdx-js/react';
 import type { FC, PropsWithChildren } from 'react';
-
 import { ThemeProvider } from '~/components/theme-provider';
 import TranslationsProvider from '~/components/translations-provider';
 
@@ -20,7 +21,7 @@ export const AppProviders: FC<Props> = (props) => {
         locale={locale}
         resources={resources}
       >
-        {children}
+        <MDXProvider>{children}</MDXProvider>
       </TranslationsProvider>
     </ThemeProvider>
   );

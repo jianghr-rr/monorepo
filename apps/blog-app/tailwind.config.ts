@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { Config } from 'tailwindcss';
 // import { fontFamily } from 'tailwindcss/defaultTheme';
 
@@ -12,7 +15,6 @@ const config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}', // Note the addition of the `app` directory.
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
-
     // Or if using `src` directory:
     './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
@@ -77,7 +79,34 @@ const config = {
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
 
-      typography: {
+      typography: (theme: any) => ({
+        light: {
+          css: {
+            color: theme('colors.gray.900'),
+            a: {
+              color: theme('colors.blue.600'),
+              '&:hover': {
+                color: theme('colors.blue.800'),
+              },
+            },
+            // 其他 light 主题的自定义样式
+          },
+        },
+        dark: {
+          css: {
+            'h1, strong': {
+              color: theme('colors.gray.100'),
+            },
+            color: theme('colors.gray.100'),
+            a: {
+              color: theme('colors.blue.400'),
+              '&:hover': {
+                color: theme('colors.blue.600'),
+              },
+            },
+            // 其他 dark 主题的自定义样式
+          },
+        },
         DEFAULT: {
           css: {
             'h2, h3, h4, h5, ul, ol': {
@@ -102,7 +131,33 @@ const config = {
             },
           },
         },
-      },
+      }),
+      // typography: {
+      //   DEFAULT: {
+      //     css: {
+      //       'h2, h3, h4, h5, ul, ol': {
+      //         'margin-top': '1em',
+      //         'margin-bottom': '0.6em',
+      //       },
+      //       'p, pre, blockquote': {
+      //         'margin-top': '0.6em',
+      //         'margin-bottom': '0.6em',
+      //       },
+      //       li: {
+      //         'margin-top': '0px',
+      //         'margin-bottom': '0px',
+      //       },
+      //       'li > p, li > ul, li > ol ': {
+      //         'margin-top': '0px',
+      //         'margin-bottom': '0px',
+      //       },
+      //       hr: {
+      //         'margin-top': '1em',
+      //         'margin-bottom': '1em',
+      //       },
+      //     },
+      //   },
+      // },
     },
   },
   plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],

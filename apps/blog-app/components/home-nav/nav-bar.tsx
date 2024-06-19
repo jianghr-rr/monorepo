@@ -18,8 +18,8 @@ const Navbar = () => {
     () => [
       { href: '/', label: t('home') },
       { href: '/fabric', label: t('fabric') },
-      // { href: '/blog', label: t('blog') },
       { href: '/patterns', label: t('patterns') },
+      { href: '/interview', label: t('interview') },
     ],
     [t]
   );
