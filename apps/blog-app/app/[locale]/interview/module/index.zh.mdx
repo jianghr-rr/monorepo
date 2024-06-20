@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 # JS模块化
 ## 目标
 - 了解JS模块化的历史
@@ -59,7 +61,7 @@ var simpleModule = (function() {
 })();
 
 simpleModule.increase();
-simpleModule.reset():
+simpleModule.reset();
 ```
 如果模块依赖其他模块需要怎么做？  
 > 作为参数传入
@@ -68,3 +70,272 @@ var simpleModule = (function(moduleA, moduleB) {
     // ...
 })(moduleA, moduleB);
 ```
+## 成熟期
+### CommonJs
+由nodejs来制定的一套方案
+特征:  
+* 通过module + exports去对外暴露接口
+* 通过require来引入其他模块
+模块组织方式:  
+1. 引入模块(require)
+``` javascript
+var dependencyModule = require('./dependencyModule');
+```
+2. 对外暴露(exports)
+``` javascript
+    var count = 0;
+    var increase = function() {
+        ++count;
+    }
+    var reset = funtion() {
+        count = 0;
+    }
+
+    exports.increase = {
+        increase: increase,
+        reset: reset,
+    };
+```
+实际也是转成立即执行函数来执行
+``` javascript
+(function(thisvalue, exports, module, require) {
+
+}).call(thisvalue, exports, module, require)
+```
+### nodeJs的处理方式
+<Link href='/interview/module/commonjs'>node commonJS</Link>
+
+CommonJs主要提出的是针对服务器端的规范，缺点: 只考虑同步加载，文件都是在机器上的，所以只考虑同步的。
+读取和修改不会修改之前的文件。下载的文件更新(假删除)。
+
+## AMD规范
+> 解决了异步加载，允许制定回调函数
+经典实现框架是require.js  
+新增定义方式(通过define来定义一个模块，然后require来加载):  
+``` javascript
+define(id, [depends], callback);
+```
+``` javascript
+require([module], callback);
+```
+使用方式:  
+``` javascript
+define('myModule', ['depend1', 'depend2'], (depend1, depend2) => {
+    // ...
+    var xxx = function() {
+        // ...
+    }
+
+    return {
+        xxx: xxx,
+    }
+})
+```
+``` javascript
+require('myModule', (mod) => {
+    mod.xxx();
+})
+```
+**测试题1: AMD兼容commonJs的代码**  
+**测试题2: AMD使用revealing**  
+``` javascript
+define('myMod', [], (require, export, module) => {
+    var depa = require('./a');
+    var depb = require('./b');
+
+    var count = 0;
+    var increase = function() {
+        ++count;
+    }
+    var reset = funtion() {
+        count = 0;
+    }
+    
+    export.increase = increase;
+    export.reset = reset;
+});
+
+define('myMod2', [], (require, export, module) => {
+    var myMod = require('./myMod');
+    myMod.increase();
+    myMod.reset();
+})
+```
+**测试题3: 兼容AMD commonJS (UMD)**  
+UMD的出现: 基于AMD切换commonJS的切换方式  
+``` javascript
+(define('myMod', [], (require, export, module) => {
+    var depa = require('./a');
+    var depb = require('./b');
+
+    var count = 0;
+    var increase = function() {
+        ++count;
+    }
+    var reset = funtion() {
+        count = 0;
+    }
+
+    export.increase = increase;
+    export.reset = reset;
+}))(
+    // 目标是区分AMD还是commonJS
+    /**
+     * 1. 判断module是否是object
+     * 2. 需要有exports
+     * 3. define !== function
+     * 如上则使用的commonJs
+     */
+);
+```
+看一个开源的pubsub库的代码:
+``` javascript
+(function (root, factory){
+    'use strict';
+
+    var PubSub = {};
+
+    if (root.PubSub) {
+        PubSub = root.PubSub;
+        console.warn("PubSub already loaded, using existing version");
+    } else {
+        root.PubSub = PubSub;
+        factory(PubSub);
+    }
+    // CommonJS and Node.js module support
+    if (typeof exports === 'object'){
+        if (module !== undefined && module.exports) {
+            exports = module.exports = PubSub; // Node.js specific `module.exports`
+        }
+        exports.PubSub = PubSub; // CommonJS module 1.1.1 spec
+        module.exports = exports = PubSub; // CommonJS
+    }
+    // AMD support
+    /* eslint-disable no-undef */
+    else if (typeof define === 'function' && define.amd){
+        define(function() { return PubSub; });
+        /* eslint-enable no-undef */
+    }
+
+}(( typeof window === 'object' && window ) || this, function (PubSub){
+    // ...
+}));
+```
+### CMD规范
+> 按需加载
+主要框架 sea.js  
+``` javascript
+define('mod', function(require, exports, module) {
+  var $ = require('jquery');
+
+  exports.sayHello = function() {
+    $('#hello').toggle('slow');
+  };
+});
+```
+``` javascript
+define(function(require, exports) {
+
+  // 获取模块 a 的接口
+  var a = require('./a');
+
+  // 调用模块 a 的方法
+  a.doSomething();
+
+});
+```
+require.async 方法用来在模块内部异步加载模块，并在加载完成后执行指定回调。callback 参数可选。
+``` javascript
+define(function(require, exports, module) {
+
+  // 异步加载一个模块，在加载完成时，执行回调
+  require.async('./b', function(b) {
+    b.doSomething();
+  });
+
+  // 异步加载多个模块，在加载完成时，执行回调
+  require.async(['./c', './d'], function(c, d) {
+    c.doSomething();
+    d.doSomething();
+  });
+
+});
+```
+缺点: 需要在编译时解析，依赖打包，扩大打包体积。  
+**ADM和CMD的区别**
+- 优化了按需加载
+
+### ES6模块
+> 新的时代
+将引入和导出统一成了 export 和 import  
+``` javascript
+import a from './a';
+
+var count = 0;
+var increase = function() {
+    ++count;
+}
+var reset = funtion() {
+    count = 0;
+}
+
+export default {
+    increase, 
+    reset
+}
+```
+**缺点: 动态模块**
+- export
+- promise
+ES11的解决方案
+``` javascript
+import('./xxx').then(dynamicMod => {
+    dynamicMod.xxx();
+})
+```
+局限性: 还是做了运行时的依赖分析  
+### 解决模块化的新思路: 工程化
+所有东西都是运行时依赖分析的
+> 模块化的依赖分析依赖运行时，看看有没有什么方案进行线下运行: glup(管道)、webpack(拓扑模块)
+``` bash
+<!DOCTYPE HTML>
+<html>
+    <script src="./main.js"></script>
+    <script>
+    // 构建工具给的标识位
+    require.config(__FRAM_CONFIG__);
+    </script>
+    <script>
+        require(a, [], () => {
+            // 业务处理
+        });
+    </scirpt>
+</html>
+```
+
+``` javascript
+define('a', () => {
+    var b = require('b')
+
+    export.run = function() {
+
+    }
+})
+```
+
+1. 扫描依赖关系表: a会依赖b,b依赖xxx.., 生成标识位  
+``` javascript
+{
+    a: ['b'],
+    b: ['xxx']
+}
+```
+2. 重新生成依赖数据(把上面的标识位替换成对应的代码)
+3. 执行工具采用模块化方案解决模块化处理依赖  
+
+优点: 
+1. 构建时生成配置，运行时直接执行
+2. 同步生成依赖
+3. 可以扩展
+
+### webpack工程化 + mvvm框架组件化 + 设计模式

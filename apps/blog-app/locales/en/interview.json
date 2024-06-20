@@ -1,4 +1,7 @@
 {
     "title": "interview",
-    "module": "module"
+    "module": {
+        "title": "module",
+        "commonJS": "CommonJS"
+    }
 }

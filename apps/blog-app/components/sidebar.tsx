@@ -13,6 +13,10 @@ interface SideBarProps {
   links: {
     label: string;
     href: string;
+    children?: {
+      label: string;
+      href: string;
+    }[];
   }[];
 }
 
@@ -27,15 +31,36 @@ const SideBar: FC<SideBarProps> = ({ links }) => {
             <NavigationMenuItem key={link.href} className="w-full">
               <Link href={link.href} legacyBehavior passHref>
                 <NavigationMenuLink
-                  className={`${navigationMenuTriggerStyle()} ${pathname?.includes(link.href) && link.href !== '/' ? ' text-primary-400' : ''} ${
+                  className={`${navigationMenuTriggerStyle()} flex-col ${pathname?.includes(link.href) && link.href !== '/' ? ' text-primary-400' : ''} ${
                     pathname === '/' && link.href === '/'
                       ? ' text-primary-400'
                       : ''
                   }`}
                 >
-                  {link.label}
+                  <p className="text-lg">{link.label}</p>
                 </NavigationMenuLink>
               </Link>
+
+              {link?.children?.map((subLink) => {
+                return (
+                  <NavigationMenuItem
+                    key={subLink.href}
+                    className="ml-2 w-full"
+                  >
+                    <Link href={subLink.href} legacyBehavior passHref>
+                      <NavigationMenuLink
+                        className={`${navigationMenuTriggerStyle()} ${pathname?.includes(subLink.href) && link.href !== '/' ? ' text-primary-400' : ''} ${
+                          pathname === '/' && link.href === '/'
+                            ? ' text-primary-400'
+                            : ''
+                        }`}
+                      >
+                        {subLink.label}
+                      </NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                );
+              })}
             </NavigationMenuItem>
           );
         })}

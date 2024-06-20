@@ -43,7 +43,7 @@ async function InterviewLayout({
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={82}>
-          <div className="relative box-border flex h-full flex-col overflow-auto p-4">
+          <div className="relative box-border flex h-full flex-col overflow-auto p-4 px-10">
             {children}
           </div>
         </ResizablePanel>

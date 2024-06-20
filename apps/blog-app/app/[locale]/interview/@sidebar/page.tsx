@@ -7,7 +7,18 @@ export default function InterviewPageSideBar() {
   const { t } = useTranslation();
 
   const links = useMemo(
-    () => [{ href: '/interview/module', label: t('module') }],
+    () => [
+      {
+        href: '/interview/module',
+        label: t('module.title'),
+        children: [
+          {
+            href: '/interview/module/commonjs',
+            label: t('module.commonJS'),
+          },
+        ],
+      },
+    ],
     [t]
   );
 
