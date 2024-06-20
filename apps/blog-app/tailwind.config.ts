@@ -78,7 +78,6 @@ const config = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
-
       typography: (theme: any) => ({
         light: {
           css: {
@@ -94,7 +93,7 @@ const config = {
         },
         dark: {
           css: {
-            'h1, strong, p': {
+            'h1, h2, h3, h4, strong, p': {
               color: theme('colors.gray.100'),
             },
             color: theme('colors.gray.100'),

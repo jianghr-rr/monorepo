@@ -2,11 +2,13 @@ import { useTheme } from 'next-themes';
 import type { ReactNode } from 'react';
 
 export default function MDXWrapper({ children }: { children?: ReactNode }) {
-  const { theme } = useTheme();
+  const { theme, systemTheme } = useTheme();
+
+  const currentTheme = theme === 'system' ? systemTheme : theme;
 
   return (
     <div
-      className={`prose ${theme === 'dark' ? 'prose-dark' : 'prose-light'} my-8 w-full`}
+      className={`prose ${currentTheme === 'dark' ? 'prose-dark' : 'prose-light'} my-8 w-full`}
     >
       {children}
     </div>

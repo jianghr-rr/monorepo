@@ -3,5 +3,8 @@
     "module": {
         "title": "module",
         "commonJS": "CommonJS"
+    },
+    "engineering": {
+        "title": "engineering"
     }
 }

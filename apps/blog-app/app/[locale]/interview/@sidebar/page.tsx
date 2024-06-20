@@ -18,6 +18,10 @@ export default function InterviewPageSideBar() {
           },
         ],
       },
+      {
+        href: '/interview/engineering',
+        label: t('engineering.title'),
+      },
     ],
     [t]
   );
