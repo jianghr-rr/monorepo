@@ -31,13 +31,13 @@ const SideBar: FC<SideBarProps> = ({ links }) => {
             <NavigationMenuItem key={link.href} className="w-full">
               <Link href={link.href} legacyBehavior passHref>
                 <NavigationMenuLink
-                  className={`${navigationMenuTriggerStyle()} flex-col ${pathname?.includes(link.href) && link.href !== '/' ? ' text-primary-400' : ''} ${
+                  className={`${navigationMenuTriggerStyle()} flex-col hover:text-primary-300 ${pathname?.includes(link.href) && link.href !== '/' ? ' text-primary-400' : ''} ${
                     pathname === '/' && link.href === '/'
                       ? ' text-primary-400'
                       : ''
                   }`}
                 >
-                  <p className="text-lg">{link.label}</p>
+                  <p className="font-semibold">{link.label}</p>
                 </NavigationMenuLink>
               </Link>
 
@@ -49,7 +49,7 @@ const SideBar: FC<SideBarProps> = ({ links }) => {
                   >
                     <Link href={subLink.href} legacyBehavior passHref>
                       <NavigationMenuLink
-                        className={`${navigationMenuTriggerStyle()} ${pathname?.includes(subLink.href) && link.href !== '/' ? ' text-primary-400' : ''} ${
+                        className={`${navigationMenuTriggerStyle()} -ml-px block border-l border-transparent pl-4 hover:text-primary-300 dark:text-primary-200 dark:hover:text-primary-300 ${pathname?.includes(subLink.href) && link.href !== '/' ? ' text-primary-400' : ''} ${
                           pathname === '/' && link.href === '/'
                             ? ' text-primary-400'
                             : ''

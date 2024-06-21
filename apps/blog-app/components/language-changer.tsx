@@ -3,16 +3,28 @@
 import { useRouter, usePathname } from 'next/navigation';
 import type { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/select';
 import i18nConfig from '~/i18nConfig';
+
+const localeMap = {
+  zh: '简体中文',
+  en: 'English',
+};
 
 export default function LanguageChanger() {
   const { i18n } = useTranslation();
-  const currentLocale = i18n.language;
+  const currentLocale = i18n.language as keyof typeof localeMap;
   const router = useRouter();
   const currentPathname = usePathname();
 
-  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const newLocale = e.target.value;
+  const handleChange = (value: string) => {
+    const newLocale = value;
 
     // set cookie for next-i18n-router
     const days = 30;
@@ -37,9 +49,14 @@ export default function LanguageChanger() {
   };
 
   return (
-    <select onChange={handleChange} value={currentLocale}>
-      <option value="zh">简体中文</option>
-      <option value="en">English</option>
-    </select>
+    <Select onValueChange={handleChange}>
+      <SelectTrigger className="w-[100px]">
+        <SelectValue placeholder={localeMap[currentLocale]} />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="zh">简体中文</SelectItem>
+        <SelectItem value="en">English</SelectItem>
+      </SelectContent>
+    </Select>
   );
 }

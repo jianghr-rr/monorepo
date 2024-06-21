@@ -18,35 +18,33 @@ const Navbar = () => {
     () => [
       { href: '/', label: t('home') },
       { href: '/fabric', label: t('fabric') },
+      { href: '/three', label: t('three') },
       { href: '/patterns', label: t('patterns') },
       { href: '/interview', label: t('interview') },
+      { href: '/algorithm', label: t('algorithm') },
     ],
     [t]
   );
 
   return (
-    <nav>
-      <div className="navbar mx-auto max-w-6xl flex-col px-8 sm:flex-row">
-        <NavigationMenu>
-          <NavigationMenuList>
-            {links.map((link) => {
-              return (
-                <Link key={link.href} href={link.href} legacyBehavior passHref>
-                  <NavigationMenuLink
-                    className={`${navigationMenuTriggerStyle()} text-xl ${pathname?.includes(link.href) && link.href !== '/' ? ' text-primary' : ''} ${
-                      pathname === '/' && link.href === '/'
-                        ? ' text-primary'
-                        : ''
-                    }`}
-                  >
-                    {link.label}
-                  </NavigationMenuLink>
-                </Link>
-              );
-            })}
-          </NavigationMenuList>
-        </NavigationMenu>
-      </div>
+    <nav className="text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">
+      <NavigationMenu>
+        <NavigationMenuList>
+          {links.map((link) => {
+            return (
+              <Link key={link.href} href={link.href} legacyBehavior passHref>
+                <NavigationMenuLink
+                  className={`${navigationMenuTriggerStyle()} bg-transparent hover:text-primary-400 dark:hover:text-primary-300 ${pathname?.includes(link.href) && link.href !== '/' ? ' text-primary' : ''} ${
+                    pathname === '/' && link.href === '/' ? ' text-primary' : ''
+                  }`}
+                >
+                  {link.label}
+                </NavigationMenuLink>
+              </Link>
+            );
+          })}
+        </NavigationMenuList>
+      </NavigationMenu>
     </nav>
   );
 };

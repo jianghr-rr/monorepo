@@ -5,6 +5,14 @@
         "commonJS": "CommonJS"
     },
     "engineering": {
-        "title": "工程化"
+        "title": "工程化",
+        "webpack": "Webpack",
+        "functional": "函数式"
+    },
+    "base": {
+        "title": "基础知识",
+        "this": "this",
+        "object": "面向对象",
+        "promise": "promise"
     }
 }

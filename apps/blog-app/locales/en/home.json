@@ -2,6 +2,9 @@
   "home": "home",
   "patterns": "patterns",
   "interview": "interview",
+  "fabric": "fabricJs",
+  "three": "threeJs",
+  "algorithm": "算法",
   "page": {
     "title": "blog"
   }

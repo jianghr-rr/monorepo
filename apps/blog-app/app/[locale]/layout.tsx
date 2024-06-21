@@ -3,10 +3,13 @@ import type { ReactNode } from 'react';
 import { inter, lexend } from '~/app/[locale]/fonts';
 import CodeSnippet from '~/components/code-snippet';
 import HomeNav from '~/components/home-nav';
+import Picture from '~/components/picture';
 import i18nConfig from '~/i18nConfig';
 import { AppProviders } from '~/providers/app-providers';
 import initTranslations from '../i18n';
+import PageTransition from './page-transition';
 import './globals.css';
+import './custom.css';
 
 const i18nNamespaces = ['home'];
 
@@ -50,9 +53,12 @@ const RootLayout = async function ({
           locale={locale}
           resources={resources}
         >
+          <Picture />
           <CodeSnippet />
           <HomeNav />
-          <main className="grow overflow-y-auto">{children}</main>
+          <main className="self-main grow overflow-y-auto">
+            <PageTransition>{children}</PageTransition>
+          </main>
         </AppProviders>
       </body>
     </html>

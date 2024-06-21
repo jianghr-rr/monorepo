@@ -5,6 +5,14 @@
         "commonJS": "CommonJS"
     },
     "engineering": {
-        "title": "engineering"
+        "title": "engineering",
+        "webpack": "webpack",
+        "functional": "functional"
+    },
+    "base": {
+        "title": "javascript",
+        "this": "this",
+        "object": "oob",
+        "promise": "promise"
     }
 }

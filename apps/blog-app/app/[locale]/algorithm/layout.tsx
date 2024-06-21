@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 import type { ReactNode } from 'react';
 import NavPageLayout from '~/components/nav-page-layout';
 
-const i18nNamespaces = ['patterns'];
+const i18nNamespaces = ['algorithm'];
 
 const DynamicSidebar = dynamic<{
   children: ReactNode;

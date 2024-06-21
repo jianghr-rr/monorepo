@@ -21,6 +21,30 @@ export default function InterviewPageSideBar() {
       {
         href: '/interview/engineering',
         label: t('engineering.title'),
+        children: [
+          {
+            href: '/interview/engineering/webpack',
+            label: t('engineering.webpack'),
+          },
+          {
+            href: '/interview/engineering/functional',
+            label: t('engineering.functional'),
+          },
+        ],
+      },
+      {
+        href: '/interview/base',
+        label: t('base.title'),
+        children: [
+          {
+            href: '/interview/base/this',
+            label: t('base.this'),
+          },
+          {
+            href: '/interview/base/object',
+            label: t('base.object'),
+          },
+        ],
       },
     ],
     [t]
