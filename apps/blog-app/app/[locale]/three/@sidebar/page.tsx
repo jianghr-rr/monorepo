@@ -6,7 +6,21 @@ import { SideBar } from '~/components/sidebar';
 export default function PatternsPageSideBar() {
   const { t } = useTranslation();
 
-  const links = useMemo(() => [{ href: '/three', label: t('three') }], [t]);
+  const links = useMemo(
+    () => [
+      {
+        href: '/three',
+        label: t('title'),
+        children: [
+          {
+            href: '/three/thebasics',
+            label: t('theBasics'),
+          },
+        ],
+      },
+    ],
+    [t]
+  );
 
   return <SideBar links={links} />;
 }

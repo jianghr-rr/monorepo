@@ -13,6 +13,38 @@
         "title": "javascript",
         "this": "this",
         "object": "oob",
-        "promise": "promise"
+        "promise": "promise",
+        "ast": "AST",
+        "es6": "es6+"
+    },
+    "react": {
+        "title": "react"
+    },
+    "vue": {
+        "title": "vue"
+    },
+    "typescript": {
+        "title": "TS"
+    },
+    "browser": {
+        "title": "browser"
+    },
+    "nodejs": {
+        "title": "NodeJs"
+    },
+    "webpack": {
+        "title": "Webpack"
+    },
+    "webgl": {
+        "title": "WebGL"
+    },
+    "lowcode": {
+        "title": "lowcode"
+    },
+    "microFE": {
+        "title": "microFE"
+    },
+    "nextjs": {
+        "title": "NextJs"
     }
 }

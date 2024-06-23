@@ -17,10 +17,10 @@ const Navbar = () => {
   const links = useMemo(
     () => [
       { href: '/', label: t('home') },
+      { href: '/interview', label: t('interview') },
       { href: '/fabric', label: t('fabric') },
       { href: '/three', label: t('three') },
       { href: '/patterns', label: t('patterns') },
-      { href: '/interview', label: t('interview') },
       { href: '/algorithm', label: t('algorithm') },
     ],
     [t]

@@ -36,6 +36,7 @@
     "highlight.js": "9.18.5",
     "i18next": "23.11.5",
     "i18next-resources-to-backend": "1.2.1",
+    "leva": "0.9",
     "lucide-react": "0.376.0",
     "next": "14.1.4",
     "next-i18n-router": "5.5.0",

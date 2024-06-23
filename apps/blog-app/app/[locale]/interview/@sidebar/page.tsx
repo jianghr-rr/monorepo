@@ -44,7 +44,55 @@ export default function InterviewPageSideBar() {
             href: '/interview/base/object',
             label: t('base.object'),
           },
+          {
+            href: '/interview/base/promise',
+            label: t('base.promise'),
+          },
+          {
+            href: '/interview/base/ast',
+            label: t('base.ast'),
+          },
+          {
+            href: '/interview/base/es6',
+            label: t('base.es6'),
+          },
         ],
+      },
+      {
+        href: '/interview/react',
+        label: t('react.title'),
+      },
+      {
+        href: '/interview/vue',
+        label: t('vue.title'),
+      },
+      {
+        href: '/interview/typescript',
+        label: t('typescript.title'),
+      },
+      {
+        href: '/interview/browser',
+        label: t('browser.title'),
+      },
+      {
+        href: '/interview/nodejs',
+        label: t('nodejs.title'),
+      },
+      {
+        href: '/interview/webpack',
+        label: t('webpack.title'),
+      },
+      {
+        href: '/interview/webgl',
+        label: t('webgl.title'),
+      },
+      {
+        href: '/interview/lowcode',
+        label: t('lowcode.title'),
+      },
+      {
+        href: '/interview/nextjs',
+        label: t('nextjs.title'),
       },
     ],
     [t]

@@ -13,6 +13,38 @@
         "title": "基础知识",
         "this": "this",
         "object": "面向对象",
-        "promise": "promise"
+        "promise": "promise",
+        "ast": "AST",
+        "es6": "es6+"
+    },
+    "react": {
+        "title": "react"
+    },
+    "vue": {
+        "title": "vue"
+    },
+    "typescript": {
+        "title": "TS"
+    },
+    "browser": {
+        "title": "浏览器"
+    },
+    "nodejs": {
+        "title": "NodeJs"
+    },
+    "webpack": {
+        "title": "Webpack"
+    },
+    "webgl": {
+        "title": "WebGL"
+    },
+    "lowcode": {
+        "title": "低代码"
+    },
+    "microFE": {
+        "title": "微前端"
+    },
+    "nextjs": {
+        "title": "NextJs"
     }
 }
