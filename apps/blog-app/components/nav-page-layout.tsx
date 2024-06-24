@@ -3,6 +3,7 @@
  */
 import type { ReactNode } from 'react';
 import initTranslations from '~/app/i18n';
+import PagePorgress from '~/components/nav-page-progress';
 import PageTransition from '~/components/nav-page-transition';
 import TranslationsProvider from '~/components/translations-provider';
 import {
@@ -39,9 +40,7 @@ async function PatternsLayout({
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={82}>
           <PageTransition>
-            <div className="relative box-border flex h-full flex-col overflow-auto p-4 px-10">
-              {children}
-            </div>
+            <PagePorgress>{children}</PagePorgress>
           </PageTransition>
         </ResizablePanel>
       </ResizablePanelGroup>

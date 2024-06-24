@@ -1,24 +1,31 @@
 'use client';
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+
+const TypingEffect = ({ text }: { text: string }) => {
+  const [displayedText, setDisplayedText] = useState('');
+
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      setDisplayedText((prev) => prev + text[index]);
+      index++;
+      if (index === text.length - 1) {
+        clearInterval(interval);
+      }
+    }, 100); // Adjust the speed here
+    return () => clearInterval(interval);
+  }, [text]);
+
+  return <motion.div>{displayedText ?? ''}</motion.div>;
+};
 
 const HomePage = () => {
   return (
     <div className="flex size-full items-center justify-center">
-      <motion.div
-        className="box"
-        animate={{
-          scale: [1, 2, 2, 1, 1],
-          rotate: [0, 0, 180, 180, 0],
-          borderRadius: ['0%', '0%', '50%', '50%', '0%'],
-        }}
-        transition={{
-          duration: 2,
-          ease: 'easeInOut',
-          times: [0, 0.2, 0.5, 0.8, 1],
-          repeat: Infinity,
-          repeatDelay: 1,
-        }}
-      />
+      <div className="page-title">
+        <TypingEffect text="砸, 瓦鲁多!" />
+      </div>
     </div>
   );
 };

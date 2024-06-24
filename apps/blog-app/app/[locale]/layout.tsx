@@ -1,9 +1,10 @@
 import { dir } from 'i18next';
+import NextTopLoader from 'nextjs-toploader';
 import type { ReactNode } from 'react';
 import { inter, lexend } from '~/app/[locale]/fonts';
 import CodeSnippet from '~/components/code-snippet';
 import HomeNav from '~/components/home-nav';
-import Picture from '~/components/picture';
+import { Picture } from '~/components/picture';
 import i18nConfig from '~/i18nConfig';
 import { AppProviders } from '~/providers/app-providers';
 import initTranslations from '../i18n';
@@ -48,6 +49,7 @@ const RootLayout = async function ({
       className={`h-full scroll-smooth ${inter.variable} ${inter.className} ${lexend.className}`}
     >
       <body className="flex h-full flex-col">
+        <NextTopLoader color="#8b5cf6" />
         <AppProviders
           namespaces={i18nNamespaces}
           locale={locale}

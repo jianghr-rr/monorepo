@@ -18,6 +18,20 @@ export default function PatternsPageSideBar() {
           },
         ],
       },
+      {
+        href: '/three/r3f',
+        label: t('r3f.title'),
+        children: [
+          {
+            href: '/three/r3f/thebasics',
+            label: t('r3f.theBasics'),
+          },
+          {
+            href: '/three/r3f/editable-cube',
+            label: t('r3f.editableCube'),
+          },
+        ],
+      },
     ],
     [t]
   );

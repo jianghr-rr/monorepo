@@ -1,4 +1,9 @@
 {
     "title": "ThreeJS",
-    "theBasics": "基础知识"
+    "theBasics": "基础知识",
+    "r3f": {
+        "title": "React Three Fiber",
+        "theBasics": "基础知识",
+        "editableCube": "可编辑的立方体"
+    }
 }

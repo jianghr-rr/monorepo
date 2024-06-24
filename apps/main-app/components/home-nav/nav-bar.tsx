@@ -16,11 +16,9 @@ const Navbar = () => {
   return (
     <nav>
       <div className="navbar mx-auto max-w-6xl flex-col px-8 sm:flex-row">
-        <li>
-          <Link href="/" className="btn btn-primary">
-            {t('home')}
-          </Link>
-        </li>
+        <Link href="/" className="btn btn-primary">
+          {t('home')}
+        </Link>
         <ul className="menu menu-horizontal md:ml-8">
           {links.map((link) => {
             return (

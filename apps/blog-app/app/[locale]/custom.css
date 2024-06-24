@@ -23,6 +23,25 @@
     background-color: #8b5cf6;
 }
 
+.loading-box {
+    width: 24px;
+    height: 24px;
+    background-color: #8b5cf6;
+}
+
+.progress-bar {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #8b5cf6;
+    transform-origin: 0%;
+  }
+
+.page-title {
+    @apply text-2xl font-bold tracking-tight text-purple-900 dark:text-purple-100 sm:text-3xl my-5;
+}
+
 .blog-h1 {
     @apply inline-block text-2xl font-extrabold tracking-tight text-purple-900 dark:text-purple-200 sm:text-3xl my-5;
 }
