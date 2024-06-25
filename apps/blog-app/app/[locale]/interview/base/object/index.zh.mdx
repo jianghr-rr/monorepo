@@ -1,1 +1,75 @@
-# webpack
+# 面向对象
+- 对象是什么
+- 构造函数
+- 原型对象
+- 实现继承及不同的方式
+## 对象是什么,为什么需要面向对象
+- 对象是对单个物体的简单抽象
+- 对象是一个容器，封装了函数和方法
+## 构造函数
+主要作用是生成对象  
+理解成一个模版，表征了一类物体的共同属性，从而生成对象。  
+这个模版可以理解成类，但是JS一开始设计是基于构造函数  原型链（constructor  prototype）。  
+构造函数的特征:  
+1. 函数体内的this指向它所生成的实例对象  
+2. 生成对象需要new进行实例化  
+3. 可以做初始化传参  
+
+**构造函数不初始化，能正常使用吗?**  
+不能  
+如果想要业务方无感知的使用这个构造函数
+``` javascript
+function Couser () {
+    const _isClass = this instanceof Couser;
+    if (!_isClass) {
+        return new Couser():
+    }
+
+    this.xxx = xxx;
+}
+
+const couser = Couser();
+```
+> 在写底层的API时，可以让外部不用感知内部的类型。  
+**new的时候做了一些什么事情**
+``` javascript
+function Couser() {};
+const couser = new Couser();
+```
+- 创建了一个空对象，作为返回的实例
+- 将空对象的原型对象指向构造函数的prototype属性
+- 将当前的实例对象赋值给this
+- 执行constructor里的代码
+**实例属性影响**
+``` javascript
+function Couser(a, b) {
+    this.a = a;
+    this.b = b;
+};
+const couser = new Couser('a', 'b');
+const couser1 = new Couser('a', 'b1');
+```
+对于实例的改变不会影响其他实例  
+### constructor是什么
+- 每个对象在创建的时候会拥有一个constructor属性
+- contructor继承自圆形对象
+- contructor指向构造函数  
+**在使用上面的方案构造对象会有问题吗?**
+同样的方法会被创建很多次  
+## 原型对象
+``` javascript
+function Couser(a, b) {
+    this.a = a;
+    this.b = b;
+    this.getA() {
+        return this.a;
+    }
+};
+const couser = new Couser('a', 'b');
+const couser1 = new Couser('a', 'b1');
+```
+利用
+- 构造函数在执行时会对将要生成的对象的原型对象指向构造函数的prototype属性。  
+- 每个生成的对象都有__proto__属性
+- 每个生成的对象都有constructor属性，指向构造函数  
+所以可以在原型对象（Course.prototype）上放一些公共属性。  
