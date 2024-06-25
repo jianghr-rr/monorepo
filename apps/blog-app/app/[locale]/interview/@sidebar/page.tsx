@@ -9,30 +9,6 @@ export default function InterviewPageSideBar() {
   const links = useMemo(
     () => [
       {
-        href: '/interview/module',
-        label: t('module.title'),
-        children: [
-          {
-            href: '/interview/module/commonjs',
-            label: t('module.commonJS'),
-          },
-        ],
-      },
-      {
-        href: '/interview/engineering',
-        label: t('engineering.title'),
-        children: [
-          {
-            href: '/interview/engineering/webpack',
-            label: t('engineering.webpack'),
-          },
-          {
-            href: '/interview/engineering/functional',
-            label: t('engineering.functional'),
-          },
-        ],
-      },
-      {
         href: '/interview/base',
         label: t('base.title'),
         children: [
@@ -55,6 +31,30 @@ export default function InterviewPageSideBar() {
           {
             href: '/interview/base/es6',
             label: t('base.es6'),
+          },
+        ],
+      },
+      {
+        href: '/interview/module',
+        label: t('module.title'),
+        children: [
+          {
+            href: '/interview/module/commonjs',
+            label: t('module.commonJS'),
+          },
+        ],
+      },
+      {
+        href: '/interview/engineering',
+        label: t('engineering.title'),
+        children: [
+          {
+            href: '/interview/engineering/webpack',
+            label: t('engineering.webpack'),
+          },
+          {
+            href: '/interview/engineering/functional',
+            label: t('engineering.functional'),
           },
         ],
       },

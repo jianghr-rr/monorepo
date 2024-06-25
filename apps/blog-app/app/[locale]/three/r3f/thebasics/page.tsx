@@ -201,7 +201,7 @@ export default function FabricPage() {
   const { t } = useTranslation();
 
   return (
-    <div>
+    <div className="blog-container">
       <h1 className="blog-h1">{t('theBasics')}</h1>
       <h2 className="blog-h2">了解如下知识点</h2>
       <ul className="blog-ul">

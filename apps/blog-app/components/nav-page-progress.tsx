@@ -18,7 +18,7 @@ const PagePorgress = ({ children }: { children: React.ReactNode }) => {
       />
       <div
         ref={carouselRef}
-        className="relative box-border flex h-full flex-col overflow-auto p-4 px-10"
+        className="align-center relative box-border flex h-full flex-col overflow-auto p-4 px-10"
       >
         {children}
       </div>

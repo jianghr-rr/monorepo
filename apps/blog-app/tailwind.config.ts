@@ -82,10 +82,13 @@ const config = {
         light: {
           css: {
             color: theme('colors.gray.900'),
+            h1: {
+              color: theme('colors.purple.900'),
+            },
             a: {
-              color: theme('colors.blue.600'),
+              color: theme('colors.purple.600'),
               '&:hover': {
-                color: theme('colors.blue.800'),
+                color: theme('colors.purple.800'),
               },
             },
             // 其他 light 主题的自定义样式
@@ -98,9 +101,9 @@ const config = {
             },
             color: theme('colors.gray.100'),
             a: {
-              color: theme('colors.blue.400'),
+              color: theme('colors.purple.400'),
               '&:hover': {
-                color: theme('colors.blue.600'),
+                color: theme('colors.purple.600'),
               },
             },
             // 其他 dark 主题的自定义样式
@@ -108,9 +111,15 @@ const config = {
         },
         DEFAULT: {
           css: {
+            margin: '0 auto !important',
             'h2, h3, h4, h5, ul, ol': {
               'margin-top': '1em',
               'margin-bottom': '0.6em',
+            },
+            h1: {
+              'font-size': theme('fontSize.3xl'),
+              'margin-top': '1.25rem !important',
+              'margin-bottom': '1.25rem',
             },
             'p, pre, blockquote': {
               'margin-top': '0.6em',
