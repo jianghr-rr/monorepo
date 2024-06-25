@@ -462,6 +462,26 @@ new MyPromise()
             }
         }
 
+        static resolve(value) {
+            if (value instanceof MyPromise) {
+                return value;
+            }
+
+            return new MyPromise((resolve) => {
+                resolve(value);
+            })
+        }
+
+        static reject(value) {
+            if (value instanceof MyPromise) {
+                return value;
+            }
+
+            return new MyPromise((resolve, reject) => {
+                reject(value);
+            })
+        }
+
         resolve(value) {
             if (this.status === PENDING) {
                 this.status = FULFILLED;
@@ -526,6 +546,10 @@ new MyPromise()
 
             return NewPromise;
         };
+
+        catch(onRejected) {
+            return this.then(null, onRejected);
+        }
 
         resolvePromise(newPromise, x, resolve, reject) {
             if (x === newPromise) {
@@ -595,4 +619,45 @@ new MyPromise()
         console.log(value);
     });
     ```
-    
+
+# 用es5写
+1. 初始化状态
+    ```JavaScript
+    var PENDING = 'pending';
+    var FULFILLED = 'fulfilled';
+    var REJECTED = 'rejected';
+
+    function MyPromise(fn) {
+        this.status = PENDING;
+        this.value = null;
+        this.reason = null;
+    }
+    ```
+2. resolve, reject
+    ``` JavaScript
+    var PENDING = 'pending';
+    var FULFILLED = 'fulfilled';
+    var REJECTED = 'rejected';
+
+    function MyPromise(fn) {
+        this.status = PENDING;
+        this.value = null;
+        this.reason = null;
+
+        var that = this;
+
+        function resolve(value) {
+            if(that.status === PENDING) {
+                that.status = FULFILLED;
+                that.value = value;
+            }
+        }
+
+        function reject(reason) {
+            if(that.status === PENDING) {
+                that.status = REJECTED;
+                that.reason = reason;
+            }
+        }
+    }
+    ```
