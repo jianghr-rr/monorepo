@@ -10,6 +10,7 @@ export default function FabricPageSideBar() {
     () => [
       { href: '/fabric/initial', label: t('initial') },
       { href: '/fabric/add-line', label: t('addLine') },
+      { href: '/fabric/select-line', label: t('selectLine') },
     ],
     [t]
   );

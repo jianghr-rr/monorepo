@@ -27,6 +27,7 @@
     "@types/prismjs": "1.26.3",
     "@types/react-highlight.js": "1.0.2",
     "@types/three": "0.165.0",
+    "ahooks": "3.8.0",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
     "fabric": "5.3.0",

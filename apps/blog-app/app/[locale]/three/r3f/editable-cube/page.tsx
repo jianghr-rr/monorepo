@@ -9,6 +9,8 @@ import { TransformControls, OrbitControls } from '@react-three/drei';
 import {
   Canvas,
   useFrame,
+  extend,
+  useThree,
   type Vector3,
   type ThreeEvent,
 } from '@react-three/fiber';
@@ -18,6 +20,25 @@ import { useTranslation } from 'react-i18next';
 import * as THREE from 'three';
 import { Button } from '~ui/button';
 import { CubeList } from './cube';
+
+extend({ GridHelper: THREE.GridHelper });
+
+function Grid() {
+  const { scene } = useThree();
+  const grid = useRef();
+
+  useEffect(() => {
+    if (grid.current) {
+      scene.add(grid.current);
+      return () => {
+        grid.current && scene.remove(grid.current);
+      };
+    }
+  }, [scene]);
+
+  return <gridHelper ref={grid} args={[100, 100]} />;
+}
+
 const BoxWithLinesAndPoints = ({
   position,
   id,
@@ -27,6 +48,7 @@ const BoxWithLinesAndPoints = ({
   vertices,
   edges,
   onClickCB,
+  onChangeCB,
   selectedObject,
 }: {
   selectedObject: any;
@@ -37,10 +59,11 @@ const BoxWithLinesAndPoints = ({
   currentCubeId: string;
   vertices: number[];
   edges: number[];
+  onChangeCB?: (e: any) => void;
   onClickCB?: (id: string, e: ThreeEvent<MouseEvent>) => void;
 }) => {
   const groupRef = useRef();
-  const transformControlsRef = useRef();
+  const transformControlsRef = useRef<any>();
 
   // 创建 BufferGeometry
   const lineGeometry = new THREE.BufferGeometry();
@@ -58,7 +81,7 @@ const BoxWithLinesAndPoints = ({
 
   useEffect(() => {
     console.log('groupRef:::', groupRef.current);
-    transformControlsRef.current?.attach(groupRef.current);
+    transformControlsRef.current?.attach?.(groupRef.current);
   }, [transformControlsRef, groupRef, mode]);
 
   // useEffect(() => {
@@ -72,6 +95,7 @@ const BoxWithLinesAndPoints = ({
       // @ts-ignore
       ref={transformControlsRef}
       mode={mode}
+      onChange={(e) => onChangeCB?.(e)}
     >
       <group
         ref={groupRef}
@@ -96,6 +120,7 @@ const BoxWithLinesAndPoints = ({
 
 export default function EditableCubePage() {
   const { t } = useTranslation();
+  const orbit = useRef<any>();
   const [mode, setMode] = useState<string>('translate');
   const [currentCubeId, setCurrentCubeId] = useState<string>('');
   const [selectedObject, setSelectedObject] = useState(null);
@@ -168,6 +193,38 @@ export default function EditableCubePage() {
       >
         rotate
       </Button>
+
+      <div style={{ width: '1000px', height: '540px' }}>
+        <Canvas camera={{ position: [0, 50, 40], fov: 25 }}>
+          <ambientLight intensity={0.5} />
+          <Grid />
+          <OrbitControls ref={orbit} />
+
+          {CubeList.map((cube) => (
+            <BoxWithLinesAndPoints
+              key={cube.cubeId + '_' + currentCubeId}
+              id={cube.cubeId}
+              currentCubeId={currentCubeId}
+              position={cube.position as unknown as Vector3}
+              size={cube.size as unknown as Vector3}
+              vertices={cube.vertices}
+              edges={cube.edges}
+              mode={mode}
+              selectedObject={selectedObject}
+              onChangeCB={(e) => {
+                console.log(e.target);
+                orbit.current.enabled = !e.target.dragging;
+              }}
+              onClickCB={(id: string, e: ThreeEvent<MouseEvent>) => {
+                // setCurrentCubeId(id);
+                // e.stopPropagation();
+                // console.log(e);
+                // setSelectedObject(e.eventObject);
+              }}
+            />
+          ))}
+        </Canvas>
+      </div>
     </div>
   );
 }

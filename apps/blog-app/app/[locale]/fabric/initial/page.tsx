@@ -30,9 +30,9 @@ export default function FabricPage() {
 
   return (
     <div>
-      <h3>{t('initial')}</h3>
+      <h1 className="blog-h1">{t('initial')}</h1>
       <canvas ref={canvasRef} width={600} height={400} />
-      <p>安装fabric:</p>
+      <p className="blog-p">安装fabric:</p>
       <Highlight language="javascript">
         {`
 npm install @types/fabric@5.3.7 --save

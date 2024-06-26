@@ -1,5 +1,6 @@
 {
     "title": "Fabric Tutorial",
     "initial": "Initial",
-    "addLine": "add Line"
+    "addLine": "add Line",
+    "selectLine": "select Line"
 }
