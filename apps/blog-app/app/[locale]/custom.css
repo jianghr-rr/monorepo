@@ -222,21 +222,21 @@
 }
 
 .blog-h2 {
-    @apply text-purple-400 hover:text-purple-700 dark:bg-purple-800 dark:text-purple-400 dark:ring-0 my-4 border-none shadow-none;
+    @apply text-purple-400 hover:text-purple-700 dark:bg-purple-800 dark:text-purple-400 dark:ring-0 my-4 border-none shadow-none text-xl;
 }
 
 .blog-h3 {
-    @apply relative border-none lg:-ml-2 lg:pl-2 my-3;
+    @apply relative border-none lg:-ml-2 lg:pl-2 my-3 text-lg;
 }
 
 .blog-p {
-    @apply my-4 text-lg text-slate-700 dark:text-slate-400;
+    @apply my-4 text-base text-slate-700 dark:text-slate-400;
 }
 
 .blog-ul {
-    @apply mt-2 space-y-2 lg:mt-4 lg:space-y-4;
+    @apply mt-2 text-base space-y-2 lg:mt-4 lg:space-y-4;
 }
 
 .blog-li {
-    @apply block w-full pl-3.5 before:pointer-events-none before:absolute before:-left-1 before:top-1/2 before:h-1.5 before:w-1.5 before:-translate-y-1/2 before:rounded-full text-slate-500 before:hidden before:bg-slate-300 hover:text-slate-600 hover:before:block dark:text-slate-400 dark:before:bg-slate-700 dark:hover:text-slate-300
+    @apply text-base block w-full pl-3.5 before:pointer-events-none before:absolute before:-left-1 before:top-1/2 before:h-1.5 before:w-1.5 before:-translate-y-1/2 before:rounded-full text-slate-500 before:hidden before:bg-slate-300 hover:text-slate-600 hover:before:block dark:text-slate-400 dark:before:bg-slate-700 dark:hover:text-slate-300
 }

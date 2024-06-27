@@ -87,7 +87,7 @@ importers:
       framer-motion: 11.2.11
       framer-motion-3d: 11.2.11
       gray-matter: 4.0.3
-      highlight.js: 9.18.5
+      highlight.js: 11.9.0
       i18next: 23.11.5
       i18next-resources-to-backend: 1.2.1
       leva: '0.9'
@@ -145,7 +145,7 @@ importers:
       framer-motion: 11.2.11_biqbaboplfbrettd7655fr4n2y
       framer-motion-3d: 11.2.11_qav3fvs6crhuucbq2m5wu7m6aq
       gray-matter: 4.0.3
-      highlight.js: 9.18.5
+      highlight.js: 11.9.0
       i18next: 23.11.5
       i18next-resources-to-backend: 1.2.1
       leva: 0.9.35_vclbomb6dii67jyd7u5uumgy7y
@@ -167,7 +167,7 @@ importers:
       react-resizable-panels: 2.0.19_biqbaboplfbrettd7655fr4n2y
       rehype-highlight: 7.0.0
       server-only: 0.0.1
-      tailwind-highlightjs: 2.0.1_6v3ywohyfogodftypf2mvesouy
+      tailwind-highlightjs: 2.0.1_yhf2jhxnblehyq63jxddztshwa
       tailwind-merge: 2.3.0
       tailwindcss-animate: 1.0.7_tailwindcss@3.4.3
       three: 0.135.0
@@ -2907,7 +2907,6 @@ packages:
   /@opentelemetry/api/1.9.0:
     resolution: {integrity: sha512-3giAOQvZiH5F9bMlMiv8+GSPMeqg0dbaeo58/0SlA9sxSqZhnUtxzX9/2FzyhS9sWQf5S0GJE0AKBrFqjpeYcg==}
     engines: {node: '>=8.0.0'}
-    dev: false
 
   /@opentelemetry/context-async-hooks/1.25.0_@opentelemetry+api@1.9.0:
     resolution: {integrity: sha512-sBW313mnMyFg0cp/40BRzrZBWG+581s2j5gIsa5fgGadswyILk4mNFATsqrCOpAx945RDuZ2B7ThQLgor9OpfA==}
@@ -11924,7 +11923,7 @@ packages:
       hoist-non-react-statics: 3.3.2
       i18next: 23.11.5
       i18next-fs-backend: 2.3.1
-      next: 14.1.4_biqbaboplfbrettd7655fr4n2y
+      next: 14.1.4_tfbglvjwgdk7gt2i6jbmwpc4re
       react: 18.2.0
       react-i18next: 14.1.2_oekxf6hybyawhdebxozx7q4h2a
     dev: false
@@ -11954,7 +11953,7 @@ packages:
       react: '>=16.0.0'
       react-dom: '>=16.0.0'
     dependencies:
-      next: 14.1.4_biqbaboplfbrettd7655fr4n2y
+      next: 14.1.4_tfbglvjwgdk7gt2i6jbmwpc4re
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     dev: true
@@ -12010,6 +12009,7 @@ packages:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+    dev: false
 
   /next/14.1.4_tfbglvjwgdk7gt2i6jbmwpc4re:
     resolution: {integrity: sha512-1WTaXeSrUwlz/XcnhGTY7+8eiaFvdet5z9u3V2jb+Ek1vFo0VhHKSAIJvDWfQpttWjnyw14kBeq28TPq7bTeEQ==}
@@ -12049,7 +12049,6 @@ packages:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
-    dev: false
 
   /nextjs-toploader/1.6.12_h6dj7hpgrjuca5cqek3dk6bqim:
     resolution: {integrity: sha512-nbun5lvVjlKnxLQlahzZ55nELVEduqoEXT03KCHnsEYJnFpI/3BaIzpMyq/v8C7UGU2NfxQmjq6ldZ310rsDqA==}
@@ -14769,7 +14768,7 @@ packages:
       - typescript
     dev: true
 
-  /tailwind-highlightjs/2.0.1_6v3ywohyfogodftypf2mvesouy:
+  /tailwind-highlightjs/2.0.1_yhf2jhxnblehyq63jxddztshwa:
     resolution: {integrity: sha512-kh9e/WEi9EkP4h9keWlwBAsDeSZ3YGyQJ7XexIw98mVIVUm418OTNPqvYouoTeByPPVvu7TH2sMEFKt1A04VcA==}
     peerDependencies:
       highlight.js: ^10.7.2
@@ -14777,7 +14776,7 @@ packages:
     dependencies:
       app-root-path: 3.1.0
       css: 3.0.0
-      highlight.js: 9.18.5
+      highlight.js: 11.9.0
       lodash.merge: 4.6.2
       sync-fetch: 0.3.1
       tailwindcss: 3.4.3
