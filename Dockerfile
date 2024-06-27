@@ -10,10 +10,8 @@ FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} as app-builder
 RUN apk add --no-cache git jq && corepack enable
 
 # 更新包列表并安装 Python 和构建工具
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip build-essential && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache python3 py3-pip build-base
+
 
 WORKDIR /app
 
