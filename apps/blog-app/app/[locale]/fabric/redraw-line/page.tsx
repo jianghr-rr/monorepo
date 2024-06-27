@@ -42,8 +42,8 @@ export default function AddLinePage() {
 
   const addingControlPoint = (e: any) => {
     const obj = e.target;
-
-    if (obj && obj.type === 'line') {
+    console.log(obj);
+    if (obj && obj.name === 'line-custom') {
       const point1 = new fabric.Circle({
         left: newLineCoordinates.current?.x1,
         top: newLineCoordinates.current?.y1,
@@ -51,6 +51,9 @@ export default function AddLinePage() {
         fill: 'red',
         originX: 'center',
         originY: 'center',
+        hasBorders: false,
+        hasControls: false,
+        name: 'start-point',
       });
 
       const point2 = new fabric.Circle({
@@ -60,6 +63,9 @@ export default function AddLinePage() {
         fill: 'blue',
         originX: 'center',
         originY: 'center',
+        hasBorders: false,
+        hasControls: false,
+        name: 'end-point',
       });
 
       fabricCanvasRef.current?.add(point1, point2);
@@ -67,15 +73,42 @@ export default function AddLinePage() {
     }
   };
 
-  const updateNewLineCoordinates = (e: fabric.IEvent<MouseEvent>) => {
+  const endOfLineToFollowPointer = (e: any) => {
     const obj = e.target;
-    newLineCoordinates.current = {};
 
+    if (obj.name === 'start-point') {
+      fabricCanvasRef.current?.getObjects().forEach((shape) => {
+        if (shape.name === 'line-custom') {
+          shape.set({
+            // @ts-ignore
+            x1: obj.left,
+            y1: obj.top,
+          });
+          shape.setCoords();
+        }
+      });
+    }
+
+    if (obj.name === 'end-point') {
+      fabricCanvasRef.current?.getObjects().forEach((shape) => {
+        if (shape.name === 'line-custom') {
+          shape.set({
+            // @ts-ignore
+            x2: obj.left,
+            y2: obj.top,
+          });
+          shape.setCoords();
+        }
+      });
+    }
+  };
+
+  const updateNewLineCoordinates = (e: fabric.IEvent<MouseEvent>) => {
+    const obj = e.target ?? e.selected?.[0];
+    newLineCoordinates.current = {};
     if (obj && obj.name === 'line-custom') {
       const centerX = obj.getCenterPoint()?.x;
       const centerY = obj.getCenterPoint()?.y;
-
-      console.log(obj);
       // @ts-ignore
       const coords = obj.calcLinePoints();
       console.log(coords);
@@ -90,6 +123,16 @@ export default function AddLinePage() {
         x2: centerX + x2Offset,
         y2: centerY + y2Offset,
       };
+
+      obj.set({
+        // @ts-ignore
+        x1: centerX + x1Offset,
+        y1: centerY + y1Offset,
+        x2: centerX + x2Offset,
+        y2: centerY + y2Offset,
+      });
+
+      obj.setCoords();
     }
   };
 
@@ -143,6 +186,7 @@ export default function AddLinePage() {
             originY: 'center',
             selectable: false,
             name: 'line-custom',
+            hasControls: false,
           });
 
           fabricCanvasRef.current?.add(line);
@@ -177,6 +221,9 @@ export default function AddLinePage() {
         'selection:updated',
         updateNewLineCoordinates
       );
+
+      // 移动点时改变线段的坐标
+      fabricCanvasRef.current?.on('object:moving', endOfLineToFollowPointer);
     }
   };
 
@@ -203,46 +250,14 @@ export default function AddLinePage() {
       >
         {t('selectLine')}
       </Button>
+      <p>双击控制线段</p>
       <p className="blog-p">
-        绘制两个点，关注一下originX和originY属性，作为渲染出图形的相对位置的参照
+        绑定object的move事件，在移动时更新line的坐标，记得setCoords
       </p>
       <Highlight language={'javascript'}>
         {`
-
-  const addingControlPoint = (e: any) => {
-    const obj = e.target;
-
-    const point1 = new fabric.Circle({
-      left: obj.x1,
-      top: obj.y1,
-      radius: obj.strokeWidth * 2,
-      fill: 'red',
-      originX: 'center',
-      originY: 'center',
-    });
-
-    const point2 = new fabric.Circle({
-      left: obj.x2,
-      top: obj.y2,
-      radius: obj.strokeWidth * 2,
-      fill: 'blue',
-      originX: 'center',
-      originY: 'center',
-    });
-
-    fabricCanvasRef.current?.add(point1, point2);
-    fabricCanvasRef.current?.requestRenderAll();
-  };
         `}
       </Highlight>
-      <h3 className="blog-h3">移动后改变添加的点的坐标</h3>
-      <ol className="blog-ul">
-        <li className="blog-li">1. 获取线段的中心点及偏移量，计算点的偏移量</li>
-        <li className="blog-li">
-          2. 设置一个新的变量，用来存储新的坐标，并更新线段
-        </li>
-        <li className="blog-li">3. 更新这个变量添加一些选中事件来重制</li>
-      </ol>
     </div>
   );
 }
