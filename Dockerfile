@@ -20,7 +20,7 @@ RUN TURBO_VERSION=$(cat package.json | jq '.devDependencies["turbo"]' -r) npm i 
 COPY --link . .
 
 # https://turbo.build/repo/docs/handbook/deploying-with-docker
-RUN turbo prune --scope=main-app --docker --out-dir=./out/main-app/
+RUN turbo prune --scope=blog-app --docker --out-dir=./out/blog-app/
 
 #############################################################
 # Stage 2 - App installation                                #
@@ -43,11 +43,11 @@ RUN pnpm install
 #    yarn install --inline-builds
 
 # Build the project
-COPY --from=app-builder /app/out/main-app/full/ .
+COPY --from=app-builder /app/out/blog-app/full/ .
 COPY --link .gitignore turbo.json tsconfig.base.json ./
 
-RUN npm run migrations-generate-main-app
-RUN npm run build-main-app
+# RUN npm run migrations-generate-blog-app
+RUN npm run build-blog-app
 
 #############################################################
 # Stage 3 - App runner                                      #
@@ -69,15 +69,15 @@ RUN chown nextjs:nodejs .next
 
 USER nextjs
 
-COPY --from=app-installer --chown=nextjs:nodejs /app/apps/main-app/next.config.mjs \
-                    /app/apps/main-app/package.json \
+COPY --from=app-installer --chown=nextjs:nodejs /app/apps/blog-app/next.config.mjs \
+                    /app/apps/blog-app/package.json \
                     ./
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=app-installer --chown=nextjs:nodejs /app/apps/main-app/.next/standalone ./
-COPY --from=app-installer --chown=nextjs:nodejs /app/apps/main-app/.next/static ./apps/main-app/.next/static
-COPY --from=app-installer --chown=nextjs:nodejs /app/apps/main-app/public ./apps/main-app/public
+COPY --from=app-installer --chown=nextjs:nodejs /app/apps/blog-app/.next/standalone ./
+COPY --from=app-installer --chown=nextjs:nodejs /app/apps/blog-app/.next/static ./apps/blog-app/.next/static
+COPY --from=app-installer --chown=nextjs:nodejs /app/apps/blog-app/public ./apps/blog-app/public
 
 
 EXPOSE 4000
@@ -86,5 +86,5 @@ ENV PORT 4000
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node apps/main-app/server.js
+CMD HOSTNAME="0.0.0.0" node apps/blog-app/server.js
 

@@ -21,6 +21,10 @@
         "dependsOn": ["main-app#build"],
         "cache": false
       },
+      "build-blog-app": {
+        "dependsOn": ["blog-app#build"],
+        "cache": false
+      },
       "migrations-generate-main-app": {
         "dependsOn": ["main-app#migrations:generate"],
         "cache": false

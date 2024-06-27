@@ -15,6 +15,7 @@
     "g:lint-staged-files": "lint-staged --allow-empty",
     "g:lint-styles": "turbo run lint-styles --cache-dir=.cache/turbo --color",
     "build-main-app": "turbo run build-main-app",
+    "build-blog-app": "turbo run build-blog-app",
     "migrations-generate-main-app": "turbo run migrations-generate-main-app",
     "start-main": "turbo run start-main",
     "start-blog": "turbo run start-blog"
