@@ -9,7 +9,7 @@ FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} as app-builder
 
 RUN apk update && apk add build-base git \
     && apk add --no-cache g++ cairo-dev jpeg-dev pango-dev giflib-dev \
-    && apk add --update --repository http://dl-3.alpinelinux.org/alpine/edge/testing libmount ttf-dejavu ttf-droid ttf-freefont ttf-liberation fontconfig
+    && apk add --update --repository http://dl-3.alpinelinux.org/alpine/edge/testing libmount ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family fontconfig
 
 WORKDIR /app
 
