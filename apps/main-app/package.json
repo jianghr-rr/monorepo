@@ -20,7 +20,6 @@
     "@tailwindcss/typography": "0.5.13",
     "@types/ua-parser-js": "0.7.39",
     "accept-language": "3.0.18",
-    "canvas": "2.11.2",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
     "daisyui": "3.9.4",
