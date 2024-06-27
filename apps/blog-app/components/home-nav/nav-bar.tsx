@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useMemo } from 'react';
+import { useMemo, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   navigationMenuTriggerStyle,
@@ -27,25 +27,29 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">
-      <NavigationMenu>
-        <NavigationMenuList>
-          {links.map((link) => {
-            return (
-              <Link key={link.href} href={link.href} legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={`${navigationMenuTriggerStyle()} bg-transparent hover:text-primary-400 dark:hover:text-primary-300 ${pathname?.includes(link.href) && link.href !== '/' ? ' text-primary' : ''} ${
-                    pathname === '/' && link.href === '/' ? ' text-primary' : ''
-                  }`}
-                >
-                  {link.label}
-                </NavigationMenuLink>
-              </Link>
-            );
-          })}
-        </NavigationMenuList>
-      </NavigationMenu>
-    </nav>
+    <Suspense fallback={null}>
+      <nav className="text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">
+        <NavigationMenu>
+          <NavigationMenuList>
+            {links.map((link) => {
+              return (
+                <Link key={link.href} href={link.href} legacyBehavior passHref>
+                  <NavigationMenuLink
+                    className={`${navigationMenuTriggerStyle()} bg-transparent hover:text-primary-400 dark:hover:text-primary-300 ${pathname?.includes(link.href) && link.href !== '/' ? ' text-primary' : ''} ${
+                      pathname === '/' && link.href === '/'
+                        ? ' text-primary'
+                        : ''
+                    }`}
+                  >
+                    {link.label}
+                  </NavigationMenuLink>
+                </Link>
+              );
+            })}
+          </NavigationMenuList>
+        </NavigationMenu>
+      </nav>
+    </Suspense>
   );
 };
 

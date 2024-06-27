@@ -8,6 +8,7 @@ const DynamicSidebar = dynamic<{
   children: ReactNode;
 }>(() => import('./@sidebar/page'), {
   ssr: false,
+  loading: () => null,
 });
 
 function FabricLayout({
