@@ -7,11 +7,9 @@ ARG ALPINE_VERSION=3.18
 
 FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} as app-builder
 
-RUN apk add --no-cache git jq && corepack enable
-
-# 更新包列表并安装 Python 和构建工具
-RUN apk add --no-cache python3 py3-pip build-base
-
+RUN apk update && \
+    apk add --no-cache git jq python3 py3-pip build-base && \
+    corepack enable
 
 WORKDIR /app
 
