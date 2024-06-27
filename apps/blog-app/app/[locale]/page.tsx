@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import { useTheme } from 'next-themes';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { Transition } from '~/components/transition';
 import { useInterval } from '~/hooks';
 
@@ -43,30 +43,32 @@ const HomePage = () => {
   );
 
   return (
-    <div className="flex size-full items-center justify-center">
-      <div className="page-row align-center mx-40 shrink-0 grow text-5xl">
-        {disciplines.map((item) => (
-          <Transition
-            unmount
-            in={item === currentDiscipline}
-            timeout={{ enter: 3000, exit: 2000 }}
-            key={item}
-          >
-            {({ status, nodeRef }: { status: string; nodeRef: any }) => (
-              <span
-                aria-hidden
-                ref={nodeRef}
-                className="page-word"
-                data-plus={true}
-                data-status={status}
-              >
-                {item}
-              </span>
-            )}
-          </Transition>
-        ))}
+    <Suspense>
+      <div className="flex size-full items-center justify-center">
+        <div className="page-row align-center mx-40 shrink-0 grow text-5xl">
+          {disciplines.map((item) => (
+            <Transition
+              unmount
+              in={item === currentDiscipline}
+              timeout={{ enter: 3000, exit: 2000 }}
+              key={item}
+            >
+              {({ status, nodeRef }: { status: string; nodeRef: any }) => (
+                <span
+                  aria-hidden
+                  ref={nodeRef}
+                  className="page-word"
+                  data-plus={true}
+                  data-status={status}
+                >
+                  {item}
+                </span>
+              )}
+            </Transition>
+          ))}
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 };
 export default HomePage;
