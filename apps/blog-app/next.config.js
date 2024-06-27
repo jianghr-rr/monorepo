@@ -40,7 +40,8 @@ const nextConfig = {
       bufferutil: 'commonjs bufferutil',
       canvas: 'commonjs canvas',
     });
-    config.externals.push('canvas');
+    // config.externals.push('canvas');
+    config.resolve.alias.canvas = false;
     // config.infrastructureLogging = { debug: /PackFileCache/ };
     return config;
   },
