@@ -6,6 +6,7 @@
   "license": "ISC",
   "description": "",
   "main": "index.js",
+  "packageManager": "pnpm@7.11.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "deps:check": "npx npm-check-updates@latest --configFileName ncurc.yml --workspaces --root --mergeConfig",
@@ -14,7 +15,9 @@
     "g:lint-staged-files": "lint-staged --allow-empty",
     "g:lint-styles": "turbo run lint-styles --cache-dir=.cache/turbo --color",
     "build-main-app": "turbo run build-main-app",
-    "migrations-generate-main-app": "turbo run migrations-generate-main-app"
+    "migrations-generate-main-app": "turbo run migrations-generate-main-app",
+    "start-main": "turbo run start-main",
+    "start-blog": "turbo run start-blog"
   },
   "dependencies": {
     "cross-env": "7.0.3"
@@ -29,13 +32,14 @@
     "@bid-np/eslint-config-bases": "workspace:*",
     "eslint": "8.57.0",
     "husky": "9.0.11",
+    "highlight.js": "9.18.5",
     "lint-staged": "15.2.2",
     "npm-run-all2": "6.1.2",
     "prettier": "3.2.5",
     "rimraf": "5.0.5",
     "shell-quote": "1.8.1",
     "syncpack": "12.3.0",
-    "turbo": "1.13.0",
+    "turbo": "2.0.1",
     "typescript": "5.4.3"
   },
   "engines": {

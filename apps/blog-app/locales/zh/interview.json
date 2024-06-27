@@ -1,0 +1,50 @@
+{
+    "title": "知识体系",
+    "module": {
+        "title": "模块化",
+        "commonJS": "CommonJS"
+    },
+    "engineering": {
+        "title": "工程化",
+        "webpack": "Webpack",
+        "functional": "函数式"
+    },
+    "base": {
+        "title": "基础知识",
+        "this": "this",
+        "object": "面向对象",
+        "promise": "promise",
+        "ast": "AST",
+        "es6": "es6+"
+    },
+    "react": {
+        "title": "react"
+    },
+    "vue": {
+        "title": "vue"
+    },
+    "typescript": {
+        "title": "TS"
+    },
+    "browser": {
+        "title": "浏览器"
+    },
+    "nodejs": {
+        "title": "NodeJs"
+    },
+    "webpack": {
+        "title": "Webpack"
+    },
+    "webgl": {
+        "title": "WebGL"
+    },
+    "lowcode": {
+        "title": "低代码"
+    },
+    "microFE": {
+        "title": "微前端"
+    },
+    "nextjs": {
+        "title": "NextJs"
+    }
+}

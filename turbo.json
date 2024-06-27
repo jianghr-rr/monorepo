@@ -1,9 +1,10 @@
 {
     "$schema": "https://turbo.build/schema.json",
     "globalDependencies": ["**/.env.*local", "**/tsconfig*.json"],
-    "pipeline": {
+    "tasks": {
       "test": {},
       "dev": {},
+      "start": {},
       "test-unit": {},
       "build": {},
       "migrations:generate": {},
@@ -20,12 +21,16 @@
         "dependsOn": ["main-app#build"],
         "cache": false
       },
-      "dev-main-app": {
+      "migrations-generate-main-app": {
+        "dependsOn": ["main-app#migrations:generate"],
+        "cache": false
+      },
+      "start-main": {
         "dependsOn": ["main-app#dev"],
         "cache": false
       },
-      "migrations-generate-main-app": {
-        "dependsOn": ["main-app#migrations:generate"],
+      "start-blog": {
+        "dependsOn": ["blog-app#dev"],
         "cache": false
       }
     }

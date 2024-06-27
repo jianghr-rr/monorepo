@@ -1,0 +1,137 @@
+# commonJS
+## 模块的封装
+``` javascript
+let wrap = function(script) { // eslint-disable-line func-style
+  return Module.wrapper[0] + script + Module.wrapper[1];
+};
+
+const wrapper = [
+  '(function (exports, require, module, __filename, __dirname) { ',
+  '\n});',
+];
+
+// ...
+ObjectDefineProperty(Module, 'wrapper', {
+  __proto__: null,
+  get() {
+    return wrapperProxy;
+  },
+
+  set(value) {
+    patched = true;
+    wrapperProxy = value;
+  },
+});
+
+// ...
+let wrapperProxy = new Proxy(wrapper, {
+  __proto__: null,
+
+  set(target, property, value, receiver) {
+    patched = true;
+    return ReflectSet(target, property, value, receiver);
+  },
+
+  defineProperty(target, property, descriptor) {
+    patched = true;
+    return ObjectDefineProperty(target, property, descriptor);
+  },
+});
+
+// ...
+ObjectDefineProperty(Module, 'wrap', {
+  __proto__: null,
+  get() {
+    return wrap;
+  },
+
+  set(value) {
+    patched = true;
+    wrap = value;
+  },
+});
+```
+这意味着任何模块文件的内容都会被封装成如下形式：
+``` javascript
+(function (exports, require, module, __filename, __dirname) {
+  // 模块代码
+});
+```
+编译并执行包装后的代码
+``` javascript
+
+Module.prototype._compile = function(content, filename, format) {
+  // ...
+  const dirname = path.dirname(filename);
+  const require = makeRequireFunction(this, redirects);
+  let result;
+  const exports = this.exports;
+  const thisValue = exports;
+  const module = this;
+  // ...
+  result = ReflectApply(compiledWrapper, thisValue, [exports, require, module, filename, dirname]);
+  return result;
+}
+```
+> ReflectApply: Reflect.apply  
+compiledWrapper: 
+``` javascript
+  let compiledWrapper;
+  if (format !== 'module') {
+    const result = wrapSafe(filename, content, this, undefined, format);
+    compiledWrapper = result.function;
+    if (result.canParseAsESM) {
+      format = 'module';
+    }
+  }
+```
+具体执行流程  
+- 读取模块文件内容：使用 fs.readFileSync 读取模块文件的内容。
+- 包装模块代码：使用 Module.wrap 将模块代码封装在一个函数中。
+- 编译模块代码：使用 wrapSafe 将包装后的代码编译为可执行函数。
+- 执行模块代码：调用编译后的函数，并传递必要的参数（exports、require、module、__filename 和 __dirname）。
+
+### 源代码例子
+``` javascript
+// example.js
+const fs = require('fs');
+module.exports = function() {
+  console.log('Hello, world!');
+};
+
+```
+在加载这个模块时，Node.js 实际上执行的代码类似于：
+``` javascript
+(function (exports, require, module, __filename, __dirname) {
+  const fs = require('fs');
+  module.exports = function() {
+    console.log('Hello, world!');
+  };
+})(exports, require, module, __filename, __dirname);
+```  
+## 模块导出
+并通过 module.exports 或 exports 对象导出。
+``` javascript
+  module.exports = function() {
+    console.log('Hello, world!');
+  };
+```
+## 模块加载
+1. 加载核心模块
+2. 路径解析和文件扩展名处理
+3. Module._load来加载模块
+``` javascript
+Module.prototype.load = function(filename) {
+  const extension = path.extname(filename) || '.js';
+  if (!Module._extensions[extension]) {
+    throw new Error('Unknown extension: ' + extension);
+  }
+  Module._extensions[extension](this, filename);
+  this.loaded = true;
+};
+
+Module._extensions['.js'] = function(module, filename) {
+  const content = fs.readFileSync(filename, 'utf8');
+  module._compile(content, filename);
+};
+```
