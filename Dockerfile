@@ -73,15 +73,15 @@ RUN chown nextjs:nodejs .next
 
 USER nextjs
 
-COPY --from=app-installer --chown=nextjs:nodejs /app/apps/blog-app/next.config.mjs \
-                    /app/apps/blog-app/package.json \
+COPY --from=app-installer --chown=nextjs:nodejs /apps/blog-app/next.config.mjs \
+                    /apps/blog-app/package.json \
                     ./
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=app-installer --chown=nextjs:nodejs /app/apps/blog-app/.next/standalone ./
-COPY --from=app-installer --chown=nextjs:nodejs /app/apps/blog-app/.next/static ./apps/blog-app/.next/static
-COPY --from=app-installer --chown=nextjs:nodejs /app/apps/blog-app/public ./apps/blog-app/public
+COPY --from=app-installer --chown=nextjs:nodejs /apps/blog-app/.next/standalone ./
+COPY --from=app-installer --chown=nextjs:nodejs /apps/blog-app/.next/static ./apps/blog-app/.next/static
+COPY --from=app-installer --chown=nextjs:nodejs /apps/blog-app/public ./apps/blog-app/public
 
 
 EXPOSE 4000
