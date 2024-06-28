@@ -38,6 +38,7 @@ COPY --link .gitignore ./
 COPY pnpm-workspace.yaml ./
 COPY .npmrc ./
 
+RUN npm install pnpm -g
 RUN pnpm install
 
 # Alternatively we can use a build cache (buildx)
