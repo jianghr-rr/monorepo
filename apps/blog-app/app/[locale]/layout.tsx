@@ -1,6 +1,6 @@
 import { dir } from 'i18next';
 import NextTopLoader from 'nextjs-toploader';
-import { Suspense, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { inter, lexend } from '~/app/[locale]/fonts';
 import CodeSnippet from '~/components/code-snippet';
 import HomeNav from '~/components/home-nav';
@@ -55,14 +55,12 @@ const RootLayout = async function ({
           locale={locale}
           resources={resources}
         >
-          <Suspense>
-            <Picture />
-            <CodeSnippet />
-            <HomeNav />
-            <main className="self-main grow overflow-y-auto">
-              <PageTransition>{children}</PageTransition>
-            </main>
-          </Suspense>
+          <Picture />
+          <CodeSnippet />
+          <HomeNav />
+          <main className="self-main grow overflow-y-auto">
+            <PageTransition>{children}</PageTransition>
+          </main>
         </AppProviders>
       </body>
     </html>
