@@ -12,6 +12,16 @@ export default function FabricPageSideBar() {
       { href: '/fabric/add-line', label: t('addLine') },
       { href: '/fabric/select-line', label: t('selectLine') },
       { href: '/fabric/redraw-line', label: t('redrawLine') },
+      {
+        href: '/fabric/fabric-demo',
+        label: t('fabricDemo.title'),
+        children: [
+          {
+            href: '/fabric/fabric-demo/e-w-e-b',
+            label: t('fabricDemo.ErasingWithEraserBrush'),
+          },
+        ],
+      },
     ],
     [t]
   );
