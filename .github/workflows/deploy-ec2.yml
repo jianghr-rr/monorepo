@@ -27,6 +27,7 @@ jobs:
             git checkout . ;
             git pull origin poc;
             echo '------ git pull done ------';
+            docker rm $(docker stop $(docker ps -a -q --filter ancestor=knowledge-web-docker));
             echo '------ docker rm done ------' ;
             docker build -t knowledge-web-docker . ;
             echo '------ docker build done ------'

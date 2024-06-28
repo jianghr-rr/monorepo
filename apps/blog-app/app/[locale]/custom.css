@@ -12,7 +12,7 @@
     color: color-mix(in lab, #701a75 0%, transparent);
     transition: opacity 0.5s ease 400ms;
     isolation: isolate;
-    /* --delay: 600ms; */
+    --delay: 600ms;
   
     &::after {
       content: '';
@@ -107,7 +107,7 @@
         animation-name: fade-in;
   
       /* @media (--mediaUseMotion) { */
-        animation-name: introLine;
+        /* animation-name: introLine; */
       /* } */
     }
   
