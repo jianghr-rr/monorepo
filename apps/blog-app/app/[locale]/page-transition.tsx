@@ -36,7 +36,7 @@ const PageTransition = ({ children }: { children: React.ReactNode }) => {
           className="size-full"
           key={pathname}
           variants={variants}
-          initial="out"
+          initial="in"
           animate="in"
           transition={{ duration: 0.5 }}
         >
