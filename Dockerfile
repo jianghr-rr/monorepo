@@ -36,6 +36,7 @@ WORKDIR /app
 # First install the dependencies (as they change less often)
 COPY --link .gitignore ./
 COPY pnpm-workspace.yaml ./
+COPY .npmrc ./
 
 RUN pnpm install
 
