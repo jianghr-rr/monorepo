@@ -83,8 +83,16 @@ export default function InterviewPageSideBar() {
         label: t('webpack.title'),
       },
       {
+        href: '/interview/canvas',
+        label: t('canvas.title'),
+      },
+      {
+        href: '/interview/svg',
+        label: t('svg.title'),
+      },
+      {
         href: '/interview/webgl',
-        label: t('webgl.title'),
+        label: t('WebGL.title'),
       },
       {
         href: '/interview/lowcode',
