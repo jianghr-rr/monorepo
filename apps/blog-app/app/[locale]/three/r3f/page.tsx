@@ -6,8 +6,8 @@ export default function PatternsPage() {
   const { t } = useTranslation();
 
   return (
-    <div>
-      <h1 className="page-title">{t('r3f.title')}</h1>
+    <div className="blog-container">
+      <h1 className="blog-h1">{t('r3f.title')}</h1>
       <p className="blog-p">使用R3F来创建3D的web应用</p>
     </div>
   );

@@ -15,7 +15,10 @@
         "object": "面向对象",
         "promise": "promise",
         "ast": "AST",
-        "es6": "es6+"
+        "es6": "ES6",
+        "es": {
+            "const": "const"
+        }
     },
     "react": {
         "title": "react"

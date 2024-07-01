@@ -31,6 +31,12 @@ export default function InterviewPageSideBar() {
           {
             href: '/interview/base/es6',
             label: t('base.es6'),
+            children: [
+              {
+                href: '/interview/base/es6/const',
+                label: t('base.es.const'),
+              },
+            ],
           },
         ],
       },
