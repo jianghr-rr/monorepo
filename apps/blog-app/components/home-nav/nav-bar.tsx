@@ -35,7 +35,7 @@ const Navbar = () => {
               return (
                 <Link key={link.href} href={link.href} legacyBehavior passHref>
                   <NavigationMenuLink
-                    className={`${navigationMenuTriggerStyle()} bg-transparent hover:text-primary-400 dark:hover:text-primary-300 ${pathname?.includes(link.href) && link.href !== '/' ? ' text-primary' : ''} ${
+                    className={`${navigationMenuTriggerStyle()} home-nav bg-transparent hover:text-primary-400 dark:hover:text-primary-300 ${pathname?.includes(link.href) && link.href !== '/' ? ' text-primary' : ''} ${
                       pathname === '/' && link.href === '/'
                         ? ' text-primary'
                         : ''

@@ -182,6 +182,14 @@
     }
 }
 
+.home-nav {
+  background-color: transparent !important;
+
+  &:hover {
+    background-color: transparent !important;
+  }
+}
+
 .self-main > div {
     height: 100%;
     overflow: hidden;

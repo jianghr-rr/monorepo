@@ -34,7 +34,7 @@ async function PatternsLayout({
       <ResizablePanelGroup direction="horizontal" className="h-screen">
         <ResizablePanel defaultSize={18}>
           <div className="bg-muted text-muted-foreground flex h-screen flex-col p-2">
-            <div className="flex-auto overflow-y-auto">{sidebar}</div>
+            <div className="flex-auto overflow-y-auto pb-8">{sidebar}</div>
           </div>
         </ResizablePanel>
         <ResizableHandle withHandle />

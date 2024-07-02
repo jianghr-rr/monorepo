@@ -89,16 +89,26 @@ export default function InterviewPageSideBar() {
         label: t('webpack.title'),
       },
       {
-        href: '/interview/canvas',
-        label: t('canvas.title'),
-      },
-      {
-        href: '/interview/svg',
-        label: t('svg.title'),
-      },
-      {
-        href: '/interview/webgl',
-        label: t('WebGL.title'),
+        href: '/interview/graphics',
+        label: t('graphics.title'),
+        children: [
+          {
+            href: '/interview/graphics/canvas',
+            label: t('graphics.canvas.title'),
+          },
+          {
+            href: '/interview/graphics/svg',
+            label: t('graphics.svg.title'),
+          },
+          {
+            href: '/interview/graphics/webgl',
+            label: t('graphics.WebGL.title'),
+          },
+          {
+            href: '/interview/graphics/coordinate',
+            label: t('graphics.coordinate.title'),
+          },
+        ],
       },
       {
         href: '/interview/lowcode',

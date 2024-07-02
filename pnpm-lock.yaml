@@ -80,6 +80,7 @@ importers:
       autoprefixer: 10.4.19
       class-variance-authority: 0.7.0
       clsx: 2.1.1
+      daisyui: 4.12.10
       eslint: 8.57.0
       eslint-config-next: 14.1.4
       eslint-plugin-tailwindcss: 3.15.1
@@ -111,6 +112,7 @@ importers:
       react-resizable-panels: ^2.0.19
       rehype-highlight: 7.0.0
       rooks: 7.14.1
+      roughjs: 4.6.6
       server-only: 0.0.1
       tailwind-highlightjs: 2.0.1
       tailwind-merge: 2.3.0
@@ -141,6 +143,7 @@ importers:
       ahooks: 3.8.0_react@18.2.0
       class-variance-authority: 0.7.0
       clsx: 2.1.1
+      daisyui: 4.12.10_postcss@8.4.38
       fabric: 5.3.0
       framer-motion: 11.2.11_biqbaboplfbrettd7655fr4n2y
       framer-motion-3d: 11.2.11_qav3fvs6crhuucbq2m5wu7m6aq
@@ -166,6 +169,7 @@ importers:
       react-i18next: 14.1.2_oekxf6hybyawhdebxozx7q4h2a
       react-resizable-panels: 2.0.19_biqbaboplfbrettd7655fr4n2y
       rehype-highlight: 7.0.0
+      roughjs: 4.6.6
       server-only: 0.0.1
       tailwind-highlightjs: 2.0.1_yhf2jhxnblehyq63jxddztshwa
       tailwind-merge: 2.3.0
@@ -2909,6 +2913,7 @@ packages:
   /@opentelemetry/api/1.9.0:
     resolution: {integrity: sha512-3giAOQvZiH5F9bMlMiv8+GSPMeqg0dbaeo58/0SlA9sxSqZhnUtxzX9/2FzyhS9sWQf5S0GJE0AKBrFqjpeYcg==}
     engines: {node: '>=8.0.0'}
+    dev: false
 
   /@opentelemetry/context-async-hooks/1.25.0_@opentelemetry+api@1.9.0:
     resolution: {integrity: sha512-sBW313mnMyFg0cp/40BRzrZBWG+581s2j5gIsa5fgGadswyILk4mNFATsqrCOpAx945RDuZ2B7ThQLgor9OpfA==}
@@ -7306,6 +7311,11 @@ packages:
       stream-transform: 2.1.3
     dev: true
 
+  /culori/3.3.0:
+    resolution: {integrity: sha512-pHJg+jbuFsCjz9iclQBqyL3B2HLCBF71BwVNujUYEvCeQMvV97R59MNK3R2+jgJ3a1fcZgI9B3vYgz8lzr/BFQ==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dev: false
+
   /d/1.0.2:
     resolution: {integrity: sha512-MOqHvMWF9/9MX6nza0KgvFH4HpMU0EF5uUDXqX/BtxtU8NfB0QzRtJ8Oe/6SuS4kbhyzVJwjd97EA4PKrzJ8bw==}
     engines: {node: '>=0.12'}
@@ -7325,6 +7335,18 @@ packages:
       tailwindcss: 3.4.3
     transitivePeerDependencies:
       - ts-node
+    dev: false
+
+  /daisyui/4.12.10_postcss@8.4.38:
+    resolution: {integrity: sha512-jp1RAuzbHhGdXmn957Z2XsTZStXGHzFfF0FgIOZj3Wv9sH7OZgLfXTRZNfKVYxltGUOBsG1kbWAdF5SrqjebvA==}
+    engines: {node: '>=16.9.0'}
+    dependencies:
+      css-selector-tokenizer: 0.8.0
+      culori: 3.3.0
+      picocolors: 1.0.1
+      postcss-js: 4.0.1_postcss@8.4.38
+    transitivePeerDependencies:
+      - postcss
     dev: false
 
   /damerau-levenshtein/1.0.8:
@@ -9588,6 +9610,10 @@ packages:
       kind-of: 6.0.3
       section-matter: 1.0.0
       strip-bom-string: 1.0.0
+    dev: false
+
+  /hachure-fill/0.5.2:
+    resolution: {integrity: sha512-3GKBOn+m2LX9iq+JC1064cSFprJY4jL1jCXTcpnfER5HYE2l/4EfWSGzkPa/ZDBmYI0ZOEj5VHV/eKnPGkHuOg==}
     dev: false
 
   /hanji/0.0.5:
@@ -11925,7 +11951,7 @@ packages:
       hoist-non-react-statics: 3.3.2
       i18next: 23.11.5
       i18next-fs-backend: 2.3.1
-      next: 14.1.4_tfbglvjwgdk7gt2i6jbmwpc4re
+      next: 14.1.4_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-i18next: 14.1.2_oekxf6hybyawhdebxozx7q4h2a
     dev: false
@@ -11955,7 +11981,7 @@ packages:
       react: '>=16.0.0'
       react-dom: '>=16.0.0'
     dependencies:
-      next: 14.1.4_tfbglvjwgdk7gt2i6jbmwpc4re
+      next: 14.1.4_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     dev: true
@@ -12011,7 +12037,6 @@ packages:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
-    dev: false
 
   /next/14.1.4_tfbglvjwgdk7gt2i6jbmwpc4re:
     resolution: {integrity: sha512-1WTaXeSrUwlz/XcnhGTY7+8eiaFvdet5z9u3V2jb+Ek1vFo0VhHKSAIJvDWfQpttWjnyw14kBeq28TPq7bTeEQ==}
@@ -12051,6 +12076,7 @@ packages:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+    dev: false
 
   /nextjs-toploader/1.6.12_h6dj7hpgrjuca5cqek3dk6bqim:
     resolution: {integrity: sha512-nbun5lvVjlKnxLQlahzZ55nELVEduqoEXT03KCHnsEYJnFpI/3BaIzpMyq/v8C7UGU2NfxQmjq6ldZ310rsDqA==}
@@ -12544,6 +12570,10 @@ packages:
     engines: {node: '>= 0.8'}
     dev: false
 
+  /path-data-parser/0.1.0:
+    resolution: {integrity: sha512-NOnmBpt5Y2RWbuv0LMzsayp3lVylAHLPUTut412ZA3l+C4uw4ZVkQbjShYCQ8TCpUMdPapr4YjUqLYD6v68j+w==}
+    dev: false
+
   /path-exists/3.0.0:
     resolution: {integrity: sha512-bpC7GYwiDYQ4wYLe+FA8lhRjhQCMcQGuSgGGqDkg/QerRWw9CmGRT0iSOVRSZJ29NMLZgIzqaljJ63oaL4NIJQ==}
     engines: {node: '>=4'}
@@ -12683,6 +12713,17 @@ packages:
       mlly: 1.7.1
       pathe: 1.1.2
     dev: true
+
+  /points-on-curve/0.2.0:
+    resolution: {integrity: sha512-0mYKnYYe9ZcqMCWhUjItv/oHjvgEsfKvnUTg8sAtnHr3GVy7rGkXCb6d5cSyqrWqL4k81b9CPg3urd+T7aop3A==}
+    dev: false
+
+  /points-on-path/0.2.1:
+    resolution: {integrity: sha512-25ClnWWuw7JbWZcgqY/gJ4FQWadKxGWk+3kR/7kD0tCaDtPPMj7oHu2ToLaVhfpnHrZzYby2w6tUA0eOIuUg8g==}
+    dependencies:
+      path-data-parser: 0.1.0
+      points-on-curve: 0.2.0
+    dev: false
 
   /popmotion/11.0.3:
     resolution: {integrity: sha512-Y55FLdj3UxkR7Vl3s7Qr4e9m0onSnP8W7d/xQLsoJM40vs6UKHFdygs6SWryasTZYqugMjm3BepCF4CWXDiHgA==}
@@ -13096,7 +13137,7 @@ packages:
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.7
-      picocolors: 1.0.0
+      picocolors: 1.0.1
       source-map-js: 1.2.0
 
   /postcss/8.4.38:
@@ -13972,6 +14013,15 @@ packages:
       react-dom: 18.2.0_react@18.2.0
       use-sync-external-store: 1.2.2_react@18.2.0
     dev: true
+
+  /roughjs/4.6.6:
+    resolution: {integrity: sha512-ZUz/69+SYpFN/g/lUlo2FXcIjRkSu3nDarreVdGGndHEBJ6cXPdKguS8JGxwj5HA5xIbVKSmLgr5b3AWxtRfvQ==}
+    dependencies:
+      hachure-fill: 0.5.2
+      path-data-parser: 0.1.0
+      points-on-curve: 0.2.0
+      points-on-path: 0.2.1
+    dev: false
 
   /run-parallel/1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}

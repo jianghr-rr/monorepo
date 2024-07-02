@@ -38,14 +38,20 @@
     "webpack": {
         "title": "Webpack"
     },
-    "canvas": {
-        "title": "Canvas"
-    },
-    "svg": {
-        "title": "SVG"
-    },
-    "WebGL": {
-        "title": "WebGL"
+    "graphics": {
+        "title": "graphics",
+        "canvas": {
+            "title": "Canvas"
+        },
+        "svg": {
+            "title": "SVG"
+        },
+        "WebGL": {
+            "title": "WebGL"
+        },
+        "coordinate": {
+            "title": "coordinate system"
+        }
     },
     "lowcode": {
         "title": "lowcode"
