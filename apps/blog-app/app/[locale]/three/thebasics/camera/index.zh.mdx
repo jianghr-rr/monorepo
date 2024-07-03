@@ -1,0 +1,114 @@
+import Image from 'next/image';
+
+# Camera  
+
+## 透视投影相机PerspectiveCamera  
+
+Threejs提供了正投影相机OrthographicCamera (opens new window)和透视投影相机PerspectiveCamera (opens new window)。本节课先给大家比较常用的透视投影相机PerspectiveCamera。
+
+透视投影相机PerspectiveCamera本质上就是在模拟人眼观察这个世界的规律。
+
+``` javascript
+// 实例化一个透视投影相机对象
+const camera = new THREE.PerspectiveCamera();
+```  
+
+## 相机位置.position
+
+生活中用相机拍照，你相机位置不同，拍照结果也不同，threejs中虚拟相机同样如此。
+
+比如有一间房子，你拿着相机站在房间里面，看到的是房间内部，站在房子外面看到的是房子外面效果。
+
+相机对象Camera具有位置属性.position，通过位置属性.position可以设置相机的位置。
+
+``` javascript
+//相机在Three.js三维坐标系中的位置
+// 根据需要设置相机位置具体值
+camera.position.set(200, 200, 200); 
+```
+
+## 相机观察目标.lookAt()
+
+你用相机拍照你需要控制相机的拍照目标，具体说相机镜头对准哪个物体或说哪个坐标。对于threejs相机而言，就是设置.lookAt()方法的参数，指定一个3D坐标。
+
+``` javascript
+//相机观察目标指向Threejs 3D空间中某个位置
+camera.lookAt(0, 0, 0); //坐标原点
+```
+``` javascript
+camera.lookAt(mesh.position);//指向mesh对应的位置
+```
+<Image
+  src="/images/threejs/camera-1.png"
+  width={1600}
+  height={900}
+  alt="Picture of the author"
+/>
+
+## 定义相机渲染输出的画布尺寸
+
+你生活中相机拍照的照片是有大小的，对于threejs而言一样，需要定义相机在网页上输出的Canvas画布(照片)尺寸，大小可以根据需要定义，这里先随机定义一个尺寸。
+
+Canvas画布：课程中会把threejs虚拟相机渲染三维场景在浏览器网页上呈现的结果称为Canvas画布。
+
+``` JavaScript
+// 定义相机输出画布的尺寸(单位:像素px)
+const width = 800; //宽度
+const height = 500; //高度
+```   
+
+## 透视投影相机PerspectiveCamera：视锥体
+
+透视投影相机的四个参数fov, aspect, near, far构成一个四棱台3D空间，被称为视锥体，只有视锥体之内的物体，才会渲染出来，视锥体范围之外的物体不会显示在Canvas画布上。
+
+<Image
+  src="/images/threejs/camera-2.png"
+  width={1600}
+  height={900}
+  alt="Picture of the author"
+/>
+
+``` JavaScript
+// width和height用来设置Three.js输出的Canvas画布尺寸(像素px)
+const width = 800; //宽度
+const height = 500; //高度
+// 30:视场角度, width / height:Canvas画布宽高比, 1:近裁截面, 3000：远裁截面
+const camera = new THREE.PerspectiveCamera(30, width / height, 1, 3000);
+```
+### PerspectiveCamera参数介绍：
+
+``` JavaScript
+PerspectiveCamera( fov, aspect, near, far )
+```
+
+<table>
+<thead>
+  <tr>
+    <th>参数</th>
+    <th>含义</th>
+    <th>默认值</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>fov</td>
+    <td>相机视锥体竖直方向视野角度</td>
+    <td>50</td>
+  </tr>
+  <tr>
+    <td>aspect</td>
+    <td>相机视锥体水平方向和竖直方向长度比，一般设置为Canvas画布宽高比width / height</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>near</td>
+    <td>相机视锥体近裁截面相对相机距离</td>
+    <td>0.1</td>
+  </tr>
+  <tr>
+    <td>fofarv</td>
+    <td>相机视锥体远裁截面相对相机距离，far-near构成了视锥体高度方向</td>
+    <td>2000</td>
+  </tr>
+  </tbody>
+</table>

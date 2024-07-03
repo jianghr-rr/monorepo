@@ -56,6 +56,7 @@
     "react-i18next": "14.1.2",
     "react-resizable-panels": "^2.0.19",
     "rehype-highlight": "7.0.0",
+    "remark-gfm": "4.0.0",
     "roughjs": "4.6.6",
     "server-only": "0.0.1",
     "tailwind-highlightjs": "2.0.1",

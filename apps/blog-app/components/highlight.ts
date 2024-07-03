@@ -5,6 +5,9 @@ import 'highlight.js/styles/github.css'; // 使用 GitHub 样式
 
 export default function highlightCode() {
   document.querySelectorAll('pre code').forEach((block) => {
-    hljs?.highlightBlock(block);
+    if (block instanceof HTMLElement) {
+      hljs?.highlightBlock(block);
+    }
+    // hljs?.highlightBlock(block);
   });
 }

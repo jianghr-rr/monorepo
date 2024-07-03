@@ -1,5 +1,8 @@
 import Example from './example'
 import Example2 from './example2'
+import Polygon from './polygon'
+import Polygon3d from './polygon3d'
+import Particles from './particles';
 
 # 坐标系和向量  
 
@@ -135,4 +138,176 @@ v.dir = function() { return Math.atan2(this.y, this.x);}
 - 标准化处理：在许多算法中，使用单位向量可以简化计算，并使算法更加稳定和有效。
 - 方向保持：归一化不会改变向量的方向，仅调整其长度。
 
-# 如何用向量描述曲线？
+# 如何用向量描述曲线？  
+
+用向量描述比较简单直接，先确定起始点和起始向量，然后通过旋转和向量加法来控制形状，就可以将曲线一段一段地绘制出来。但是它的缺点也很明显，就是数学上不太直观，需要复杂的换算才能精确确定图形的位置和大小。  
+
+使用参数方程能够避免向量绘制的缺点，因此是更常用的绘制方式。使用参数方程绘制曲线时，我们既可以使用有规律的曲线参数方程来绘制这些规则曲线，还可以使用二阶、三阶贝塞尔曲线来在起点和终点之间构造平滑曲线。  
+
+# 如何利用三角剖分和向量操作描述并处理多边形  
+
+多边形又可以分为简单多边形和复杂多边形。我们该怎么区分它们呢？如果一个多边形的每条边除了相邻的边以外，不和其他边相交，那它就是简单多边形，否则就是复杂多边形。一般来说，我们在绘图时，要尽量构建简单多边形，因为简单多边形的图形性质比较简单，绘制起来比较方便。  
+
+## 不同的图形系统如何填充多边形？  
+
+### Canvas2D 如何填充多边形  
+
+<Polygon />
+``` javascript
+useEffect(() => {
+  if (canvasRef?.current) {
+    const points = [new Vector2D(0, 100)];
+    for (let i = 1; i <= 4; i++) {
+      const p = points[0]?.copy().rotate(i * Math.PI * 0.4);
+      p && points.push(p);
+    }
+
+    // @ts-ignore
+    const ctx = canvasRef?.current?.getContext('2d');
+
+    const polygon = [...points];
+
+    // 绘制正五边形
+    ctx.save();
+    ctx.translate(128, 256);
+    draw(ctx, polygon);
+    ctx.restore();
+
+    const stars = [points[0], points[2], points[4], points[1], points[3]];
+
+    // 绘制正五角星
+    ctx.save();
+    ctx.translate(356, 256);
+    draw(ctx, stars);
+    ctx.restore();
+  }
+}, []);
+```  
+
+draw: 
+``` JavaScript
+export function draw(
+  context,
+  points,
+  { fillStyle = 'black', close = false, rule = 'nonzero' } = {}
+) {
+  context.beginPath();
+  context.moveTo(...points[0]);
+  for (let i = 1; i < points.length; i++) {
+    context.lineTo(...points[i]);
+  }
+  if (close) context.closePath();
+  context.fillStyle = fillStyle;
+  context.fill(rule);
+}
+```  
+默认的规则是“nonzero”，也就是说 不管有没有相交的边，只要是由边围起来的区域都一律填充  
+
+还有一种规则叫做“evenodd”，它是根据重叠区域是奇数还是偶数来判断是否填充的  
+
+### WebGL 如何填充多边形  
+
+在 WebGL 中，虽然没有提供自动填充多边形的方法，但是我们可以用三角形这种基本图元来快速地填充多边形。因此，在 WebGL 中填充多边形的第一步，就是将多边形分割成多个三角形。这种将多边形分割成若干个三角形的操作，在图形学中叫做三角剖分（Triangulation）。  
+
+<Polygon3d />
+
+``` jsx
+const gl = (canvasRef?.current as any)?.getContext?.('webgl');
+
+const vertex = `
+  attribute vec2 position;
+
+  void main() {
+    gl_PointSize = 1.0;
+    gl_Position = vec4(position, 1.0, 1.0);
+  }
+`;
+
+const fragment = `
+  precision mediump float;
+
+  void main()
+  {
+    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+  }    
+  `;
+
+const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+gl.shaderSource(vertexShader, vertex);
+gl.compileShader(vertexShader);
+
+const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+gl.shaderSource(fragmentShader, fragment);
+gl.compileShader(fragmentShader);
+
+const program = gl.createProgram();
+gl.attachShader(program, vertexShader);
+gl.attachShader(program, fragmentShader);
+gl.linkProgram(program);
+gl.useProgram(program);
+
+const vertices = [
+  [-0.7, 0.5],
+  [-0.4, 0.3],
+  [-0.25, 0.71],
+  [-0.1, 0.56],
+  [-0.1, 0.13],
+  [0.4, 0.21],
+  [0, -0.6],
+  [-0.3, -0.3],
+  [-0.6, -0.3],
+  [-0.45, 0.0],
+];
+
+// 三角刨分
+const points = vertices.flat();
+const triangles = earcut(points);
+
+const position = new Float32Array(points);
+const cells = new Uint16Array(triangles);
+
+const pointBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, pointBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, position, gl.STATIC_DRAW);
+
+const vPosition = gl.getAttribLocation(program, 'position');
+gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0);
+gl.enableVertexAttribArray(vPosition);
+
+const cellsBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cellsBuffer);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, cells, gl.STATIC_DRAW);
+
+gl.clear(gl.COLOR_BUFFER_BIT);
+gl.drawElements(gl.LINE_STRIP, cells.length, gl.UNSIGNED_SHORT, 0);
+}
+```  
+
+针对复杂的 3D 模型，我们一般不在运行的时候进行三角剖分，而是通过设计工具把图形的三角剖分结果直接导出进行使用。也就是说，在 3D 渲染的时候，我们一般使用的模型数据都是已经经过三角剖分以后的顶点数据  
+
+### 如何判断点在多边形内部？  
+
+已知一个三角形的三条边分别是向量 a、b、c，平面上一点 u 连接三角形三个顶点的向量分别为 u1、u2、u3，那么 u 点在三角形内部的充分必要条件是：u1 X a、u2 X b、u3 X c 的符号相同。  
+
+### 如何用仿射变换对几何图形进行坐标变换  
+
+在实际绘制的时候，我们经常需要在画布上绘制许多轮廓相同的图形，难道这也需要我们重复地去计算每个图形的顶点吗？当然不需要。我们只需要创建一个基本的几何轮廓，然后通过仿射变换来改变几何图形的位置、形状、大小和角度。  
+
+**什么是仿射变换**  
+
+仿射变换简单来说就是“线性变换 + 平移”  
+
+再说回到几何图形，针对它的仿射变换具有以下 2 个性质：  
+- 仿射变换前是直线段的，仿射变换后依然是直线段  
+- 对两条直线段 a 和 b 应用同样的仿射变换，变换前后线段长度比例保持不变
+
+**向量的平移、旋转与缩放**  
+
+常见的仿射变换形式包括平移、旋转、缩放以及它们的组合  
+
+**仿射变换的应用：实现粒子动画**  
+
+<Particles />  
+
+1. 创建三角形  
+2. 通过仿射变换对三角形进行变换  

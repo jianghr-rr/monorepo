@@ -216,6 +216,14 @@
     transform-origin: 0%;
 }
 
+.sidebar {
+  max-width: 100%;
+
+  & > div {
+    flex-grow: 1;
+  }
+}
+
 .blog-container {
     width: 65ch;
     margin: 0 auto;

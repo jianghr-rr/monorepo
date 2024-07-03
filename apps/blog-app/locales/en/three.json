@@ -1,6 +1,11 @@
 {
     "title": "ThreeJS",
     "theBasics": "The Basics",
+    "tb": {
+        "scene": "scene",
+        "camera": "camera",
+        "webglrender": "WebGLRenderer"
+    },
     "r3f": {
         "title": "React Three Fiber",
         "theBasics": "R3F The Basics",

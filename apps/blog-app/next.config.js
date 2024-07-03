@@ -4,6 +4,12 @@ const withMDX = require('@next/mdx')({
     rehypePlugins: [
       require('@mapbox/rehype-prism'), // 使用rehype-prism插件来处理代码高亮
     ],
+    remarkPlugins: [
+      async () => {
+        const remarkGfm = await import('remark-gfm');
+        return remarkGfm.default;
+      },
+    ],
   },
 });
 

@@ -16,6 +16,18 @@ export default function PatternsPageSideBar() {
             href: '/three/thebasics',
             label: t('theBasics'),
           },
+          {
+            href: '/three/thebasics/scene',
+            label: t('tb.scene'),
+          },
+          {
+            href: '/three/thebasics/camera',
+            label: t('tb.camera'),
+          },
+          {
+            href: '/three/thebasics/webglrender',
+            label: t('tb.webglrender'),
+          },
         ],
       },
       {
