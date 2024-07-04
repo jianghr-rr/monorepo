@@ -1,11 +1,17 @@
 {
-  "home": "home",
-  "patterns": "patterns",
-  "interview": "interview",
-  "fabric": "fabricJs",
-  "three": "threeJs",
-  "algorithm": "算法",
+  "home": "Home",
+  "patterns": "Patterns",
+  "interview": "Interview",
+  "fabric": "FabricJs",
+  "three": "ThreeJs",
+  "react": "React",
+  "vue": "Vue",
+  "algorithm": "Algorithm",
+  "graphics": "Graphics",
+  "nodeJs": "NodeJs",
+  "nextJs": "NextJs",
+  "engineering": "Engineering",
   "page": {
-    "title": "blog"
+    "title": "Blog"
   }
 }

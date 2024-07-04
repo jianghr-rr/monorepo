@@ -4,11 +4,6 @@
         "title": "module",
         "commonJS": "CommonJS"
     },
-    "engineering": {
-        "title": "engineering",
-        "webpack": "webpack",
-        "functional": "functional"
-    },
     "base": {
         "title": "javascript",
         "this": "this",
@@ -17,7 +12,8 @@
         "ast": "AST",
         "es6": "ES6",
         "es": {
-            "const": "const"
+            "const": "const",
+            "arrowFun": "arrow function"
         }
     },
     "react": {
@@ -37,21 +33,6 @@
     },
     "webpack": {
         "title": "Webpack"
-    },
-    "graphics": {
-        "title": "graphics",
-        "canvas": {
-            "title": "Canvas"
-        },
-        "svg": {
-            "title": "SVG"
-        },
-        "WebGL": {
-            "title": "WebGL"
-        },
-        "coordinate": {
-            "title": "coordinate system"
-        }
     },
     "lowcode": {
         "title": "lowcode"

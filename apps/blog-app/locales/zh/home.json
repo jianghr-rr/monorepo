@@ -2,9 +2,15 @@
   "home": "首页",
   "patterns": "设计模式",
   "interview": "总览",
-  "fabric": "fabricJs",
-  "three": "threeJs",
+  "fabric": "FabricJs",
+  "three": "ThreeJs",
+  "react": "React",
+  "vue": "Vue",
   "algorithm": "算法",
+  "graphics": "图形学",
+  "nodeJs": "NodeJs",
+  "nextJs": "NextJs",
+  "engineering": "工程化",
   "page": {
     "title": "博客"
   }

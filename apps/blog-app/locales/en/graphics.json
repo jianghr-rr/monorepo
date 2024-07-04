@@ -1,0 +1,17 @@
+{
+    "graphics": {
+        "title": "graphics",
+        "canvas": {
+            "title": "Canvas"
+        },
+        "svg": {
+            "title": "SVG"
+        },
+        "WebGL": {
+            "title": "WebGL"
+        },
+        "coordinate": {
+            "title": "coordinate system"
+        }
+    }
+}

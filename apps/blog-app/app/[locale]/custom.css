@@ -4,13 +4,14 @@
     display: flex;
     flex-shrink: 0;
     align-items: center;
+    opacity: 0;
     line-height: 1;
     animation-duration: 1.5s;
     animation-delay: 600ms;
     animation-fill-mode: forwards;
     animation-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
     color: color-mix(in lab, #701a75 0%, transparent);
-    /* transition: opacity 0.5s ease 400ms; */
+    transition: opacity 0.5s ease 400ms;
     /* isolation: isolate;
     --delay: 600ms; */
   
@@ -37,7 +38,7 @@
   
     &[data-status='entering'] {
       animation-name: introTextReveal;
-  
+      
       /* @media (--mediaUseMotion) { */
         &::after {
             animation-name: reveal;
@@ -104,8 +105,8 @@
     /* top: 0.05em; */
   
     &[data-status='entering'] {
-        /* animation-name: fade-in; */
-  
+        /* animation-name: fade-in;
+   */
       /* @media (--mediaUseMotion) { */
         animation-name: introLine;
       /* } */
@@ -120,6 +121,7 @@
 
 @keyframes introTextReveal {
     0% {
+      opacity: 0;
       color: color-mix(in lab, #701a75 0%, transparent);
     }
   
@@ -132,6 +134,7 @@
     }
   
     100% {
+      opacity: 1;
       color: #3b0764;
     }
 }
@@ -166,6 +169,15 @@
 
     100% {
       opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
     }
 }
 

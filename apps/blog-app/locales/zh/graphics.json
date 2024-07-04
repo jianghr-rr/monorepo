@@ -1,0 +1,17 @@
+{
+    "graphics": {
+        "title": "图形",
+        "canvas": {
+            "title": "Canvas"
+        },
+        "svg": {
+            "title": "SVG"
+        },
+        "WebGL": {
+            "title": "WebGL"
+        },
+        "coordinate": {
+            "title": "坐标系和向量"
+        }
+    }
+}

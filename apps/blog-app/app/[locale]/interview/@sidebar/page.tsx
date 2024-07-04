@@ -36,6 +36,10 @@ export default function InterviewPageSideBar() {
                 href: '/interview/base/es6/const',
                 label: t('base.es.const'),
               },
+              {
+                href: '/interview/base/es6/arrow-fun',
+                label: t('base.es.arrowFun'),
+              },
             ],
           },
         ],
@@ -51,28 +55,6 @@ export default function InterviewPageSideBar() {
         ],
       },
       {
-        href: '/interview/engineering',
-        label: t('engineering.title'),
-        children: [
-          {
-            href: '/interview/engineering/webpack',
-            label: t('engineering.webpack'),
-          },
-          {
-            href: '/interview/engineering/functional',
-            label: t('engineering.functional'),
-          },
-        ],
-      },
-      {
-        href: '/interview/react',
-        label: t('react.title'),
-      },
-      {
-        href: '/interview/vue',
-        label: t('vue.title'),
-      },
-      {
         href: '/interview/typescript',
         label: t('typescript.title'),
       },
@@ -81,34 +63,8 @@ export default function InterviewPageSideBar() {
         label: t('browser.title'),
       },
       {
-        href: '/interview/nodejs',
-        label: t('nodejs.title'),
-      },
-      {
         href: '/interview/webpack',
         label: t('webpack.title'),
-      },
-      {
-        href: '/interview/graphics',
-        label: t('graphics.title'),
-        children: [
-          {
-            href: '/interview/graphics/canvas',
-            label: t('graphics.canvas.title'),
-          },
-          {
-            href: '/interview/graphics/svg',
-            label: t('graphics.svg.title'),
-          },
-          {
-            href: '/interview/graphics/webgl',
-            label: t('graphics.WebGL.title'),
-          },
-          {
-            href: '/interview/graphics/coordinate',
-            label: t('graphics.coordinate.title'),
-          },
-        ],
       },
       {
         href: '/interview/lowcode',

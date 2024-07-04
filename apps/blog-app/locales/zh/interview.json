@@ -4,11 +4,6 @@
         "title": "模块化",
         "commonJS": "CommonJS"
     },
-    "engineering": {
-        "title": "工程化",
-        "webpack": "Webpack",
-        "functional": "函数式"
-    },
     "base": {
         "title": "基础知识",
         "this": "this",
@@ -17,7 +12,8 @@
         "ast": "AST",
         "es6": "ES6",
         "es": {
-            "const": "const"
+            "const": "const",
+            "arrowFun": "箭头函数"
         }
     },
     "react": {
@@ -37,21 +33,6 @@
     },
     "webpack": {
         "title": "Webpack"
-    },
-    "graphics": {
-        "title": "图形",
-        "canvas": {
-            "title": "Canvas"
-        },
-        "svg": {
-            "title": "SVG"
-        },
-        "WebGL": {
-            "title": "WebGL"
-        },
-        "coordinate": {
-            "title": "坐标系和向量"
-        }
     },
     "lowcode": {
         "title": "低代码"

@@ -14,8 +14,6 @@ export default function PatternsPage() {
         <h3 className="mb-4 text-xl">{t('introd.p3')}</h3>
         <h3 className="mb-4 text-xl">{t('introd.p4')}</h3>
       </div>
-      <p>singleton-patterns</p>
-      <p>revealing-patterns</p>
     </div>
   );
 }
