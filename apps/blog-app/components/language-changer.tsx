@@ -50,10 +50,10 @@ export default function LanguageChanger() {
 
   return (
     <Select onValueChange={handleChange}>
-      <SelectTrigger className="w-[100px]">
+      <SelectTrigger className="w-[100px] bg-transparent">
         <SelectValue placeholder={localeMap[currentLocale]} />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="bg-gradient-to-r from-violet-500 to-fuchsia-500">
         <SelectItem value="zh">简体中文</SelectItem>
         <SelectItem value="en">English</SelectItem>
       </SelectContent>

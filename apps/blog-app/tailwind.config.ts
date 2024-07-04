@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -57,6 +59,13 @@ const config = {
           900: '#4c1d95',
           950: '#2e1065',
           DEFAULT: '#8b5cf6',
+        },
+        accent: {
+          DEFAULT: '#8b5cf6', // 设置默认的 accent 颜色
+          hover: '#7c3aed', // 设置 accent 悬停状态的颜色
+        },
+        boxShadow: {
+          'ring-custom': 'none', // 自定义 ring 阴影样式
         },
       },
       borderRadius: {
@@ -151,16 +160,10 @@ const config = {
       daisyui: {
         themes: [
           {
-            mytheme: {
+            light: {
+              ...require('daisyui/src/theming/themes')?.light,
               primary: '#8b5cf6',
-              secondary: '#f6d860',
-              accent: '#37cdbe',
-              neutral: '#3d4451',
-              'base-100': '#ffffff',
-              info: '#2094f3',
-              success: '#009485',
-              warning: '#ff9900',
-              error: '#ff5724',
+              secondary: 'teal',
             },
           },
         ],

@@ -3,7 +3,11 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SideBar } from '~/components/sidebar';
 
-export default function PatternsPageSideBar() {
+export default function PatternsPageSideBar({
+  direction,
+}: {
+  direction: string;
+}) {
   const { t } = useTranslation();
 
   const links = useMemo(
@@ -11,5 +15,5 @@ export default function PatternsPageSideBar() {
     [t]
   );
 
-  return <SideBar links={links} />;
+  return <SideBar direction={direction} links={links} />;
 }

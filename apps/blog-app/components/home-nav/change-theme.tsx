@@ -22,7 +22,10 @@ export default function ChangeTheme() {
           <span className="sr-only">切换主题</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent
+        align="end"
+        className="bg-gradient-to-r from-violet-500 to-fuchsia-500"
+      >
         <DropdownMenuItem onClick={() => setTheme('light')}>
           Light
         </DropdownMenuItem>

@@ -6,6 +6,7 @@ const i18nNamespaces = ['graphics'];
 
 const DynamicSidebar = dynamic<{
   children: ReactNode;
+  direction: string; // 添加 direction 属性
 }>(() => import('./@sidebar/page'), {
   ssr: false,
 });
@@ -23,7 +24,12 @@ function InterviewLayout({
     <NavPageLayout
       params={params}
       i18nNamespaces={i18nNamespaces}
-      sidebar={<DynamicSidebar>{sidebar}</DynamicSidebar>}
+      sidebar={
+        <DynamicSidebar direction="horizontal">{sidebar}</DynamicSidebar>
+      }
+      breadcrumb={
+        <DynamicSidebar direction="vertical">{sidebar}</DynamicSidebar>
+      }
     >
       {children}
     </NavPageLayout>

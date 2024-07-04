@@ -1,10 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable sonarjs/no-collapsible-if */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { FC } from 'react';
@@ -27,7 +20,6 @@ interface SideBarProps {
       }[];
     }[];
   }[];
-  direction?: string;
 }
 
 const RecursiveNavigation: FC<SideBarProps> = ({ links }) => {
@@ -83,11 +75,11 @@ const RecursiveNavigation: FC<SideBarProps> = ({ links }) => {
   );
 };
 
-const SideBar: FC<SideBarProps> = ({ links, direction }) => {
+const Breadcrumb: FC<SideBarProps> = ({ links }) => {
   return (
     <NavigationMenu className="sidebar w-full">
       <NavigationMenuList className="w-full">
-        <ul className={`menu menu-vertical w-full rounded-box`}>
+        <ul className="menu menu-horizontal w-full rounded-box">
           <RecursiveNavigation links={links} />
         </ul>
       </NavigationMenuList>
@@ -95,5 +87,5 @@ const SideBar: FC<SideBarProps> = ({ links, direction }) => {
   );
 };
 
-export default SideBar;
-export { SideBar };
+export default Breadcrumb;
+export { Breadcrumb };
