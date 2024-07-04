@@ -12,6 +12,37 @@
         },
         "coordinate": {
             "title": "坐标系和向量"
+        },
+        "fabric": {
+            "title": "Fabric 教程",
+            "initial": "初始化",
+            "addLine": "添加线段",
+            "selectLine": "选择线段",
+            "redrawLine": "调整已经绘制的线段",
+            "addShapes": "添加形状",
+            "line": "线段",
+            "singleArrowLine": "单箭头线段",
+            "doubleArrowLine": "双箭头线段",
+            "rectangle": "矩形",
+            "add": "添加",
+            "fabricDemo": {
+                "title": "Fabric Demo",
+                "ErasingWithEraserBrush": "用橡皮刷擦除"
+            }
+        },
+        "three": {
+            "title": "ThreeJS",
+            "theBasics": "基础知识",
+            "tb": {
+                "scene": "场景",
+                "camera": "相机",
+                "webglrender": "WebGL渲染器"
+            },
+            "r3f": {
+                "title": "React Three Fiber",
+                "theBasics": "基础知识",
+                "editableCube": "可编辑的立方体"
+            }
         }
     }
 }

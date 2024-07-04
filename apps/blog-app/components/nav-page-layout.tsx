@@ -61,7 +61,7 @@ async function PatternsLayout({
         <Drawer>
           <div className="flex items-center justify-start p-0">
             <DrawerTrigger>
-              <AlignJustify className="fixed bottom-3 left-3 z-20 mr-3" />
+              <AlignJustify className="fixed bottom-5 left-5 z-20 mr-3" />
             </DrawerTrigger>
           </div>
           <DrawerContent>

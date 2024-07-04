@@ -79,7 +79,10 @@ const Navbar = () => {
           <DropdownMenuTrigger asChild>
             <EllipsisVertical />
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-white">
+          <DropdownMenuContent
+            align="end"
+            className="bg-white dark:bg-gray-950"
+          >
             <NavigationMenu>
               <NavigationMenuList className="flex flex-col items-baseline">
                 {links.map((link) => {
