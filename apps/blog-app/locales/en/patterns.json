@@ -9,5 +9,8 @@
     },
     "singleton": {
         "title": "singleton pattern"
+    },
+    "prototype": {
+        "title": "prototype pattern"
     }
 }

@@ -11,7 +11,10 @@ export default function PatternsPageSideBar({
   const { t } = useTranslation();
 
   const links = useMemo(
-    () => [{ href: '/patterns/singleton', label: t('SingletonPattern') }],
+    () => [
+      { href: '/patterns/singleton', label: t('SingletonPattern') },
+      { href: '/patterns/prototype', label: t('prototype.title') },
+    ],
     [t]
   );
 

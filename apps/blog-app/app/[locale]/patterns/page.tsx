@@ -6,7 +6,7 @@ export default function PatternsPage() {
   const { t } = useTranslation();
 
   return (
-    <div>
+    <div className="blog-container">
       <h1 className="mb-8 text-center text-5xl font-bold">{t('title')}</h1>
       <div className="mx-8">
         <h3 className="mb-4 text-xl">{t('introd.p1')}</h3>
