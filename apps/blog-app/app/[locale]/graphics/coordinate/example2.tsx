@@ -39,7 +39,7 @@ const Rect = () => {
       <canvas
         ref={canvasRef}
         className="mb-5 rounded border border-gray-200 shadow"
-        style={{ width: '512px', height: '256px' }}
+        style={{ width: '100%', height: '256px' }}
         width="512"
         height="256"
       ></canvas>

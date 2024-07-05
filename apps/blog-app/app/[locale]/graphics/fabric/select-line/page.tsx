@@ -111,11 +111,12 @@ export default function AddLinePage() {
   };
 
   return (
-    <div>
+    <div className="blog-container">
       <h1 className="blog-h1">{t('selectLine')}</h1>
       <canvas
         ref={canvasRef}
-        width={960}
+        style={{ width: 'auto' }}
+        width={'auto'}
         height={540}
         className="mb-5 rounded border border-gray-200 shadow"
       />

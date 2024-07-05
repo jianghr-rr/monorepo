@@ -13,5 +13,9 @@
   "engineering": "工程化",
   "page": {
     "title": "博客"
+  },
+  "not_found": {
+    "title": "页面被小鱼吃掉了",
+    "go_back": "返回首页"
   }
 }

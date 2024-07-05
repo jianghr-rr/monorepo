@@ -29,9 +29,14 @@ export default function FabricPage() {
   }, []);
 
   return (
-    <div>
+    <div className="blog-container">
       <h1 className="blog-h1">{t('initial')}</h1>
-      <canvas ref={canvasRef} width={600} height={400} />
+      <canvas
+        style={{ width: 'auto', height: '400px' }}
+        ref={canvasRef}
+        width="auto"
+        height="400"
+      />
       <p className="blog-p">安装fabric:</p>
       <Highlight language="javascript">
         {`

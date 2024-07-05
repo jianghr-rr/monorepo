@@ -213,8 +213,8 @@ export default function FabricPage() {
       </ul>
       <h2 className="blog-h2">初始化</h2>
       <p className="blog-p">添加一个canvas及一些元素</p>
-      <div className="size-96">
-        <Canvas>
+      <div style={{ width: '100%', height: '400px' }}>
+        <Canvas style={{ width: '100%' }}>
           <mesh>
             <boxGeometry />
           </mesh>
@@ -242,7 +242,7 @@ export default function FabricPage() {
         </li>
         <li className="blog-li">添加光源(directionalLight)</li>
       </ul>
-      <div className="size-96">
+      <div className="size-96" style={{ width: '100%' }}>
         <Canvas>
           <directionalLight position={[0, 0, 2]} />
           <mesh>
@@ -269,7 +269,7 @@ export default function FabricPage() {
       </Highlight>
       <h2 className="blog-h2">分组</h2>
       <p className="blog-p">将多个cube分组</p>
-      <div className="size-96">
+      <div className="size-96" style={{ width: '100%' }}>
         <Canvas>
           <directionalLight position={[0, 0, 2]} />
           <group position={[0, -1, 0]}>
@@ -300,7 +300,7 @@ export default function FabricPage() {
       </Highlight>
       <h2 className="blog-h2">动画</h2>
       <p className="blog-p">使用useFrame来做动画</p>
-      <div className="size-96">
+      <div className="size-96" style={{ width: '100%' }}>
         <Canvas>
           <directionalLight position={[0, 0, 2]} />
           <AnimateCube position={[1, 0, 0]} color={'green'} side={1} />
@@ -351,7 +351,7 @@ const AnimateCube = ({
       </Highlight>
       <h2 className="blog-h2">点击事件</h2>
       <p className="blog-p">添加一个球, 触发点击事件</p>
-      <div className="size-96">
+      <div className="size-96" style={{ width: '100%' }}>
         <Canvas>
           <directionalLight position={[0, 0, 2]} />
           <Sphere position={[1, 0, 0]} color={'orange'} args={[1, 30, 30]} />
@@ -413,7 +413,7 @@ const Sphere = ({
       <p className="blog-p">
         useHelper(directionalLightRef, DirectionalLightHelper, 0.5, 'black');
       </p>
-      <div className="size-96">
+      <div className="size-96" style={{ width: '100%' }}>
         <Canvas>
           <Scene2 />
         </Canvas>

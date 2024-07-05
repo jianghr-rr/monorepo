@@ -13,5 +13,9 @@
   "engineering": "Engineering",
   "page": {
     "title": "Blog"
+  },
+  "not_found": {
+    "title": "Not found",
+    "go_back": "Go back"
   }
 }

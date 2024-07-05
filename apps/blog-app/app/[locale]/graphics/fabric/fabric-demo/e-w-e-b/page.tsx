@@ -56,7 +56,7 @@ const FabricPage = forwardRef<HTMLCanvasElement, FabricPageProps>(
     FabricPage.displayName = 'FabricPage';
 
     return (
-      <div>
+      <div className="blog-container">
         <h1 className="blog-h1">{t('fabricDemo.ErasingWithEraserBrush')}</h1>
         <canvas
           ref={forwardedRef}
