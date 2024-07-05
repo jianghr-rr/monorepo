@@ -5,6 +5,7 @@
     flex-shrink: 0;
     align-items: center;
     opacity: 0;
+    font-size: 2rem;
     line-height: 1;
     animation-duration: 1.5s;
     animation-delay: 600ms;
