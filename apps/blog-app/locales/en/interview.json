@@ -6,9 +6,11 @@
     },
     "base": {
         "title": "javascript",
+        "context": "context",
         "this": "this",
         "object": "oob",
         "promise": "promise",
+        "class": "class",
         "ast": "AST",
         "es6": "ES6",
         "es": {
@@ -42,5 +44,8 @@
     },
     "nextjs": {
         "title": "NextJs"
+    },
+    "htmlCss": {
+        "title": "HTML/CSS"
     }
 }

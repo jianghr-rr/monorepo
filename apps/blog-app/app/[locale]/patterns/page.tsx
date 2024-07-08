@@ -7,13 +7,11 @@ export default function PatternsPage() {
 
   return (
     <div className="blog-container">
-      <h1 className="mb-8 text-center text-5xl font-bold">{t('title')}</h1>
-      <div className="mx-8">
-        <h3 className="mb-4 text-xl">{t('introd.p1')}</h3>
-        <h3 className="mb-4 text-xl">{t('introd.p2')}</h3>
-        <h3 className="mb-4 text-xl">{t('introd.p3')}</h3>
-        <h3 className="mb-4 text-xl">{t('introd.p4')}</h3>
-      </div>
+      <h1 className="page-title">{t('title')}</h1>
+      <p className="blog-p">{t('introd.p1')}</p>
+      <p className="blog-p">{t('introd.p2')}</p>
+      <p className="blog-p">{t('introd.p3')}</p>
+      <p className="blog-p">{t('introd.p4')}</p>
     </div>
   );
 }

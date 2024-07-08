@@ -7,8 +7,10 @@
     "base": {
         "title": "基础知识",
         "this": "this",
+        "context": "上下文",
         "object": "面向对象",
         "promise": "promise",
+        "class": "类",
         "ast": "AST",
         "es6": "ES6",
         "es": {
@@ -42,5 +44,8 @@
     },
     "nextjs": {
         "title": "NextJs"
+    },
+    "htmlCss": {
+        "title": "HTML/CSS"
     }
 }

@@ -17,20 +17,28 @@ export default function InterviewPageSideBar({
         label: t('base.title'),
         children: [
           {
-            href: '/interview/base/this',
-            label: t('base.this'),
+            href: '/interview/base/class',
+            label: t('base.class'),
           },
           {
             href: '/interview/base/object',
             label: t('base.object'),
           },
           {
-            href: '/interview/base/promise',
-            label: t('base.promise'),
+            href: '/interview/base/context',
+            label: t('base.context'),
+          },
+          {
+            href: '/interview/base/this',
+            label: t('base.this'),
           },
           {
             href: '/interview/base/ast',
             label: t('base.ast'),
+          },
+          {
+            href: '/interview/base/promise',
+            label: t('base.promise'),
           },
           {
             href: '/interview/base/es6',
@@ -67,16 +75,12 @@ export default function InterviewPageSideBar({
         label: t('browser.title'),
       },
       {
-        href: '/interview/webpack',
-        label: t('webpack.title'),
-      },
-      {
         href: '/interview/lowcode',
         label: t('lowcode.title'),
       },
       {
-        href: '/interview/nextjs',
-        label: t('nextjs.title'),
+        href: '/interview/html_css',
+        label: t('htmlCss.title'),
       },
     ],
     [t]
