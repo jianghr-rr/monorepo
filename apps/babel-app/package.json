@@ -1,0 +1,36 @@
+{
+    "name": "babel-app",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "build": "./node_modules/.bin/babel src --out-dir dist"
+    },
+    "dependencies": {
+        "@babel/cli": "7.24.7",
+        "@babel/core": "7.24.7",
+        "@babel/preset-env": "7.24.7",
+        "core-js": "3.37.1"
+    },
+    "main": "lint-staged.config.js",
+    "directories": {
+        "lib": "lib"
+    },
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "babel": {
+        "presets": [
+            [
+                "@babel/preset-env",
+                {
+                    "targets": {
+                        "ie": "6"
+                    },
+                    "modules": false,
+                    "useBuiltIns": "usage",
+                    "corejs": "3.37.1"
+                }
+            ]
+        ]
+    }
+}

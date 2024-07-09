@@ -1,0 +1,318 @@
+import Example1 from './example-1.jsx';
+
+# 单例模式
+
+单例是可以实例化一次的类，并且可以全局访问。这个实例可以在整个应用程序中共享，这使得 Singletons 非常适合管理应用程序中的全局状态。
+
+首先，让我们看一下使用 ES2015 类的单例是什么样子的。在此示例中，我们将构建一个 Counter 具有以下功能的类：
+
+- 返回实例值 getInstance 的方法
+- 返回 counter 变量当前值 getCount 的方法
+- 一种将 的值 counter 递增 1 increment 的方法
+- 一种 decrement 将 的值 counter 递减 1 的方法
+
+``` javascript
+let counter = 0;
+
+class Counter {
+  getInstance() {
+    return this;
+  }
+
+  getCount() {
+    return counter;
+  }
+
+  increment() {
+    return ++counter;
+  }
+
+  decrement() {
+    return --counter;
+  }
+}
+```
+
+但是，此类不符合单例的标准！单例应该只能实例化一次。目前，我们可以创建该 Counter 类的多个实例。
+
+``` javascript
+let counter = 0;
+
+class Counter {
+  getInstance() {
+    return this;
+  }
+
+  getCount() {
+    return counter;
+  }
+
+  increment() {
+    return ++counter;
+  }
+
+  decrement() {
+    return --counter;
+  }
+}
+
+const counter1 = new Counter();
+const counter2 = new Counter();
+
+console.log(counter1.getInstance() === counter2.getInstance()); // false
+```
+
+通过调用该 new 方法两次，我们只需设置 counter1 和 counter2 等于不同的实例。 getInstance 方法返回的值 on counter1 并 counter2 有效地返回了对不同实例的引用：它们并不严格相等！
+
+<Example1 />
+
+让我们确保只能创建 Counter 该类的一个实例。
+
+确保只能创建一个实例的一种方法是创建一个名为 instance 的变量。在 的 Counter 构造函数中，我们可以在创建新实例时设置 instance 等于对实例的引用。我们可以通过检查 instance 变量是否已经有值来防止新的实例化。如果是这种情况，则实例已存在。这不应该发生：应该抛出错误以让用户知道
+
+``` javascript
+let instance;
+let counter = 0;
+
+class Counter {
+  constructor() {
+    if (instance) {
+      throw new Error("You can only create one instance!");
+    }
+    instance = this;
+  }
+
+  getInstance() {
+    return this;
+  }
+
+  getCount() {
+    return counter;
+  }
+
+  increment() {
+    return ++counter;
+  }
+
+  decrement() {
+    return --counter;
+  }
+}
+
+const counter1 = new Counter();
+const counter2 = new Counter();
+// Error: You can only create one instance!
+```
+
+让我们从 counter.js 文件中导出 Counter 实例。但在这样做之前，我们也应该冻结实例。该 Object.freeze 方法确保使用代码无法修改 Singleton。无法添加或修改冻结实例上的属性，从而降低意外覆盖 Singleton 上的值的风险。
+
+``` javascript
+let instance;
+let counter = 0;
+
+class Counter {
+  constructor() {
+    if (instance) {
+      throw new Error("You can only create one instance!");
+    }
+    instance = this;
+  }
+
+  getInstance() {
+    return this;
+  }
+
+  getCount() {
+    return counter;
+  }
+
+  increment() {
+    return ++counter;
+  }
+
+  decrement() {
+    return --counter;
+  }
+}
+
+const singletonCounter = Object.freeze(new Counter());
+export default singletonCounter;
+```
+
+---
+
+补充:
+
+# 简单的单例模式
+
+``` javascript
+var Singleton = function(name) {
+  this.name = name;
+  this.instance = null;
+}
+
+Singleton.prototye.getName = function() {
+  return this.name;
+}
+
+Singleton.prototye.getInstance = function(name) {
+  if (this.instance) {
+    return this.instance;
+  }
+
+  this.instance = new Singleton(name);
+
+  return this.instance;
+}
+```
+
+我们通过Singleton.getInstance来获取Singleton类的唯一对象，这种方式相对简单，但有一个问题，就是增加了这个类的“不透明性”我们通过Singleton.getInstance来获取Singleton类的唯一对象，这种方式相对简单，但有一个问题，就是增加了这个类的“不透明性”，Singleton类的使用者必须知道这是一个单例类，跟以往通过new XXX的方式来获取对象不同，这里偏要使用Singleton.getInstance来获取对象。
+
+这段单例模式代码意义并不大
+
+# 透明的单例模式
+
+用户用这个类创建对象的时候可以像使用其他普通类一样
+
+``` javascript
+var CreateDiv = (function() {
+  var instance = null;
+
+  var CreateDiv = function(html) {
+    if (instance) {
+      return instance;
+    }
+
+    this.html = html;
+    this.init():
+
+    return instance = this;
+  }
+
+  CreateDiv.prototye.init = function() {
+    // ...
+  }
+
+  return CreateDiv;
+})();
+```
+
+为了把instance封装起来，我们使用了自执行的匿名函数和闭包，并且让这个匿名函数返回真正的Singleton构造方法，这增加了一些程序的复杂度，阅读起来也不是很舒服。
+
+# 用代理实现单例模式
+
+``` javascript
+var CreateDiv = function(html) {
+  this.html = html;
+  this.init();
+}
+
+CreateDiv.prototype.init = function() {
+  // ...
+}
+
+// 引入代理
+var PorxySingletonCreateDiv = (function() {
+  var instance = null;
+  return function(html) {
+    if (!instance) {
+      instance = new CreateDiv(html);
+    }
+
+    return instance;
+  }
+})();
+```
+
+# javascript中的单例模式
+
+单例模式的核心是确保只有一个实例，并提供全局访问
+
+`var a = { }`
+
+这种方式虽然能满足单例的需求，但是并不安全。
+
+# 惰性单例
+
+惰性单例是指在需要的时候才创建实例
+
+``` javascript
+Singleton.getInstance = (function() {
+  var instance = null;
+
+  return function() {
+    if (!instance) {
+      instance = new Singleton();
+    }
+
+    return instance
+  }
+})();
+```
+
+通用的惰性单例
+
+``` javascript
+var getSingle = function(fn) {
+  var result;
+
+  return function() {
+    return result || (result = fn.apply(this, arguments))
+  }
+}
+```
+
+# 一个github上的
+
+[lazy-singleton](https://github.com/jamestalmage/lazy-singleton/blob/master/index.js)
+
+``` javascript
+'use strict';
+const p2n = require('p2n');
+
+function lazySingleton(fn) {
+	const isConstructor = this instanceof lazySingleton;
+
+	return (...args) => {
+		let initialized = false;
+		let value;
+
+		return () => {
+			if (!initialized) {
+				value = isConstructor ? new fn(...args) : fn(...args); // eslint-disable-line new-cap
+				initialized = true;
+			}
+
+			return value;
+		};
+	};
+}
+
+const promise = fn => {
+	const wrapped = lazySingleton((...args) => new Promise((resolve, reject) => fn(resolve, reject, ...args)));
+	return (...args) => {
+		const promise = wrapped(...args);
+		return cb => p2n(promise(), cb);
+	};
+};
+
+const callback = fn => promise(
+	(resolve, reject, ...args) => {
+		args.push((err, result) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(result);
+			}
+		});
+
+		fn(...args);
+	}
+);
+
+module.exports = lazySingleton;
+module.exports.sync = lazySingleton;
+module.exports.Sync = lazySingleton;
+module.exports.promise = promise;
+module.exports.callback = callback;
+```

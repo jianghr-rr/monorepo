@@ -89,5 +89,12 @@
     "rooks": "7.14.1",
     "tailwindcss": "3.4.3",
     "typescript": "5.4.3"
-  }
+  },
+  "main": "lint-staged.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
