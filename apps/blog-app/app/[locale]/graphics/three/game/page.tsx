@@ -11,10 +11,14 @@ export default function theBasics() {
   const canvasRef = useRef(null);
 
   useLayoutEffect(() => {
-    if (!temp) {
+    if (!temp && canvasRef.current) {
       new Main(canvasRef.current);
       temp = true;
     }
+
+    return () => {
+      temp = false;
+    };
   }, []);
 
   return (
