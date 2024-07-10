@@ -10,5 +10,8 @@
         "title": "React Three Fiber",
         "theBasics": "R3F The Basics",
         "editableCube": "Editable Cube"
+    },
+    "game": {
+        "title": "Game"
     }
 }

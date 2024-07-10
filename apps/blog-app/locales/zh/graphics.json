@@ -8,7 +8,8 @@
             "title": "SVG"
         },
         "WebGL": {
-            "title": "WebGL"
+            "title": "WebGL",
+            "demo": "Demo"
         },
         "coordinate": {
             "title": "坐标系和向量"
@@ -42,6 +43,9 @@
                 "title": "React Three Fiber",
                 "theBasics": "基础知识",
                 "editableCube": "可编辑的立方体"
+            },
+            "game": {
+                "title": "游戏"
             }
         }
     }

@@ -1,5 +1,5 @@
 'use client';
-
+import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 
 export default function PatternsPage() {
@@ -7,7 +7,14 @@ export default function PatternsPage() {
 
   return (
     <div className="blog-container">
-      <h1 className="blog-h1">{t('title')}</h1>
+      <h1 className="blog-h1">{t('graphics.three.title')}</h1>
+
+      <Image
+        src={'/images/threejs/o-1.jpg'}
+        width={1600}
+        height={900}
+        alt="extend"
+      />
       <p className="blog-p">
         Three.js 通过对 WebGL 的高层次抽象和封装，使得 3D
         图形编程变得更加简单和高效。它提供了丰富的功能和内置工具，极大地简化了常见的

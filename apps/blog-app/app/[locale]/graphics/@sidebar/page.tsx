@@ -27,6 +27,12 @@ export default function PatternsPageSideBar({
           {
             href: '/graphics/webgl',
             label: t('graphics.WebGL.title'),
+            children: [
+              {
+                href: '/graphics/webgl/demo',
+                label: t('graphics.WebGL.demo'),
+              },
+            ],
           },
           {
             href: '/graphics/coordinate',
@@ -85,6 +91,10 @@ export default function PatternsPageSideBar({
               {
                 href: '/graphics/three/thebasics/webglrender',
                 label: t('graphics.three.tb.webglrender'),
+              },
+              {
+                href: '/graphics/three/game',
+                label: t('graphics.three.game.title'),
               },
             ],
           },
