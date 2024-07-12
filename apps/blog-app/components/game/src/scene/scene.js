@@ -1,4 +1,3 @@
-import sceneConf from '../../confs/scene-conf';
 import * as THREE from '../../libs/three.js';
 import background from '../objects/background';
 import camera from './camera';
@@ -15,7 +14,6 @@ class Scene {
 
   init(canvas) {
     this.instance = new THREE.Scene();
-    console.log('123', this.instance);
     const renderer = (this.renderer = new THREE.WebGLRenderer({
       antialias: true, // 抗锯齿
       canvas: canvas,

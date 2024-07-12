@@ -440,7 +440,7 @@ Matrix4.prototype.setPerspective = function (fovy, aspect, near, far) {
     throw 'null frustum';
   }
 
-  rd = 1 / (far - near);
+  var rd = 1 / (far - near);
   ct = Math.cos(fovy) / s;
 
   e = this.elements;

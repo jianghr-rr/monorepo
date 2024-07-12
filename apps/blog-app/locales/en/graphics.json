@@ -9,7 +9,8 @@
         },
         "WebGL": {
             "title": "WebGL",
-            "demo": "Demo"
+            "demo": "Demo",
+            "cube": "Cube"
         },
         "coordinate": {
             "title": "coordinate system"
@@ -45,7 +46,10 @@
                 "editableCube": "Editable Cube"
             },
             "game": {
-                "title": "Game"
+                "title": "Game",
+                "mvc": "MVC",
+                "step1": "Step 1",
+                "step2": "Step 2"
             }
         }
     }

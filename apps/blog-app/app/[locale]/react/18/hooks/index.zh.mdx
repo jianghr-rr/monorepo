@@ -1,0 +1,52 @@
+# State Hooks
+
+状态允许组件“记住”用户输入等信息。例如，表单组件可以使用状态来存储输入值，而图像库组件可以使用状态来存储所选的图像索引。
+
+若要向组件添加状态，请使用以下钩子之一：
+
+- useState
+- useReducer
+
+# Context Hooks
+
+上下文允许组件从远方的父母那里接收信息，而无需将其作为道具传递。例如，应用的顶级组件可以将当前 UI 主题传递给下面的所有组件，无论其深度如何。
+
+- useContext
+
+# Ref Hooks
+
+引用允许组件保存一些不用于渲染的信息，例如 DOM 节点或超时 ID。与状态不同，更新 ref 不会重新渲染组件。Refs 是 React 范式的“逃生舱口”。当您需要使用非 React 系统（例如内置浏览器 API）时，它们非常有用。
+
+- useRef 声明引用。您可以在其中保存任何值，但大多数情况下，它用于保存 DOM 节点。
+- useImperativeHandle 允许您自定义组件公开的 ref。这很少使用。
+
+# Effect Hooks
+
+效果器允许组件连接到外部系统并与之同步。这包括处理网络、浏览器 DOM、动画、使用不同 UI 库编写的小部件以及其他非 React 代码。
+
+- useEffect 将组件连接到外部系统。
+
+有两种很少使用的变体 useEffect
+
+- useLayoutEffect 在浏览器重新绘制屏幕之前触发。您可以在此处测量布局。
+- useInsertionEffect 在 React 对 DOM 进行更改之前触发。 库可以在此处插入动态 CSS。
+
+# Performance Hooks
+
+优化重新渲染性能的常用方法是跳过不必要的工作。例如，你可以告诉 React 重用缓存的计算，或者如果数据自上次渲染以来没有改变，则跳过重新渲染。
+
+- useMemo 允许您缓存成本高昂的计算结果。
+- useCallback 允许您在将函数定义传递给优化组件之前对其进行缓存。
+
+有时，您无法跳过重新渲染，因为屏幕实际上需要更新。在这种情况下，可以通过将必须同步的阻止更新（如键入输入）与不需要阻止用户界面（如更新图表）的非阻止更新分开来提高性能。
+
+- useTransition 允许您将状态转换标记为非阻塞，并允许其他更新中断它。
+- useDeferredValue 允许您推迟更新 UI 的非关键部分，并让其他部分先更新。
+
+# Other Hooks
+
+- useDebugValue 允许自定义 React DevTools 为自定义 Hook 显示的标签。
+- useId 允许组件将唯一 ID 与自身关联。通常与辅助功能 API 一起使用。
+- useSyncExternalStore 允许组件订阅外部存储。
+- useActionState 允许您管理操作状态。
+

@@ -1,6 +1,18 @@
 {
+    "16": {
+        "title": "React 16",
+        "interview": "React 16 总览"
+    },
     "18": {
         "title": "React 18",
         "interview": "React 18 总览"
+    },
+    "hooks": {
+        "title": "React Hooks",
+        "interview": "React Hooks 总览"
+    },
+    "uiComponent": {
+        "title": "UI 组件",
+        "interview": "UI 组件总览"
     }
 }

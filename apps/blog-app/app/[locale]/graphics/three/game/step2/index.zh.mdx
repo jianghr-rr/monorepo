@@ -1,0 +1,107 @@
+# 第二步: 长方体和圆柱体
+
+- new THREE.CylinderGeometry
+- THREE.CylinderGeometry
+
+## block基类
+
+高度定好的
+
+``` javascript
+import blockConf from '../../confs/block-conf';
+
+export default class BaseBlock {
+  constructor(type) {
+    this.type = type; // cuboid | cylinder
+    this.height = blockConf.height;
+    this.width = blockConf.width;
+    this.status = 'stop';
+    this.scale = 1;
+  }
+
+  popup() {
+    // ...
+  }
+
+  _shrink() {
+    // ...
+  }
+
+  rebound() {
+    // ...
+  }
+
+  shrink() {
+    // ...
+  }
+
+  update() {
+    // ...
+  }
+
+  getVertices() {
+    // ...
+  }
+}
+```
+
+## Cuboid
+
+``` javascript
+import * as THREE from '../../libs/three.js';
+import BaseBlock from './base';
+
+export default class Cuboid extends BaseBlock {
+  constructor(x, y, z, type, width) {
+    super('cuboid');
+    const size = width || this.width;
+    var geometry = new THREE.BoxGeometry(size, this.height, size);
+    var material = new THREE.MeshPhongMaterial({
+      color: 0xffffff,
+    });
+    this.instance = new THREE.Mesh(geometry, material);
+    this.instance.receiveShadow = true;
+    this.instance.name = 'block';
+    
+  }
+}
+
+```
+
+## Cylinder
+
+``` javascript
+import * as THREE from '../../libs/three.js';
+import BaseBlock from './base';
+
+export default class Cylinder extends BaseBlock {
+  constructor(x, y, z, type, width) {
+    super('cylinder');
+    const size = width || this.width;
+    var geometry = new THREE.CylinderGeometry(
+      size / 2,
+      size / 2,
+      this.height,
+      120
+    );
+    var material = new THREE.MeshPhongMaterial({
+      color: 0xffffff,
+    });
+    this.instance = new THREE.Mesh(geometry, material);
+    this.instance.receiveShadow = true;
+    this.instance.name = 'block';
+  }
+}
+
+```
+
+在game-page.js中添加块
+
+``` javascript
+  addInitBlock() {
+    this.currentBlock = new Cuboid(-15, 0, 0, 'show');
+    this.scene.instance.add(this.currentBlock.instance);
+    this.nextBlock = new Cylinder(23, 0, 0, 'show');
+    this.scene.instance.add(this.nextBlock.instance);
+  }
+```

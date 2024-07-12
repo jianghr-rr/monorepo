@@ -87,7 +87,7 @@ const SideBar: FC<SideBarProps> = ({ links, direction }) => {
   return (
     <NavigationMenu className="sidebar w-full">
       <NavigationMenuList className="w-full">
-        <ul className={`menu menu-vertical w-full rounded-box`}>
+        <ul className={`menu menu-vertical w-full rounded-box pb-12`}>
           <RecursiveNavigation links={links} />
         </ul>
       </NavigationMenuList>

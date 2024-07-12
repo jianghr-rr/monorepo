@@ -32,6 +32,10 @@ export default function PatternsPageSideBar({
                 href: '/graphics/webgl/demo',
                 label: t('graphics.WebGL.demo'),
               },
+              {
+                href: '/graphics/webgl/cube',
+                label: t('graphics.WebGL.cube'),
+              },
             ],
           },
           {
@@ -95,6 +99,20 @@ export default function PatternsPageSideBar({
               {
                 href: '/graphics/three/game',
                 label: t('graphics.three.game.title'),
+                children: [
+                  {
+                    href: '/graphics/three/game/mvc',
+                    label: t('graphics.three.game.mvc'),
+                  },
+                  {
+                    href: '/graphics/three/game/step1',
+                    label: t('graphics.three.game.step1'),
+                  },
+                  {
+                    href: '/graphics/three/game/step2',
+                    label: t('graphics.three.game.step2'),
+                  },
+                ],
               },
             ],
           },

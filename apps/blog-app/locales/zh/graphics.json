@@ -9,7 +9,8 @@
         },
         "WebGL": {
             "title": "WebGL",
-            "demo": "Demo"
+            "demo": "Demo",
+            "cube": "立方体"
         },
         "coordinate": {
             "title": "坐标系和向量"
@@ -45,7 +46,10 @@
                 "editableCube": "可编辑的立方体"
             },
             "game": {
-                "title": "游戏"
+                "title": "游戏",
+                "mvc": "使用MVC模式",
+                "step1": "第一步",
+                "step2": "第二步"
             }
         }
     }
