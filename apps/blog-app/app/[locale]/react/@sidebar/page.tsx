@@ -29,6 +29,46 @@ export default function PatternsPageSideBar({
           {
             href: '/react/18/interview',
             label: t('18.interview'),
+            children: [
+              {
+                href: '/react/18/hooks',
+                label: t('18.hooks'),
+                children: [
+                  {
+                    href: '/react/18/hooks/useState',
+                    label: t('useState'),
+                  },
+                  {
+                    href: '/react/18/hooks/useReducer',
+                    label: t('useReducer'),
+                  },
+                  {
+                    href: '/react/18/hooks/useCallback',
+                    label: t('useCallback'),
+                  },
+                  {
+                    href: '/react/18/hooks/useContext',
+                    label: t('useContext'),
+                  },
+                  {
+                    href: '/react/18/hooks/useRef',
+                    label: t('useRef'),
+                  },
+                  {
+                    href: '/react/18/hooks/useActionState',
+                    label: t('useActionState'),
+                  },
+                ],
+              },
+              {
+                href: '/react/18/components',
+                label: t('18.components'),
+              },
+              {
+                href: '/react/18/api',
+                label: t('18.api'),
+              },
+            ],
           },
         ],
       },

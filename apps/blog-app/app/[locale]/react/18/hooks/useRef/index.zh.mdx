@@ -1,0 +1,51 @@
+# useRef
+
+useRef 是一个 React Hook，它允许您引用渲染不需要的值。
+
+``` javascript
+const ref = useRef(initialValue)
+```
+
+## 参数
+
+initialValue ：您希望 ref 对象 current 的属性初始为值。它可以是任何类型的值。初始渲染后将忽略此参数。
+
+## 返回
+
+useRef 返回具有单个属性的对象：
+
+current ：最初，它设置为 initialValue 您已通过。您可以稍后将其设置为其他内容。如果将 ref 对象作为 ref 属性传递给 React 到 JSX 节点，React 将设置其 current 属性。
+
+在下一次渲染时， useRef 将返回相同的对象。
+
+## 警告
+
+您可以更改 ref.current 属性。与状态不同，它是可变的。但是，如果它包含用于渲染的对象（例如，状态的一部分），则不应更改该对象。
+
+当你改变属性时 ref.current ，React 不会重新渲染你的组件。React 不知道你什么时候更改它，因为 ref 是一个普通的 JavaScript 对象。
+
+在渲染过程中不要写入或读取 ref.current ，初始化除外。这使得组件的行为不可预测。
+
+``` jsx
+import { useRef } from 'react';
+
+export default function Counter() {
+  let ref = useRef(0);
+
+  function handleClick() {
+    ref.current = ref.current + 1;
+    alert('You clicked ' + ref.current + ' times!');
+  }
+
+  return (
+    <button onClick={handleClick}>
+      Click me!
+    </button>
+  );
+}
+```
+
+# 使用 ref 操作 DOM
+
+使用 ref 来操作 DOM 是特别常见的，React 对此有内置的支持。
+

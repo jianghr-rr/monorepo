@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -17,16 +18,7 @@ const Example1 = () => {
   }, [videoRef]);
 
   return (
-    <video
-      ref={videoRef}
-      width="1280"
-      height="720"
-      controls
-      preload="none"
-      autoPlay
-      loop
-      muted
-    >
+    <video ref={videoRef} width="1280" height="720" controls>
       <source src="/videos/instance-1.webm" type="video/mp4" />
       Your browser does not support the video tag.
     </video>

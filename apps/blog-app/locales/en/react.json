@@ -5,7 +5,10 @@
     },
     "18": {
         "title": "React 18",
-        "interview": "React 18 Interview"
+        "interview": "React 18 Interview",
+        "hooks": "hooks",
+        "components": "components",
+        "api": "API"
     },
     "hooks": {
         "title": "React Hooks",

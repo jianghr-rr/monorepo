@@ -5,7 +5,10 @@
     },
     "18": {
         "title": "React 18",
-        "interview": "React 18 总览"
+        "interview": "React 18 总览",
+        "hooks": "hooks",
+        "components": "components",
+        "api": "API"
     },
     "hooks": {
         "title": "React Hooks",
