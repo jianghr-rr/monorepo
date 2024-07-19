@@ -47,12 +47,28 @@ export default function PatternsPageSideBar({
                     label: t('useCallback'),
                   },
                   {
+                    href: '/react/18/hooks/useMemo',
+                    label: t('useMemo'),
+                  },
+                  {
                     href: '/react/18/hooks/useContext',
                     label: t('useContext'),
                   },
                   {
                     href: '/react/18/hooks/useRef',
                     label: t('useRef'),
+                  },
+                  {
+                    href: '/react/18/hooks/useEffect',
+                    label: t('useEffect'),
+                  },
+                  {
+                    href: '/react/18/hooks/useLayoutEffect',
+                    label: t('useLayoutEffect'),
+                  },
+                  {
+                    href: '/react/18/hooks/useInsertionEffect',
+                    label: t('useInsertionEffect'),
                   },
                   {
                     href: '/react/18/hooks/useActionState',

@@ -1,0 +1,46 @@
+# useLayoutEffect
+
+useLayoutEffect 是在浏览器重新绘制屏幕之前触发的 useEffect 版本。
+
+``` javascript
+useLayoutEffect(setup, dependencies)
+```
+
+useLayoutEffect 的代码和从它计划的所有状态更新都会阻止浏览器重新绘制屏幕。如果过度使用，这会使您的应用变慢。如果可能，请首选 useEffect .
+
+## 在浏览器重新绘制屏幕之前测量布局
+
+大多数组件不需要知道它们在屏幕上的位置和大小来决定要渲染的内容。他们只返回一些 JSX。然后浏览器计算它们的布局（位置和大小）并重新绘制屏幕。
+
+有时，这还不够。想象一下，悬停时某个元素旁边会出现一个工具提示。如果有足够的空间，工具提示应显示在元素上方，但如果不适合，则应显示在下方。为了在正确的最终位置渲染工具提示，您需要知道它的高度（即它是否适合顶部）。
+
+为此，您需要分两次渲染：
+
+- 在任意位置呈现工具提示（即使位置错误）。
+- 测量其高度并决定放置工具提示的位置。
+- 在正确的位置再次呈现工具提示。
+
+所有这些都需要在浏览器重新绘制屏幕之前发生。您不希望用户看到工具提示在移动。调用 useLayoutEffect 以在浏览器重新绘制屏幕之前执行布局测量：
+
+``` javascript
+function Tooltip() {
+  const ref = useRef(null);
+  const [tooltipHeight, setTooltipHeight] = useState(0); // You don't know real height yet
+
+  useLayoutEffect(() => {
+    const { height } = ref.current.getBoundingClientRect();
+    setTooltipHeight(height); // Re-render now that you know the real height
+  }, []);
+
+  // ...use tooltipHeight in the rendering logic below...
+}
+```
+
+以下是逐步完成的工作方式：
+
+1. Tooltip 使用首字母 tooltipHeight = 0 进行渲染（因此工具提示的位置可能错误）。
+2. React 将它放在 DOM 中并在 中 useLayoutEffect 运行代码。
+3. 测量 useLayoutEffect 工具提示内容的高度并触发立即重新渲染。
+4. Tooltip 再次使用实 tooltipHeight 数进行渲染（因此工具提示的位置正确）。
+
+请注意，即使 Tooltip 组件必须分两次渲染（首先， tooltipHeight 初始化为 0 实际测量高度，然后使用实际测量高度），您也只能看到最终结果。这就是为什么您需要 useLayoutEffect 而不是 useEffect 此示例的原因。

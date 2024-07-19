@@ -1,0 +1,47 @@
+# useMemo
+
+useMemo 是一个 React Hook，它允许您在重新渲染之间缓存计算结果。
+
+``` javascript
+const cachedValue = useMemo(calculateValue, dependencies)
+```
+
+### Parameters
+
+calculateValue ：计算要缓存的值的函数。它应该是纯的，不应该接受任何参数，并且应该返回任何类型的值。React 将在初始渲染期间调用您的函数。在下一次渲染时，如果自上次渲染以来没有更改， dependencies React 将再次返回相同的值。否则，它将调用 calculateValue ，返回其结果，并存储它，以便以后可以重用。
+
+dependencies ： calculateValue 代码中引用的所有反应式值的列表。响应式值包括 props、state 以及直接在组件主体中声明的所有变量和函数。如果你的 linter 是为 React 配置的，它将验证每个反应值是否都正确指定为依赖项。依赖项列表必须具有恒定数量的项，并以内联方式编写，如 [dep1, dep2, dep3] .React 将使用 Object.is 比较将每个依赖项与其先前的值进行比较。
+
+### Returns
+
+在初始呈现时， useMemo 返回不带参数的调用 calculateValue 结果。
+
+在下一次渲染期间，它将返回上次渲染中已存储的值（如果依赖项未更改），或者再次调用 calculateValue 并返回 calculateValue 已返回的结果。
+
+### 警告
+
+除非有特定原因，否则 React 不会丢弃缓存的值。例如，在开发中，当您编辑组件的文件时，React 会丢弃缓存。无论是在开发中还是在生产中，如果你的组件在初始挂载期间挂起，React 都会丢弃缓存。将来，React 可能会添加更多利用丢弃缓存的功能——例如，如果 React 将来添加对虚拟化列表的内置支持，那么丢弃从虚拟化表视口滚动出来的项目的缓存是有意义的。如果您 useMemo 仅依赖性能优化，这应该没问题。否则，状态变量或 ref 可能更合适。
+
+# 用法
+
+若要在重新渲染之间缓存计算，请将其包装在组件顶层的 useMemo 调用中：
+
+``` javascript
+import { useMemo } from 'react';
+
+function TodoList({ todos, tab, theme }) {
+  const visibleTodos = useMemo(() => filterTodos(todos, tab), [todos, tab]);
+  // ...
+}
+```
+
+您需要将两件事传递给 useMemo ：
+
+- 一个不接受参数的计算函数，如 () => ，并返回您想要计算的内容。
+- 依赖项列表，包括组件中计算中使用的每个值。
+
+在初始渲染时，您将从 useMemo 中获得的值将是调用计算的结果。
+
+在每次后续渲染中，React 都会将依赖项与你在上次渲染期间传递的依赖项进行比较。如果所有依赖项均未更改（与 Object.is 相比）， useMemo 则将返回您之前已计算的值。否则，React 将重新运行您的计算并返回新值。
+
+换句话说， useMemo 在重新渲染之间缓存计算结果，直到其依赖关系发生变化。
