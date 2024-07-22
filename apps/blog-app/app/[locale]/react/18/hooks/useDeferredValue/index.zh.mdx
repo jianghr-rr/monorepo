@@ -1,0 +1,165 @@
+# useDeferredValue
+
+useDeferredValue 是一个 React Hook，可让您延迟更新 UI 的一部分。
+
+``` javascript
+const deferredValue = useDeferredValue(value)
+```
+
+## 参考
+
+useDeferredValue 调用组件的顶层以获取该值的延迟版本。
+
+``` javascript
+import { useState, useDeferredValue } from 'react';
+
+function SearchPage() {
+  const [query, setQuery] = useState('');
+  const deferredQuery = useDeferredValue(query);
+  // ...
+}
+```
+
+**让我们通过一个示例来了解这何时有用。**
+
+在此示例中， SearchResults 组件在获取搜索结果时挂起。尝试键入 "a" ，等待结果，然后将其编辑为 "ab" 。 "a" get 的结果被加载回退替换。
+
+<iframe src="https://codesandbox.io/embed/3lgvwy?view=editor+%2B+preview&module=%2Fsrc%2FApp.js"
+    style={{width: "100%", height: "500px", border: "0", borderRadius: "4px", overflow: "hidden"}}
+    title="eager-agnesi-3lgvwy"
+    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
+一种常见的替代 UI 模式是推迟更新结果列表，并继续显示以前的结果，直到新结果准备就绪。调用 useDeferredValue 以向下传递查询的延迟版本：
+
+``` javascript
+export default function App() {
+  const [query, setQuery] = useState('');
+  const deferredQuery = useDeferredValue(query);
+  return (
+    <>
+      <label>
+        Search albums:
+        <input value={query} onChange={e => setQuery(e.target.value)} />
+      </label>
+      <Suspense fallback={<h2>Loading...</h2>}>
+        <SearchResults query={deferredQuery} />
+      </Suspense>
+    </>
+  );
+}
+```
+
+将 query 立即更新，因此输入将显示新值。但是，在加载数据之前，它将 deferredQuery 保留其以前的值，因此 SearchResults 将显示一段时间的陈旧结果。
+
+在下面的示例中输入 "a" ，等待结果加载，然后将输入编辑为 "ab" 。请注意，在加载新结果之前，您现在看到的不是 Suspense 回退，而是过时的结果列表：
+
+<iframe src="https://codesandbox.io/embed/jryw3v?view=editor+%2B+preview&module=%2Fsrc%2FApp.js"
+    style={{width: "100%", height: "500px", border: "0", borderRadius: "4px", overflow: "hidden"}}
+    title="priceless-wildflower-jryw3v"
+    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
+您可以将其视为分两步发生：
+
+1. 首先，React 使用新的 query （ "ab" ） 重新渲染，但使用旧的 deferredQuery （仍然是 "a") .传递到结果列表的 deferredQuery 值将被延迟：它“滞后于” query 该值。
+2. 在后台，React 尝试使用两者 query 重新渲染并 deferredQuery 更新为 "ab" .如果重新渲染完成，React 将在屏幕上显示它。但是，如果它挂起（结果 "ab" 尚未加载），React 将放弃此渲染尝试，并在数据加载后再次重试此重新渲染。用户将继续看到过时的延迟值，直到数据准备就绪。
+
+延迟的“背景”渲染是可中断的。例如，如果您再次输入输入，React 将放弃它并使用新值重新启动。React 将始终使用最新提供的值。
+
+请注意，每次击键仍然有一个网络请求。这里推迟的是显示结果（直到它们准备就绪），而不是网络请求本身。即使用户继续键入，每次击键的响应也会被缓存，因此按 Backspace 键是即时的，不会再次提取。
+
+<iframe src="https://codesandbox.io/embed/f8d9m4?view=editor+%2B+preview&module=%2Fsrc%2FApp.js"
+    style={{width: "100%", height: "500px", border: "0", borderRadius: "4px", overflow: "hidden"}}
+    title="sweet-snyder-f8d9m4"
+    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
+## 参数
+
+- value ：要推迟的值。它可以是任何类型。
+- Canary only optional initialValue ：在组件初始渲染期间使用的值。如果省略此选项， useDeferredValue 则不会在初始渲染期间延迟，因为没有可以渲染的先前版本 value 。
+
+## 返回
+
+currentValue ：在初始渲染期间，返回的延迟值将与您提供的值相同。在更新期间，React 将首先尝试使用旧值重新渲染（因此它将返回旧值），然后在后台尝试使用新值进行另一次重新渲染（因此它将返回更新的值）。
+
+# 延迟对 UI 的一部分进行重新渲染
+
+您也可以 useDeferredValue 申请作为性能优化。当 UI 的一部分重新呈现速度较慢、没有简单的方法来优化它并且您希望防止它阻止 UI 的其余部分时，它非常有用。
+
+想象一下，您有一个文本字段和一个组件（如图表或长列表），每次击键时都会重新呈现：
+
+``` javascript
+function App() {
+  const [text, setText] = useState('');
+  return (
+    <>
+      <input value={text} onChange={e => setText(e.target.value)} />
+      <SlowList text={text} />
+    </>
+  );
+}
+```
+
+首先，优化 SlowList 为在props相同时跳过重新渲染。为此，请将其包装在 memo ：
+
+``` javascript
+const SlowList = memo(function SlowList({ text }) {
+  // ...
+});
+```
+
+但是，只有当 SlowList 道具与上一次渲染期间的道具相同时，这才会有所帮助。你现在面临的问题是，当它们不同时，当你实际上需要显示不同的视觉输出时，它会很慢。
+
+具体来说，主要的性能问题是，每当你在输入中键入时，都会 SlowList 收到新的道具，并且重新渲染其整个树会使键入感觉卡顿。在这种情况下， useDeferredValue 允许您优先更新输入（必须快速）而不是更新结果列表（允许更慢）：
+
+``` javascript
+function App() {
+  const [text, setText] = useState('');
+  const deferredText = useDeferredValue(text);
+  return (
+    <>
+      <input value={text} onChange={e => setText(e.target.value)} />
+      <SlowList text={deferredText} />
+    </>
+  );
+}
+```
+
+这不会使重新渲染 SlowList 的速度更快。但是，它告诉 React 可以取消重新渲染列表的优先级，这样它就不会阻止击键。该列表将“滞后”输入，然后“赶上”。和以前一样，React 会尝试尽快更新列表，但不会阻止用户键入。
+
+## 未优化的列表重新渲染
+
+<iframe src="https://codesandbox.io/embed/7whsp7?view=editor+%2B+preview&module=%2Fsrc%2FSlowList.js"
+    style={{width: "100%", height: "500px", border: "0", borderRadius: "4px", overflow: "hidden"}}
+    title="react.dev (forked)"
+    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
+## 延迟重新呈现列表
+
+<iframe src="https://codesandbox.io/embed/94tgxw?view=editor+%2B+preview&module=%2Fsrc%2FApp.js"
+    style={{width: "100%", height: "500px", border: "0", borderRadius: "4px", overflow: "hidden"}}
+    title="react.dev (forked)"
+    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
+## 延迟值与去抖动和限制有何不同（debouncing and throttling）？
+
+- 去抖动意味着在更新列表之前，您需要等待用户停止键入（例如一秒钟）。
+- 限制意味着您每隔一段时间（例如，每秒最多更新一次）更新列表。
+
+虽然这些技术在某些情况下很有帮助， useDeferredValue 但它更适合优化渲染，因为它与 React 本身深度集成并适应用户的设备。
+
+与去抖动或节流不同，它不需要选择任何固定延迟。如果用户的设备速度很快（例如功能强大的笔记本电脑），则延迟的重新渲染几乎会立即发生，并且不会引起注意。如果用户的设备速度较慢，则列表将“滞后”输入，与设备的速度成比例。
+
+此外，与去抖动或限制不同，默认情况下，由 完成的 useDeferredValue 延迟重新渲染是可中断的。这意味着，如果 React 正在重新渲染一个大列表，但用户又进行了一次击键，React 将放弃重新渲染，处理击键，然后再次开始在后台渲染。相比之下，去抖动和节流仍然会产生一种卡顿的体验，因为它们正在阻塞：它们只是推迟了渲染阻击键的时刻。
+
+如果正在优化的工作在渲染期间没有发生，则去抖动和限制仍然有用。例如，它们可以让您触发更少的网络请求。您也可以将这些技术一起使用。
+

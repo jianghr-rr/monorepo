@@ -11,7 +11,22 @@ export default function PatternsPageSideBar({
   const { t } = useTranslation();
 
   const links = useMemo(
-    () => [{ href: '/algorithm', label: t('algorithm') }],
+    () => [
+      {
+        href: '/algorithm',
+        label: t('algorithm'),
+        children: [
+          {
+            href: '/algorithm/two-sum',
+            label: t('twoSum'),
+          },
+          {
+            href: '/algorithm/group-anagrams',
+            label: t('groupAnagrams'),
+          },
+        ],
+      },
+    ],
     [t]
   );
 
