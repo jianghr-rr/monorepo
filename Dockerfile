@@ -38,8 +38,11 @@ COPY --link .gitignore ./
 COPY pnpm-workspace.yaml ./
 COPY .npmrc ./
 
+RUN npm cache clean --force
 RUN npm install pnpm -g
+RUN pnpm store prune
 RUN pnpm install
+
 
 # Alternatively we can use a build cache (buildx)
 #RUN --mount=type=cache,target=/root/.yarn3-cache,id=yarn3-cache \

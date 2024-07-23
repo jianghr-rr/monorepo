@@ -27,7 +27,24 @@
  * @return {string[][]}
  */
 var groupAnagrams = function(strs) {
-    const res = [];
     const map = new Map();
+    
+    for (let i of strs) {
+        // 生成模版，模版作为map的key
+        let temp = [...i].sort().join('');
+
+        // 如果之前存在相同的模版，就加入这个key的数组
+        // 否则就新建一个
+        if (map.has(temp)) {
+            map.get(temp).push(i);
+        }
+        else {
+            map.set(temp, [i])
+        }
+    }
+
+    return [...map.values()];
 };
 ```
+
+`map.values()`返回的是一个迭代器对象，可以通过解构生成数组
