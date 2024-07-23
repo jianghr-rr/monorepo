@@ -38,9 +38,7 @@ COPY --link .gitignore ./
 COPY pnpm-workspace.yaml ./
 COPY .npmrc ./
 
-RUN npm cache clean --force
 RUN npm install pnpm -g
-RUN pnpm store prune
 RUN pnpm install
 
 
