@@ -79,6 +79,10 @@ export default function PatternsPageSideBar({
                     label: t('useDeferredValue'),
                   },
                   {
+                    href: '/react/18/hooks/useId',
+                    label: t('useId'),
+                  },
+                  {
                     href: '/react/18/hooks/useDebugValue',
                     label: t('useDebugValue'),
                   },
