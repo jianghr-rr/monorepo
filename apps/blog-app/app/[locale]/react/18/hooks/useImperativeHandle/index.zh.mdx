@@ -1,0 +1,91 @@
+# useImperativeHandle
+
+useImperativeHandle 是一个 React Hook，可让您自定义作为 ref 公开的句柄。
+
+``` javascript
+useImperativeHandle(ref, createHandle, dependencies)
+```
+
+## 用法
+
+向父组件公开自定义 ref 句柄
+
+公开您自己的命令式方法
+
+``` javascript
+import { forwardRef, useImperativeHandle } from 'react';
+
+const MyInput = forwardRef(function MyInput(props, ref) {
+  useImperativeHandle(ref, () => {
+    return {
+      // ... your methods ...
+    };
+  }, []);
+  // ...
+}
+```
+
+## 参数
+
+ref ： ref 您从 render 函数接收的第二个 forwardRef 参数。
+
+createHandle ：一个不带参数并返回您想要公开的 ref 句柄的函数。该 ref 句柄可以是任何类型。通常，您将返回一个包含要公开的方法的对象。
+
+可选 dependencies ： createHandle 代码内部引用的所有反应值的列表。反应式值包括 props、state 以及直接在组件主体中声明的所有变量和函数。如果你的 linter 配置了 React，它将验证每个反应值是否都被正确地指定为依赖项。依赖项列表必须具有恒定数量的项，并且像 一样 [dep1, dep2, dep3] 内联编写。React 将使用比较将 Object.is 每个依赖项与其以前的值进行比较。如果重新渲染导致某些依赖项发生变化，或者您省略了此参数，则您的 createHandle 函数将重新执行，并且新创建的句柄将分配给 ref。
+
+## 返回
+
+useImperativeHandle 返回 undefined 。
+
+## 向父组件公开自定义 ref 句柄
+
+默认情况下，组件不会将其 DOM 节点公开给父组件。例如，如果您希望 的 MyInput 父组件能够访问 `<input>` DOM 节点，则必须选择 forwardRef 加入：
+
+``` javascript
+import { forwardRef } from 'react';
+
+const MyInput = forwardRef(function MyInput(props, ref) {
+  return <input {...props} ref={ref} />;
+});
+```
+
+使用上面的代码，ref to MyInput 将接收 `<input>` DOM 节点。但是，您可以改为公开自定义值。若要自定义公开的手柄，请在组件的顶层调用 useImperativeHandle ：
+
+``` javascript
+import { forwardRef, useImperativeHandle } from 'react';
+
+const MyInput = forwardRef(function MyInput(props, ref) {
+  useImperativeHandle(ref, () => {
+    return {
+      // ... your methods ...
+    };
+  }, []);
+
+  return <input {...props} />;
+});
+```
+
+请注意，在上面的代码中，不再 ref 转发到 `<input>` .
+
+例如，假设您不想公开整个 `<input>` DOM 节点，但想要公开其中的两个方法： focus 和 scrollIntoView 。为此，请将真实的浏览器 DOM 保存在单独的 ref 中。然后，use useImperativeHandle to 公开一个句柄，仅包含您希望父组件调用的方法：
+
+``` javascript
+import { forwardRef, useRef, useImperativeHandle } from 'react';
+
+const MyInput = forwardRef(function MyInput(props, ref) {
+  const inputRef = useRef(null);
+
+  useImperativeHandle(ref, () => {
+    return {
+      focus() {
+        inputRef.current.focus();
+      },
+      scrollIntoView() {
+        inputRef.current.scrollIntoView();
+      },
+    };
+  }, []);
+
+  return <input {...props} ref={inputRef} />;
+});
+```

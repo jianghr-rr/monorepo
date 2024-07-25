@@ -83,6 +83,10 @@ export default function PatternsPageSideBar({
                     label: t('useId'),
                   },
                   {
+                    href: '/react/18/hooks/useImperativeHandle',
+                    label: t('useImperativeHandle'),
+                  },
+                  {
                     href: '/react/18/hooks/useDebugValue',
                     label: t('useDebugValue'),
                   },
