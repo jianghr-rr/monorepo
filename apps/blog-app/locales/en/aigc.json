@@ -1,5 +1,8 @@
 {
     "not_found": {
         "title": "Not found"
+    },
+    "token": {
+        "title": "Understanding Tokens in ChatGPT"
     }
 }

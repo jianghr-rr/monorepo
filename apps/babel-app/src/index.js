@@ -1,3 +1,5 @@
-new Promise((resolve, reject) => {
-  resolve(1);
-});
+function* generatorFunction() {
+  yield 1;
+  yield 2;
+  yield 3;
+}

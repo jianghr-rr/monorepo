@@ -15,8 +15,10 @@
         "es6": "ES6",
         "es": {
             "const": "const",
-            "arrowFun": "箭头函数"
-        }
+            "arrowFun": "箭头函数",
+            "reflect": "Reflect"
+        },
+        "iteration": "属性，元素的迭代"
     },
     "react": {
         "title": "react"

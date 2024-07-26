@@ -13,8 +13,8 @@ export default function PatternsPageSideBar({
   const links = useMemo(
     () => [
       {
-        href: '/aigc/token',
-        label: t('token.title'),
+        href: '/next-js/rsc',
+        label: t('rsc'),
       },
     ],
     [t]

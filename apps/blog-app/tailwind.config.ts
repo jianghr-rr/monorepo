@@ -94,6 +94,9 @@ const config = {
             h1: {
               color: theme('colors.purple.900'),
             },
+            h2: {
+              color: theme('colors.purple.800'),
+            },
             a: {
               color: theme('colors.purple.600'),
               '&:hover': {

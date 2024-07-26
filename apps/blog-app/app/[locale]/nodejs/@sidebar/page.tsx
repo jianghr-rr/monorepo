@@ -13,8 +13,16 @@ export default function PatternsPageSideBar({
   const links = useMemo(
     () => [
       {
-        href: '/aigc/token',
-        label: t('token.title'),
+        href: '/nodejs/ecmascript',
+        label: t('ecmascript'),
+      },
+      {
+        href: '/nodejs/v8',
+        label: t('V8'),
+      },
+      {
+        href: '/nodejs/run-time',
+        label: t('Runtime'),
       },
     ],
     [t]

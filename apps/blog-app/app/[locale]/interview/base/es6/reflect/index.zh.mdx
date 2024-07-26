@@ -1,0 +1,84 @@
+# Reflect
+
+许多强类型语言长期以来都提供了反射 API（例如 Python 或 C#），而 JavaScript 几乎不需要反射 API – 它已经是一种动态语言。 ES6 的引入提供了一些新的扩展点，开发人员可以在其中访问该语言以前的内部方面 - 是的，我说的是 Proxy 。
+
+您可能会说 JavaScript 在 ES5 中已经具有反射功能，尽管规范或社区从未这样称呼过它们。 Array.isArray 、 Object.getOwnPropertyDescriptor 甚至 Object.keys 等方法都是在其他语言中被归类为反射的经典示例。 Reflect 内置函数将在未来容纳该类别中的未来方法。这很有意义，对吧？为什么在 Object 中会有像 getOwnPropertyDescriptor （甚至 create ）这样的超级反射静态方法？
+
+毕竟， Object 是一个基本原型，而不是反射方法的存储库。拥有一个公开大多数反射方法的专用接口更有意义。
+
+Reflect 对象。与 Math 非常相似， Reflect 是一个静态对象，您无法 new 启动或调用，并且它的所有方法都是静态的。 ES6 代理中的 _traps（在此处和此处介绍）一对一映射到 Reflect API。对于每个陷阱， Reflect 中有一个匹配的反射方法。
+
+Reflect 是 JavaScript 的一个内置对象，提供了一系列的方法，用于对对象进行元编程操作。
+
+Reflect 对象中的方法与一些目标对象的方法对应，主要用于对对象属性的操作。它的出现是为了使这些操作更加一致和简洁，同时为代理对象的默认行为提供基础。
+
+- `apply()`
+- `construct()`
+- `defineProperty()`
+- `deleteProperty()`
+- `get()`
+- `getOwnPropertyDescriptor()`
+- `getPrototypeOf()`
+- `has()`
+- `isExtensible()`
+- `ownKeys()`
+- `preventExtensions()`
+- `set()`
+- `setPrototypeOf()`
+
+## 元编程
+
+在 JavaScript 中，我们可以把元编程的功能分为几类：第一类是查找和添加对象属性相关的功能；第二类是创建 DSL 这样的特定领域语言；第三类就是可以作为代理用于对象的装饰器。
+
+### 对象属性的属性
+
+1. 对象属性的设置
+
+属性本身也有三个相关的数据属性，它们分别为可写属性（writable）、可枚举属性（enumerable）以及可配置属性（configurable）。
+
+这里的可写属性指定了属性的值是否可以更改；可枚举属性指定了属性是否可以由 for/in 循环和 Object.keys() 方法枚举；可配置属性指定了是否可以删除属性或更改属性的属性。
+
+我们可以通过 object.getOwnPropertyDescriptor() 来获取对象属性的属性描述，如果要查询继承属性的属性，就需要通过 Object.getPrototypeOf() 的方法来遍历原型链。如果要设置属性的属性或者使用指定的属性创建新属性，就需要用到 Object.defineProperty() 的方法。
+
+2. 对象的可延展性
+
+除了对对象的属性的获取和设置外，我们对对象本身也可以设置它的可延展性。我们可以通过 Object.isExtensible() 让一个对象可延展，同样的，我们也可以通过 Object.preventExtensions() 将一个对象设置为不可延展。
+
+在 JavaScript 中，我们可以通过 Object.seal() 把不可延展属性和不可配置属性结合；通过 Object.freeze() 我们可以把不可延展、不可配置和不可写属性结合起来。
+
+3. 对象的原型对象
+
+我们可以通过 Object.getPrototypeOf() 来获取对象的原型；通过 isPrototypeOf() 我们可以判断一个对象是不是另外一个对象的原型；同时，如果我们想要修改一个对象的原型，可以通过 Object.setPrototypeOf()。不过有一点需要注意的是，通常在原型已经设置后，就很少被改变了，使用 Object.setPrototypeOf() 有可能对性能产生影响。
+
+## 用于 DSL 的模版标签
+
+我们知道，在 JavaScript 中，在反引号内的字符串被称为模板字面量。当一个值为函数的表达式，并且后面跟着一个模板字面量时，它会变成一个函数被调用，我们将它称之为“带标签的模板字面量”。
+
+为什么我们说定义一个新的标签函数，用于标签模板字面量可以被当做是一种元编程呢？因为标签模板通常用于定义 DSL，也就是域特定语言，这样定义新的标签函数就如同向 JavaScript 中添加了新的语法。标签模板字面量已被许多前端 JavaScript 库采用。GraphQL 查询语言通过使用 gql`` 标签函数，可以使查询被嵌入到 JavaScript 代码中。Emotion 库使用 css`` 标签函数，使 CSS 样式同样可以被嵌入到 JavaScript 中。
+
+## Proxy 和 Reflect
+
+Reflect 并不是一个类，和 Math 对象类似，它的属性只是定义了一组相关的函数。ES6 中添加的这些函数都在一个命名空间中，它们模仿核心语言的行为，并且复制了各种预先存在于对象函数的特性。
+
+``` javascript
+const loggedObj = new Proxy(obj, {
+  construct: function(target, argumentsList) {
+    // additional functionality
+    // ...
+    return Reflect.construct(target, argumentsList);
+    // ☝️ same as `return new target(...argumentsList);`    
+  },
+  get: function(target, name) {
+    // additional functionality
+    // ...
+    return Reflect.get(target, name);
+    // ☝️ same as `return target[name];`
+  },
+  deleteProperty: function(target, name) {
+    // additional functionality
+    // ...
+    return Reflect.deleteProperty(target, name);
+    // ☝️ same as `return delete target[name];`
+  }
+});
+```

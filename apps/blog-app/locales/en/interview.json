@@ -15,8 +15,10 @@
         "es6": "ES6",
         "es": {
             "const": "const",
-            "arrowFun": "arrow function"
-        }
+            "arrowFun": "arrow function",
+            "reflect": "Reflect"
+        },
+        "iteration": "iteration"
     },
     "react": {
         "title": "react"

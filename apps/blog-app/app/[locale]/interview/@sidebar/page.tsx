@@ -52,7 +52,15 @@ export default function InterviewPageSideBar({
                 href: '/interview/base/es6/arrow-fun',
                 label: t('base.es.arrowFun'),
               },
+              {
+                href: '/interview/base/es6/reflect',
+                label: t('base.es.reflect'),
+              },
             ],
+          },
+          {
+            href: '/interview/base/iteration',
+            label: t('base.iteration'),
           },
         ],
       },

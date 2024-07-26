@@ -1,5 +1,8 @@
 {
     "not_found": {
         "title": "页面被小鱼吃掉了"
+    },
+    "token": {
+        "title": "理解ChatGPT的Tokens"
     }
 }

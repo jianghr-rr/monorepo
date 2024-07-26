@@ -31,7 +31,7 @@ const Navbar = () => {
       { href: '/graphics', label: t('graphics') },
       { href: '/engineering', label: t('engineering') },
       { href: '/nodejs', label: t('nodeJs') },
-      { href: '/nextjs', label: t('nextJs') },
+      { href: '/next-js', label: t('nextJs') },
       { href: '/patterns', label: t('patterns') },
       { href: '/algorithm', label: t('algorithm') },
       { href: '/aigc', label: t('aigc') },
