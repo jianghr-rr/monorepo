@@ -1,5 +1,8 @@
 {
     "algorithm": "Algorithm",
     "twoSum": "twoSum",
-    "groupAnagrams": "groupAnagrams"
+    "groupAnagrams": "groupAnagrams",
+    "moveZeroes": "moveZeroes",
+    "maxArea": "maxArea",
+    "threeSum": "threeSum"
 }

@@ -24,6 +24,18 @@ export default function PatternsPageSideBar({
             href: '/algorithm/group-anagrams',
             label: t('groupAnagrams'),
           },
+          {
+            href: '/algorithm/move-zeroes',
+            label: t('moveZeroes'),
+          },
+          {
+            href: '/algorithm/max-area',
+            label: t('maxArea'),
+          },
+          {
+            href: '/algorithm/three-sum',
+            label: t('threeSum'),
+          },
         ],
       },
     ],
