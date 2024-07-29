@@ -36,6 +36,10 @@ export default function PatternsPageSideBar({
             href: '/algorithm/three-sum',
             label: t('threeSum'),
           },
+          {
+            href: '/algorithm/rainwater-trap',
+            label: t('rainwaterTrap'),
+          },
         ],
       },
     ],

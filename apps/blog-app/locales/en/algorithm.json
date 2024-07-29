@@ -4,5 +4,6 @@
     "groupAnagrams": "groupAnagrams",
     "moveZeroes": "moveZeroes",
     "maxArea": "maxArea",
-    "threeSum": "threeSum"
+    "threeSum": "threeSum",
+    "rainwaterTrap": "rainwaterTrap"
 }

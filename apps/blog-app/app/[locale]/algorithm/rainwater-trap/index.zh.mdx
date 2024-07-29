@@ -1,0 +1,85 @@
+import Image from 'next/image';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "~ui/carousel"
+
+# 接雨水
+
+给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+<Image
+    src={'/images/algorithm/rainwatertrap.png'}
+    width={1600}
+    height={900}
+    alt="extend"
+/>
+
+> 输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]  
+> 输出：6  
+> 解释：上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。
+
+
+维护两个指针 left 和 right，以及两个变量 leftMax 和 rightMax，初始时 left=0,right=n−1,leftMax=0,rightMax=0。指针 left 只会向右移动，指针 right 只会向左移动，在移动指针的过程中维护两个变量 leftMax 和 rightMax 的值。
+
+当两个指针没有相遇时，进行如下操作：
+
+使用 `height[left]` 和 `height[right] `的值更新 leftMax 和 rightMax 的值；
+
+如果 `height[left]<height[right]`，则必有 `leftMax<rightMax`，下标 left 处能接的雨水量等于 `leftMax−height[left]`，将下标 left 处能接的雨水量加到能接的雨水总量，然后将 left 加 1（即向右移动一位）；
+
+如果 `height[left]≥height[right]`，则必有 `leftMax≥rightMax`，下标 right 处能接的雨水量等于 `rightMax−height[right]`，将下标 right 处能接的雨水量加到能接的雨水总量，然后将 right 减 1（即向左移动一位）。
+
+当两个指针相遇时，即可得到能接的雨水总量。
+
+<Carousel className="w-full">
+    <CarouselContent>
+        {Array.from({ length: 12 }).map((_, index) => (
+            <div key={index} className="basis-full shrink-0">
+                <Image
+                    src={`/images/algorithm/rainwatertrap/p${index+1}.png`}
+                    width={1600}
+                    height={900}
+                    alt="extend"
+                />
+                <p className='text-center'>{index+1}</p>
+            </div>
+        ))}
+    </CarouselContent>
+    <CarouselPrevious />
+    <CarouselNext />
+</Carousel>
+
+
+``` JavaScript
+/**
+ * @param {number[]} height
+ * @return {number}
+ */
+var trap = function(height) {
+    let left = 0;
+    let right = height.length - 1;
+    let leftMax = height[left];
+    let rightMax = height[right];
+    let res = 0;
+
+    while(left < right) {
+         leftMax = Math.max(leftMax, height[left]);
+        rightMax = Math.max(rightMax, height[right]);
+        // 左边的低则对左边的进行计算，然后left右移
+        if (height[left] < height[right]) {
+            res = res + (leftMax - height[left]);
+            left++;
+        }
+        else {
+            res = res + (rightMax - height[right]);
+            right--;
+        }
+    }
+
+    return res;
+};
+```

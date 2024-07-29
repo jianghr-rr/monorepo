@@ -1,3 +1,5 @@
+const path = require('path');
+
 const withMDX = require('@next/mdx')({
   extension: /\.mdx?$/,
   options: {
@@ -49,6 +51,9 @@ const nextConfig = {
     // config.externals.push('canvas');
     config.resolve.alias.canvas = false;
     // config.infrastructureLogging = { debug: /PackFileCache/ };
+    // console.log('???', path.join(__dirname, 'components/ui'));
+    // config.resolve.alias['~ui'] = path.join(__dirname, 'components/ui');
+
     return config;
   },
 };
