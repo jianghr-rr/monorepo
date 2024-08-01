@@ -40,6 +40,10 @@ export default function PatternsPageSideBar({
             href: '/algorithm/rainwater-trap',
             label: t('rainwaterTrap'),
           },
+          {
+            href: '/algorithm/length-of-longest-substring',
+            label: t('lengthOfLongestSubstring'),
+          },
         ],
       },
     ],

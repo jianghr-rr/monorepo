@@ -41,6 +41,9 @@
       "~ui/*": [
         "./components/ui/*"
       ],
+      "~color4bg/*": [
+        "./components/color4bg/*"
+      ],
       "~server/*": [
         "./server/*"
       ],

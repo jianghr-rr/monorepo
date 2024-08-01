@@ -5,5 +5,6 @@
     "moveZeroes": "moveZeroes",
     "maxArea": "maxArea",
     "threeSum": "threeSum",
-    "rainwaterTrap": "rainwaterTrap"
+    "rainwaterTrap": "rainwaterTrap",
+    "lengthOfLongestSubstring": "lengthOfLongestSubstring"
 }

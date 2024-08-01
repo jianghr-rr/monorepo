@@ -76,6 +76,7 @@ importers:
       '@radix-ui/react-dropdown-menu': 2.0.6
       '@radix-ui/react-navigation-menu': 1.1.4
       '@radix-ui/react-select': 2.1.1
+      '@radix-ui/react-slider': ^1.2.0
       '@radix-ui/react-slot': 1.0.2
       '@react-three/drei': 7.26.1
       '@react-three/fiber': 7.0.24
@@ -93,6 +94,7 @@ importers:
       autoprefixer: 10.4.19
       class-variance-authority: 0.7.0
       clsx: 2.1.1
+      color4bg.js: 0.1.1
       daisyui: 4.12.10
       embla-carousel-react: ^8.1.7
       eslint: 8.57.0
@@ -114,6 +116,7 @@ importers:
       next-seo: 6.5.0
       next-themes: 0.3.0
       nextjs-toploader: 1.6.12
+      ogl: 1.0.8
       picocolors: 1.0.0
       popmotion: 11.0.3
       postcss: 8.4.38
@@ -149,6 +152,7 @@ importers:
       '@radix-ui/react-dropdown-menu': 2.0.6_vclbomb6dii67jyd7u5uumgy7y
       '@radix-ui/react-navigation-menu': 1.1.4_vclbomb6dii67jyd7u5uumgy7y
       '@radix-ui/react-select': 2.1.1_vclbomb6dii67jyd7u5uumgy7y
+      '@radix-ui/react-slider': 1.2.0_vclbomb6dii67jyd7u5uumgy7y
       '@radix-ui/react-slot': 1.0.2_glxuhseaxnynb3wl34vdbiopru
       '@react-three/drei': 7.26.1_qav3fvs6crhuucbq2m5wu7m6aq
       '@react-three/fiber': 7.0.24_c7h2szcr7kgy54vvkd2ak74764
@@ -161,6 +165,7 @@ importers:
       ahooks: 3.8.0_react@18.2.0
       class-variance-authority: 0.7.0
       clsx: 2.1.1
+      color4bg.js: 0.1.1
       daisyui: 4.12.10_postcss@8.4.38
       embla-carousel-react: 8.1.7_react@18.2.0
       fabric: 5.3.0
@@ -178,6 +183,7 @@ importers:
       next-mdx-remote: 5.0.0_glxuhseaxnynb3wl34vdbiopru
       next-themes: 0.3.0_biqbaboplfbrettd7655fr4n2y
       nextjs-toploader: 1.6.12_h6dj7hpgrjuca5cqek3dk6bqim
+      ogl: 1.0.8
       picocolors: 1.0.0
       popmotion: 11.0.3
       prismjs: 1.29.0
@@ -5107,6 +5113,36 @@ packages:
       react-remove-scroll: 2.5.7_glxuhseaxnynb3wl34vdbiopru
     dev: false
 
+  /@radix-ui/react-slider/1.2.0_vclbomb6dii67jyd7u5uumgy7y:
+    resolution: {integrity: sha512-dAHCDA4/ySXROEPaRtaMV5WHL8+JB/DbtyTbJjYkY0RXmKMO2Ln8DFZhywG5/mVQ4WqHDBc8smc14yPXPqZHYA==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+    dependencies:
+      '@radix-ui/number': 1.1.0
+      '@radix-ui/primitive': 1.1.0
+      '@radix-ui/react-collection': 1.1.0_vclbomb6dii67jyd7u5uumgy7y
+      '@radix-ui/react-compose-refs': 1.1.0_glxuhseaxnynb3wl34vdbiopru
+      '@radix-ui/react-context': 1.1.0_glxuhseaxnynb3wl34vdbiopru
+      '@radix-ui/react-direction': 1.1.0_glxuhseaxnynb3wl34vdbiopru
+      '@radix-ui/react-primitive': 2.0.0_vclbomb6dii67jyd7u5uumgy7y
+      '@radix-ui/react-use-controllable-state': 1.1.0_glxuhseaxnynb3wl34vdbiopru
+      '@radix-ui/react-use-layout-effect': 1.1.0_glxuhseaxnynb3wl34vdbiopru
+      '@radix-ui/react-use-previous': 1.1.0_glxuhseaxnynb3wl34vdbiopru
+      '@radix-ui/react-use-size': 1.1.0_glxuhseaxnynb3wl34vdbiopru
+      '@types/react': 18.2.73
+      '@types/react-dom': 18.2.22
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
   /@radix-ui/react-slot/1.0.2_glxuhseaxnynb3wl34vdbiopru:
     resolution: {integrity: sha512-YeTpuq4deV+6DusvVUW4ivBgnkHwECUu0BiN43L5UCDFgdhsRUWAghhTF5MbvNTPzmiFOx90asDSUjWuCNapwg==}
     peerDependencies:
@@ -8117,6 +8153,10 @@ packages:
     dependencies:
       color-convert: 1.9.3
       color-string: 1.9.1
+
+  /color4bg.js/0.1.1:
+    resolution: {integrity: sha512-XO75snNphMI8MEGjgJtPeZKNwBOGf571WyfIBKtdvHyQ5j1rVTYk7EiWQ37auRIuY0Ob7p0UcWBby/6QYcUv3w==}
+    dev: false
 
   /colord/2.9.3:
     resolution: {integrity: sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==}
@@ -13781,6 +13821,10 @@ packages:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-object-atoms: 1.0.0
+
+  /ogl/1.0.8:
+    resolution: {integrity: sha512-3LOqryx4qtWuQQT9QQL8yjGBNdqlonJeOwNY4+TwkrQhENYKegKt9pdWba3LzPSlGUWFTfeUDQoL9tSHMtKq3Q==}
+    dev: false
 
   /oidc-token-hash/5.0.3:
     resolution: {integrity: sha512-IF4PcGgzAr6XXSff26Sk/+P4KZFJVuHAJZj3wgO3vX2bMdNVp/QXTP3P7CEm9V1IdG8lDLY3HhiqpsE/nOwpPw==}

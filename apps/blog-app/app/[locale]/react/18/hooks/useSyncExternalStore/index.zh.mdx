@@ -1,0 +1,195 @@
+# useSyncExternalStore
+
+useSyncExternalStore是一个 React Hook，可让您订阅外部存储。
+
+``` javascript
+const snapshot = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
+```
+
+## 参考
+useSyncExternalStore(订阅、getSnapshot、getServerSnapshot)
+
+## 用法
+- 订阅外部store
+- 订阅浏览器 API
+- 将逻辑提取到自定义 Hook
+- 添加对服务器渲染的支持
+
+在组件的顶层调用useSyncExternalStore以从外部数据存储中读取值。
+
+``` javascript
+import { useSyncExternalStore } from 'react';
+import { todosStore } from './todoStore.js';
+
+function TodosApp() {
+  const todos = useSyncExternalStore(todosStore.subscribe, todosStore.getSnapshot);
+  // ...
+}
+```
+
+它返回存储中数据的快照。您需要传递两个函数作为参数：
+
+1. subscribe函数应该订阅 store 并返回一个取消订阅的函数。
+2. getSnapshot函数应该从存储中读取数据的快照。
+
+## 参数
+
+subscribe ：采用单个callback参数并将其订阅到存储的函数。当store发生变化时，它应该调用提供的callback 。这将导致组件重新渲染。 subscribe函数应该返回一个清理订阅的函数。
+
+getSnapshot ：返回组件所需的存储中数据快照的函数。虽然存储未更改，但重复调用getSnapshot必须返回相同的值。如果存储发生变化并且返回值不同（与Object.is进行比较），React 会重新渲染组件。
+
+可选getServerSnapshot ：返回存储中数据的初始快照的函数。它将仅在服务器渲染期间以及客户端上服务器渲染内容的水合作用期间使用。服务器快照在客户端和服务器之间必须相同，并且通常被序列化并从服务器传递到客户端。如果省略此参数，在服务器上渲染组件将引发错误。
+
+## Returns
+
+您可以在渲染逻辑中使用的store的当前快照。
+
+# 用法
+
+## app.js
+
+``` javascript
+import { useSyncExternalStore } from 'react';
+import { todosStore } from './todoStore.js';
+
+export default function TodosApp() {
+  const todos = useSyncExternalStore(todosStore.subscribe, todosStore.getSnapshot);
+  return (
+    <>
+      <button onClick={() => todosStore.addTodo()}>Add todo</button>
+      <hr />
+      <ul>
+        {todos.map(todo => (
+          <li key={todo.id}>{todo.text}</li>
+        ))}
+      </ul>
+    </>
+  );
+}
+```
+
+## todosStore.js
+
+``` javascript
+// This is an example of a third-party store
+// that you might need to integrate with React.
+
+// If your app is fully built with React,
+// we recommend using React state instead.
+
+let nextId = 0;
+let todos = [{ id: nextId++, text: 'Todo #1' }];
+let listeners = [];
+
+export const todosStore = {
+  addTodo() {
+    todos = [...todos, { id: nextId++, text: 'Todo #' + nextId }]
+    emitChange();
+  },
+  subscribe(listener) {
+    listeners = [...listeners, listener];
+    return () => {
+      listeners = listeners.filter(l => l !== listener);
+    };
+  },
+  getSnapshot() {
+    return todos;
+  }
+};
+
+function emitChange() {
+  for (let listener of listeners) {
+    listener();
+  }
+}
+```
+
+大多数 React 组件只会从它们的props、 state和context 中读取数据。然而，有时组件需要从 React 外部的某个存储中读取一些随时间变化的数据。这包括：
+- 在 React 之外保存状态的第三方状态管理库。
+- 公开可变值和事件以订阅其更改的浏览器 API。
+
+# 订阅浏览器 API
+
+添加useSyncExternalStore另一个原因是当您想要订阅浏览器公开的某些随时间变化的值时。例如，假设您希望组件显示网络连接是否处于活动状态。浏览器通过名为navigator.onLine的属性公开此信息。
+
+``` javascript
+import { useSyncExternalStore } from 'react';
+
+export default function ChatIndicator() {
+  const isOnline = useSyncExternalStore(subscribe, getSnapshot);
+  return <h1>{isOnline ? '✅ Online' : '❌ Disconnected'}</h1>;
+}
+
+function getSnapshot() {
+  return navigator.onLine;
+}
+
+function subscribe(callback) {
+  window.addEventListener('online', callback);
+  window.addEventListener('offline', callback);
+  return () => {
+    window.removeEventListener('online', callback);
+    window.removeEventListener('offline', callback);
+  };
+}
+```
+
+# 将逻辑提取到自定义 Hook
+
+## app.js
+
+``` javascript
+import { useOnlineStatus } from './useOnlineStatus.js';
+
+function StatusBar() {
+  const isOnline = useOnlineStatus();
+  return <h1>{isOnline ? '✅ Online' : '❌ Disconnected'}</h1>;
+}
+
+function SaveButton() {
+  const isOnline = useOnlineStatus();
+
+  function handleSaveClick() {
+    console.log('✅ Progress saved');
+  }
+
+  return (
+    <button disabled={!isOnline} onClick={handleSaveClick}>
+      {isOnline ? 'Save progress' : 'Reconnecting...'}
+    </button>
+  );
+}
+
+export default function App() {
+  return (
+    <>
+      <SaveButton />
+      <StatusBar />
+    </>
+  );
+}
+```
+
+## useOnlineStatus.js
+
+``` javascript
+import { useSyncExternalStore } from 'react';
+
+export function useOnlineStatus() {
+  const isOnline = useSyncExternalStore(subscribe, getSnapshot);
+  return isOnline;
+}
+
+function getSnapshot() {
+  return navigator.onLine;
+}
+
+function subscribe(callback) {
+  window.addEventListener('online', callback);
+  window.addEventListener('offline', callback);
+  return () => {
+    window.removeEventListener('online', callback);
+    window.removeEventListener('offline', callback);
+  };
+}
+```

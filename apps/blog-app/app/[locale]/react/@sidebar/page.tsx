@@ -87,6 +87,10 @@ export default function PatternsPageSideBar({
                     label: t('useImperativeHandle'),
                   },
                   {
+                    href: '/react/18/hooks/useSyncExternalStore',
+                    label: t('useSyncExternalStore'),
+                  },
+                  {
                     href: '/react/18/hooks/useDebugValue',
                     label: t('useDebugValue'),
                   },
