@@ -14,6 +14,8 @@ export default function PatternsPageSideBar({
     () => [
       { href: '/patterns/singleton', label: t('SingletonPattern') },
       { href: '/patterns/prototype', label: t('prototype.title') },
+      { href: '/patterns/proxy-pattern', label: t('proxy.title') },
+      { href: '/patterns/observer-pattern', label: t('observer.title') },
     ],
     [t]
   );

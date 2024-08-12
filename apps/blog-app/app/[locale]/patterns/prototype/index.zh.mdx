@@ -118,10 +118,10 @@ console.log(dog1.__ proto __);
 在构造函数的任何实例上，的 __ proto __ 值都是对构造函数原型的直接引用！每当我们尝试直接访问对象上不存在的属性时，JavaScript 都会沿着原型链向下查看该属性在原型链中是否可用。
 
 <Image
-    src={'/images/patterns/prototype-1.webp'}
-    width={1600}
-    height={900}
-    alt="prototype patterns"
+  src={'/images/patterns/prototype-1.webp'}
+  width={1600}
+  height={900}
+  alt="prototype patterns"
 />
 
 在处理应该有权访问相同属性的对象时，原型模式非常强大。我们不必每次都创建该属性的副本，而是可以简单地将该属性添加到原型中，因为所有实例都可以访问原型对象。

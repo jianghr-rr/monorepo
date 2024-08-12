@@ -1,0 +1,48 @@
+# 观察者模式
+
+通过观察者模式，我们可以将某些对象（观察者）订阅到另一个称为可观察对象的对象。每当事件发生时，可观察者都会通知其所有观察者！
+
+一个可观察对象通常包含 3 个重要部分：
+
+- observers ：观察者数组，每当特定事件发生时就会收到通知
+- subscribe() ：一种将观察者添加到观察者列表的方法
+- unsubscribe() ：从观察者列表中删除观察者的方法
+- notify() ：每当特定事件发生时通知所有观察者的方法
+
+``` javascript
+class Observable {
+  constructor() {
+    this.observers = [];
+  }
+
+  subscribe(func) {
+    this.observers.push(func);
+  }
+
+  unsubscribe(func) {
+    this.observers = this.observers.filter((observer) => observer !== func);
+  }
+
+  notify(data) {
+    this.observers.forEach((observer) => observer(data));
+  }
+}
+```
+
+现在可以使用 subscribe 方法将观察者添加到观察者列表中，使用 unsubscribe 方法删除观察者，并使用 notify 方法通知所有订阅者。
+
+让我们用这个可观察的东西来构建一些东西。我们有一个非常基本的应用程序，仅包含两个组件：一个Button和一个Switch 。
+
+``` javascript
+export default function App() {
+  return (
+    <div className="App">
+      <Button>Click me!</Button>
+      <FormControlLabel control={<Switch />} />
+    </div>
+  );
+}
+```
+
+我们希望跟踪用户与应用程序的交互。每当用户单击按钮或切换开关时，我们都希望使用时间戳记录此事件。除了记录之外，我们还想创建一个 Toast 通知，每当事件发生时就会显示！
+

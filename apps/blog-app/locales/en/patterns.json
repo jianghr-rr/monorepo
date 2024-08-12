@@ -12,5 +12,11 @@
     },
     "prototype": {
         "title": "prototype pattern"
+    },
+    "proxy": {
+        "title": "Proxy Pattern"
+    },
+    "observer": {
+        "title": "Observer Pattern"
     }
 }
