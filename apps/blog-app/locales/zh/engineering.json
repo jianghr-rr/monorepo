@@ -2,6 +2,12 @@
     "engineering": {
         "title": "工程化",
         "webpack": "Webpack",
-        "functional": "函数式"
+        "functional": "函数式",
+        "webpack4": {
+            "title": "webpack 4",
+            "bound": "产物",
+            "theory": "原理",
+            "loaderPlugin": "Loader 和 Plugin"
+        }
     }
 }

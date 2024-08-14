@@ -19,6 +19,26 @@ export default function PatternsPageSideBar({
           {
             href: '/engineering/webpack',
             label: t('engineering.webpack'),
+            children: [
+              {
+                href: '/engineering/webpack/4',
+                label: t('engineering.webpack4.title'),
+                children: [
+                  {
+                    href: '/engineering/webpack/4/bound',
+                    label: t('engineering.webpack4.bound'),
+                  },
+                  {
+                    href: '/engineering/webpack/4/theory',
+                    label: t('engineering.webpack4.theory'),
+                  },
+                  {
+                    href: '/engineering/webpack/4/loader-plugin',
+                    label: t('engineering.webpack4.loaderPlugin'),
+                  },
+                ],
+              },
+            ],
           },
           {
             href: '/engineering/functional',

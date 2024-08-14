@@ -2,6 +2,12 @@
     "engineering": {
         "title": "engineering",
         "webpack": "webpack",
-        "functional": "functional"
+        "functional": "functional",
+        "webpack4": {
+            "title": "webpack 4",
+            "bound": "bound",
+            "theory": "theory",
+            "loaderPlugin": "loader and plugin"
+        }
     }
 }
