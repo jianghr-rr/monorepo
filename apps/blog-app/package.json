@@ -69,6 +69,7 @@
     "tailwindcss-animate": "1.0.7",
     "three": "0.135.0",
     "vaul": "0.9.1",
+    "web-vitals": "4.2.3",
     "webpack": "5.73.0",
     "zod": "3.22.4"
   },

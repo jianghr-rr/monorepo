@@ -26,6 +26,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  experimental: {
+    webVitalsAttribution: ['CLS', 'LCP', 'FID', 'INP'],
+  },
   images: {
     remotePatterns: [
       {

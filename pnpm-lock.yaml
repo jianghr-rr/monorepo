@@ -139,6 +139,7 @@ importers:
       three: 0.135.0
       typescript: 5.4.3
       vaul: 0.9.1
+      web-vitals: ^4.2.3
       webpack: 5.73.0
       zod: 3.22.4
     dependencies:
@@ -202,6 +203,7 @@ importers:
       tailwindcss-animate: 1.0.7_tailwindcss@3.4.3
       three: 0.135.0
       vaul: 0.9.1_vclbomb6dii67jyd7u5uumgy7y
+      web-vitals: 4.2.3
       webpack: 5.73.0
       zod: 3.22.4
     devDependencies:
@@ -17613,6 +17615,10 @@ packages:
     resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
     engines: {node: '>= 8'}
     dev: true
+
+  /web-vitals/4.2.3:
+    resolution: {integrity: sha512-/CFAm1mNxSmOj6i0Co+iGFJ58OS4NRGVP+AWS/l509uIK5a1bSoIVaHz/ZumpHTfHSZBpgrJ+wjfpAOrTHok5Q==}
+    dev: false
 
   /webcrypto-core/1.8.0:
     resolution: {integrity: sha512-kR1UQNH8MD42CYuLzvibfakG5Ew5seG85dMMoAM/1LqvckxaF6pUiidLuraIu4V+YCIFabYecUZAW0TuxAoaqw==}

@@ -9,6 +9,7 @@ import i18nConfig from '~/i18nConfig';
 import { AppProviders } from '~/providers/app-providers';
 import initTranslations from '../i18n';
 import PageTransition from './page-transition';
+
 import './globals.css';
 import './custom.css';
 
