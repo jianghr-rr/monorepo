@@ -24,6 +24,22 @@ export default function PatternsPageSideBar({
         href: '/nodejs/run-time',
         label: t('Runtime'),
       },
+      {
+        href: '/nodejs/what-is-nodejs',
+        label: t('whatIsNodejs'),
+      },
+      {
+        href: '/nodejs/browser-vs-nodejs',
+        label: t('browserVsNodeJs'),
+      },
+      {
+        href: '/nodejs/modules',
+        label: t('Modules'),
+      },
+      {
+        href: '/nodejs/node-server',
+        label: t('NodeServer'),
+      },
     ],
     [t]
   );

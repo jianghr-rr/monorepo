@@ -1,0 +1,49 @@
+# 混合模式
+
+mixin是一个对象，我们可以使用它向另一个对象或类添加可重用的功能，而无需使用继承。我们不能单独使用 mixin：它们的唯一目的是在没有继承的情况下向对象或类添加功能。
+
+假设对于我们的应用程序，我们需要创建多只狗。然而，我们创建的基本狗除了name属性外没有任何属性。
+
+``` javascript
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+}
+```
+
+狗应该能够做的不仅仅是有名字。它应该能够吠叫、摇尾巴和玩耍！我们可以创建一个 mixin 来为我们提供bark 、 wagTail和play属性，而不是直接将其添加到Dog中。
+
+``` javascript
+const dogFunctionality = {
+  bark: () => console.log("Woof!"),
+  wagTail: () => console.log("Wagging my tail!"),
+  play: () => console.log("Playing!"),
+};
+```
+
+我们可以使用Object.assign方法将dogFunctionality mixin 添加到Dog原型中。此方法允许我们向目标对象添加属性：在本例中Dog.prototype 。 Dog的每个新实例都可以访问dogFunctionality的属性，因为它们被添加到Dog的原型中！
+
+``` javascript
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+const dogFunctionality = {
+  bark: () => console.log("Woof!"),
+  wagTail: () => console.log("Wagging my tail!"),
+  play: () => console.log("Playing!"),
+};
+
+Object.assign(Dog.prototype, dogFunctionality);
+```
+
+``` javascript
+const pet1 = new Dog("Daisy");
+
+pet1.name; // Daisy
+pet1.bark(); // Woof!
+pet1.play(); // Playing!
+```

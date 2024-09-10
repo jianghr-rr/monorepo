@@ -18,5 +18,20 @@
     },
     "observer": {
         "title": "Observer Pattern"
+    },
+    "module": {
+        "title": "Module Pattern"
+    },
+    "mixin": {
+        "title": "Mixin Pattern"
+    },
+    "middleware": {
+        "title": "Middleware Pattern"
+    },
+    "flyweight": {
+        "title": "Flyweight Pattern"
+    },
+    "factory": {
+        "title": "Factory Pattern"
     }
 }

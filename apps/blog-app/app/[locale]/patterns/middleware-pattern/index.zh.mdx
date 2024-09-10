@@ -1,0 +1,99 @@
+import Image from 'next/image';
+
+# 中介者/中间件模式
+
+中介者模式使组件可以通过一个中心点（中介者）相互交互。中介者不是直接相互交谈，而是接收请求并将其转发！在 JavaScript 中，中介者通常只不过是一个对象文字或一个函数。
+
+您可以将此模式与空中交通管制员和飞行员之间的关系进行比较。飞行员不会直接相互交谈（这可能会导致相当混乱），而是与空中交通管制员交谈。空中交通管制员确保所有飞机都能收到安全飞行所需的信息，而不会撞到其他飞机。
+
+尽管我们不希望在 JavaScript 中控制飞机，但我们经常必须处理对象之间的多向数据。如果有大量组件，组件之间的通信可能会变得相当混乱。
+
+<Image
+  src={'/images/patterns/middleware-pattern-1.jpg'}
+  width={1600}
+  height={900}
+  alt="middleware patterns"
+/>
+
+对象的请求由中介器处理，而不是让每个对象直接与其他对象通信，从而形成多对多关系。中介器处理该请求，并将其转发到需要的位置。
+
+<Image
+  src={'/images/patterns/middleware-pattern-2.jpg'}
+  width={1600}
+  height={900}
+  alt="middleware patterns"
+/>
+
+您可以将此模式与空中交通管制员和飞行员之间的关系进行比较。飞行员不会直接相互交谈（这可能会导致相当混乱），而是与空中交通管制员交谈。空中交通管制员确保所有飞机都能收到安全飞行所需的信息，而不会撞到其他飞机。
+
+调解者模式的一个很好的用例是聊天室！聊天室中的用户不会直接相互交谈。相反，聊天室充当用户之间的中介。
+
+``` JavaScript
+class ChatRoom {
+  logMessage(user, message) {
+    const time = new Date();
+    const sender = user.getName();
+
+    console.log(`${time} [${sender}]: ${message}`);
+  }
+}
+
+class User {
+  constructor(name, chatroom) {
+    this.name = name;
+    this.chatroom = chatroom;
+  }
+
+  getName() {
+    return this.name;
+  }
+
+  send(message) {
+    this.chatroom.logMessage(this, message);
+  }
+}
+```
+
+我们可以创建连接到聊天室的新用户。每个用户实例都有一个send方法，我们可以使用它来发送消息。
+
+# 案例研究
+
+Express.js是一种流行的 Web 应用程序服务器框架。我们可以向用户可以访问的某些路由添加回调。
+
+假设如果用户点击根'/' ，我们希望向请求添加一个标头。我们可以在中间件回调中添加此标头。
+
+``` JavaScript
+const app = require("express")();
+
+app.use("/", (req, res, next) => {
+  req.headers["test-header"] = 1234;
+  next();
+});
+```
+
+next方法调用请求-响应周期中的下一个回调。我们将有效地创建位于请求和响应之间的中间件功能链，反之亦然。
+
+<Image
+  src={'/images/patterns/middleware-pattern-3.jpg'}
+  width={1600}
+  height={900}
+  alt="middleware patterns"
+/>
+
+``` JavaScript
+const app = require("express")();
+
+app.use(
+  "/",
+  (req, res, next) => {
+    req.headers["test-header"] = 1234;
+    next();
+  },
+  (req, res, next) => {
+    console.log(`Request has test header: ${!!req.headers["test-header"]}`);
+    next();
+  }
+);
+```
+
+## 中间件模式让所有通信都流经一个中心点，使我们能够轻松简化对象之间的多对多关系。

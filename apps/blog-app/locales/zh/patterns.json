@@ -18,5 +18,102 @@
     },
     "observer": {
         "title": "观察者模式"
+    },
+    "module": {
+        "title": "模块模式"
+    },
+    "mixin": {
+        "title": "混合模式"
+    },
+    "middleware": {
+        "title": "中间件模式"
+    },
+    "flyweight": {
+        "title": "享元模式"
+    },
+    "factory": {
+        "title": "工厂模式"
+    },
+    "AnimatingViewTransitions": {
+        "title": "动画视图转换"
+    },
+    "OptimizeYourLoadingSequence": {
+        "title": "优化加载序列"
+    },
+    "StaticImport": {
+        "title": "静态导入"
+    },
+    "DynamicImport": {
+        "title": "动态导入"
+    },
+    "ImportOnVisibility": {
+        "title": "导入可见性"
+    },
+    "ImportOnInteraction": {
+        "title": "交互导入"
+    },
+    "RouteBasedSplitting": {
+        "title": "基于路由的拆分"
+    },
+    "BundleSplitting": {
+        "title": "捆绑拆分"
+    },
+    "PRPLPattern": {
+        "title": "PRPL模式"
+    },
+    "TreeShaking": {
+        "title": "树摇"
+    },
+    "preload": {
+        "title": "预加载"
+    },
+    "prefetch": {
+        "title": "预取"
+    },
+    "OptimizeLoadingThirdParties": {
+        "title": "优化第三方加载"
+    },
+    "ListVirtualization": {
+        "title": "列表虚拟化"
+    },
+    "CompressingJavaScript": {
+        "title": "压缩 JavaScript"
+    },
+
+    "container": {
+        "title": "容器模式"
+    },
+    "HOC": {
+        "title": "HOC"
+    },
+    "renderProps": {
+        "title": "render props"
+    },
+    "hooks": {
+        "title": "hooks"
+    },
+    "compound": {
+        "title": "复合模式"
+    },
+    "CSR": {
+        "title": "客户端渲染"
+    },
+    "SSR": {
+        "title": "服务器端渲染"
+    },
+    "RSC": {
+        "title": "React Server Components"
+    },
+    "staticRendering": {
+        "title": "静态渲染"
+    },
+    "iStaticRendering": {
+        "title": "增量静态渲染"
+    },
+    "streamServerSideRendering": {
+        "title": "流式服务器端渲染"
+    },
+    "progressiveHydration": {
+        "title": "progressive hydration"
     }
 }

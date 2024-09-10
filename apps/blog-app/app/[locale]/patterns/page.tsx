@@ -1,17 +1,22 @@
 'use client';
-
+import dynamic from 'next/dynamic';
+import { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import highlightCode from '~/components/highlight';
+import { MDXWrapper } from '~/components/mdx-wrapper';
 
-export default function PatternsPage() {
-  const { t } = useTranslation();
+const PageZh = dynamic(() => import('./index.zh.mdx'), { ssr: false });
+const PageEn = dynamic(() => import('./index.en.mdx'), { ssr: false });
+
+export default function Home() {
+  const { i18n } = useTranslation();
+  const currentLocale = i18n.language;
+
+  useLayoutEffect(() => {
+    highlightCode();
+  }, []);
 
   return (
-    <div className="blog-container">
-      <h1 className="page-title">{t('title')}</h1>
-      <p className="blog-p">{t('introd.p1')}</p>
-      <p className="blog-p">{t('introd.p2')}</p>
-      <p className="blog-p">{t('introd.p3')}</p>
-      <p className="blog-p">{t('introd.p4')}</p>
-    </div>
+    <MDXWrapper>{currentLocale === 'zh' ? <PageZh /> : <PageEn />}</MDXWrapper>
   );
 }

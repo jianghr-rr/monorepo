@@ -1,0 +1,76 @@
+# 工厂模式
+
+通过工厂模式，我们可以使用工厂函数来创建新对象。当一个函数不使用new关键字返回一个新对象时，它就是一个工厂函数！
+
+假设我们的应用程序需要许多用户。我们可以使用firstName 、 lastName和email属性创建新用户。工厂函数还将fullName属性添加到新创建的对象中，该属性返回firstName和lastName 。
+
+``` JavaScript
+const createUser = ({ firstName, lastName, email }) => ({
+  firstName,
+  lastName,
+  email,
+  fullName() {
+    return `${this.firstName} ${this.lastName}`;
+  },
+});
+```
+
+``` JavaScript
+const user1 = createUser({
+  firstName: "John",
+  lastName: "Doe",
+  email: "john@doe.com"
+});
+
+const user2 = createUser({
+  firstName: "Jane",
+  lastName: "Doe",
+  email: "jane@doe.com"
+});
+```
+
+如果我们要创建相对复杂且可配置的对象，工厂模式会很有用。键和值的值可能取决于特定的环境或配置。使用工厂模式，我们可以轻松创建包含自定义键和值的新对象！
+
+``` JavaScript
+const createObjectFromArray = ([key, value]) => ({
+  [key]: value,
+});
+
+createObjectFromArray(["name", "John"]); // { name: "John" }
+```
+
+### 优点
+
+当我们必须创建多个共享相同属性的较小对象时，工厂模式非常有用。工厂函数可以根据当前环境或用户特定的配置轻松返回自定义对象。
+
+### 缺点
+
+在 JavaScript 中，工厂模式只不过是一个不使用new关键字返回对象的函数。 ES6 箭头函数允许我们创建每次隐式返回一个对象的小型工厂函数。
+
+然而，在许多情况下，每次创建新实例而不是新对象可能会更有效地存储内存。
+
+``` JavaScript
+class User {
+  constructor(firstName, lastName, email) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+  }
+
+  fullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
+}
+
+const user1 = new User({
+  firstName: "John",
+  lastName: "Doe",
+  email: "john@doe.com",
+});
+
+const user2 = new User({
+  firstName: "Jane",
+  lastName: "Doe",
+  email: "jane@doe.com",
+});
+```
