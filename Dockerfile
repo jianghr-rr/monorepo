@@ -15,6 +15,7 @@ WORKDIR /app
 
 COPY --link package.json turbo.json ./
 
+RUN npm config set registry https://mirrors.cloud.tencent.com/npm/
 # We can't run turbo without yarn install first, let's install locally and make sure
 # both local and docker are aligned on the package.json version.
 RUN TURBO_VERSION=$(cat package.json | jq '.devDependencies["turbo"]' -r) npm i -g turbo@${TURBO_VERSION}
@@ -37,6 +38,7 @@ WORKDIR /app
 COPY --link .gitignore ./
 COPY .npmrc ./
 
+RUN npm config set registry https://mirrors.cloud.tencent.com/npm/
 RUN npm install pnpm -g --registry https://mirrors.cloud.tencent.com/npm/
 RUN pnpm install
 
