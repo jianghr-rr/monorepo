@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { inter, lexend } from '~/app/[locale]/fonts';
 import CodeSnippet from '~/components/code-snippet';
 import HomeNav from '~/components/home-nav';
-import { Picture } from '~/components/picture';
+// import { Picture } from '~/components/picture';
 import i18nConfig from '~/i18nConfig';
 import { AppProviders } from '~/providers/app-providers';
 import initTranslations from '../i18n';
@@ -56,7 +56,7 @@ const RootLayout = async function ({
           locale={locale}
           resources={resources}
         >
-          <Picture />
+          {/* <Picture /> */}
           <CodeSnippet />
           <HomeNav />
           <main className="self-main grow overflow-y-auto">
