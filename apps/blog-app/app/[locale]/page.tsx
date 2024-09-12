@@ -121,7 +121,6 @@ const HomePage = () => {
       ref={ref}
       className="fixed inset-0 z-0 flex size-full items-center justify-center"
     >
-      <div id="box" className="size-full"></div>
       <div
         id="controls_panel"
         className="absolute right-12 top-24 w-56 rounded-lg bg-zinc-50 p-4"
@@ -235,6 +234,8 @@ const HomePage = () => {
           </div>
         </div>
       </div>
+
+      <div id="box" className="custom-box size-full"></div>
     </div>
   );
 };
