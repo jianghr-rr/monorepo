@@ -1,4 +1,4 @@
-const path = require('path');
+// const path = require('path');
 
 const withMDX = require('@next/mdx')({
   extension: /\.mdx?$/,
@@ -18,7 +18,7 @@ const withMDX = require('@next/mdx')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  assetPrefix: 'http://blogstatic.curlyhair.cn/_next/',
+  assetPrefix: 'http://blogstatic.curlyhair.cn/',
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   transpilePackages: ['next-international', 'international-types'],
   eslint: {
