@@ -18,7 +18,7 @@ const withMDX = require('@next/mdx')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  // assetPrefix: 'http://blogstatic.curlyhair.cn/',
+  assetPrefix: 'http://blogstatic.curlyhair.cn/',
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   transpilePackages: ['next-international', 'international-types'],
   eslint: {
@@ -54,7 +54,7 @@ const nextConfig = {
     });
     // config.externals.push('canvas');
     config.resolve.alias.canvas = false;
-    // config.output.publicPath = 'http://blogstatic.curlyhair.cn/_next/';
+    config.output.publicPath = 'http://blogstatic.curlyhair.cn/_next/';
     // config.infrastructureLogging = { debug: /PackFileCache/ };
     // console.log('???', path.join(__dirname, 'components/ui'));
     // config.resolve.alias['~ui'] = path.join(__dirname, 'components/ui');
