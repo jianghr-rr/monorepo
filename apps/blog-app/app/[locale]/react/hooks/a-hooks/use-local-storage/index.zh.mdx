@@ -1,0 +1,173 @@
+# useLocalStorageState
+
+将状态存储到 localStorage 的 Hook。
+
+``` javascript
+import React from 'react';
+import { useLocalStorageState } from 'ahooks';
+
+export default function () {
+  return (
+    <>
+      <Counter />
+      <Counter />
+    </>
+  );
+}
+
+function Counter() {
+  const [count, setCount] = useLocalStorageState('use-local-storage-state-demo4', {
+    defaultValue: 0,
+    listenStorageChange: true,
+  });
+
+  return (
+    <div style={{ marginBottom: '8px' }}>
+      <button style={{ marginRight: '8px' }} onClick={() => setCount(count! + 1)}>
+        count: {count}
+      </button>
+      <button onClick={() => setCount()}>Clear</button>
+    </div>
+  );
+}
+```
+
+## 源码
+
+``` javascript
+import { createUseStorageState } from '../createUseStorageState';
+import isBrowser from '../utils/isBrowser';
+
+const useLocalStorageState = createUseStorageState(() => (isBrowser ? localStorage : undefined));
+
+export default useLocalStorageState;
+```
+
+创建函数：createUseStorageState 是一个高阶函数，接受一个 Storage 对象作为参数（可以是 localStorage 或 sessionStorage），然后返回一个自定义 Hook——useStorageState。这使得 createUseStorageState 可以灵活地创建针对不同存储方式的 Hook。
+
+### createUseStorageState 的大致代码如下
+
+``` javascript
+import { useState, useCallback } from 'react';
+
+function createUseStorageState<T>(storage: Storage) {
+  return function useStorageState(key: string, defaultValue?: T) {
+    // 尝试从 storage 中获取初始值
+    const getStoredValue = () => {
+      try {
+        const raw = storage.getItem(key);
+        if (raw) {
+          return JSON.parse(raw);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      // 如果获取失败，返回 defaultValue
+      return defaultValue;
+    };
+
+    // 初始化 state
+    const [state, setState] = useState<T>(() => getStoredValue());
+
+    // 定义用于更新状态的函数
+    const updateState = useCallback(
+      (value: T | ((prevState: T) => T)) => {
+        // 计算新的状态
+        const newState = typeof value === 'function' ? (value as Function)(state) : value;
+
+        // 更新状态
+        setState(newState);
+
+        // 同步到 storage
+        if (newState === undefined || newState === null) {
+          storage.removeItem(key);
+        } else {
+          try {
+            storage.setItem(key, JSON.stringify(newState));
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      },
+      [key, state]
+    );
+
+    return [state, updateState] as const;
+  };
+}
+
+export default createUseStorageState;
+```
+
+使用 useState 初始化状态：
+
+使用 useState 来创建一个状态，初始值通过 getStoredValue 函数获取，这样可以将存储中的数据与组件的状态保持同步。
+
+updateState 函数：用于更新状态，并同步到 storage 中。它使用 useCallback 来确保函数引用的稳定性，避免不必要的重新渲染。
+
+createUseStorageState 使用闭包的特性，将 storage 和 key 封装在 useStorageState 函数内部，使得每次调用 updateState 时，都会正确地同步更新到指定的 storage 中。通过这种方式，状态的更新与本地存储之间保持了同步。
+
+### 总结
+1. 使用 React 的 useState 来管理状态，并在初始化时从 storage 中获取值。
+2. 提供了一个更新状态的函数 updateState，用于同时更新 React 组件的状态和本地存储中的值。
+3. 通过闭包和 useCallback 来管理 storage 和 key，从而保持状态和存储的同步。
+
+## 还需要同步其他使用该key的的状态
+
+updateState 中使用的 dispatchEvent 是为了在多个组件间同步 localStorage 或 sessionStorage 的更新。ahooks 的 createUseStorageState 利用了浏览器的事件机制，在状态更新时触发一个自定义事件，让其他监听该事件的组件获取到最新的状态变化，从而实现跨组件、跨标签页的同步。
+
+### 创建自定义事件
+
+https://developer.mozilla.org/docs/Web/API/CustomEvent
+
+示例:
+
+``` javascript
+// 创建自定义事件
+const catFound = new CustomEvent("animalfound", {
+  detail: {
+    name: "猫",
+  },
+});
+const dogFound = new CustomEvent("animalfound", {
+  detail: {
+    name: "狗",
+  },
+});
+
+// 添加合适的事件监听器
+obj.addEventListener("animalfound", (e) => console.log(e.detail.name));
+
+// 触发事件
+obj.dispatchEvent(catFound);
+obj.dispatchEvent(dogFound);
+
+// 控制台中输出“猫”和“狗”
+```
+
+https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/dispatchEvent
+
+和经由浏览器触发，并通过事件循环异步调用事件处理程序的“原生”事件不同，dispatchEvent() 会同步调用事件处理函数。在 dispatchEvent() 返回之前，所有监听该事件的事件处理程序将在代码继续前执行并返回。
+
+源码中的定义和派发事件：
+
+``` javascript
+
+dispatchEvent(
+    // send custom event to communicate within same page
+    // importantly this should not be a StorageEvent since those cannot
+    // be constructed with a non-built-in storage area
+    new CustomEvent(SYNC_STORAGE_EVENT_NAME, {
+    detail: {
+        key,
+        newValue,
+        oldValue,
+        storageArea: storage,
+    },
+    }),
+);
+```
+
+### 总结
+
+updateState 中的 dispatchEvent 机制是为了在存储状态改变时，通知所有监听该自定义事件的组件，进而实现组件状态的同步。这种设计使得状态的同步不仅限于 useState 管理的状态范围，还能够在同一页面的不同组件间共享，甚至跨浏览器标签页实现同步。

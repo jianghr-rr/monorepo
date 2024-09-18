@@ -123,8 +123,14 @@ export default function PatternsPageSideBar({
         label: t('hooks.title'),
         children: [
           {
-            href: '/react/hooks/interview',
-            label: t('hooks.interview'),
+            href: '/react/hooks/a-hooks',
+            label: t('aHooks'),
+            children: [
+              {
+                href: '/react/hooks/a-hooks/use-local-storage',
+                label: t('useLocalStorageState'),
+              },
+            ],
           },
         ],
       },
