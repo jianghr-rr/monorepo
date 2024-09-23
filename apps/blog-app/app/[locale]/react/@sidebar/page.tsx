@@ -130,6 +130,10 @@ export default function PatternsPageSideBar({
                 href: '/react/hooks/a-hooks/use-local-storage',
                 label: t('useLocalStorageState'),
               },
+              {
+                href: '/react/hooks/a-hooks/use-raf-State ',
+                label: t('useRafState'),
+              },
             ],
           },
         ],

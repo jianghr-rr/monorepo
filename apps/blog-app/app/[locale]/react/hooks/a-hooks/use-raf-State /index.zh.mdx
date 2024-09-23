@@ -1,0 +1,77 @@
+# useRafState
+
+更新requestAnimationFrame中的状态回调，一般用于性能优化。
+
+``` javascript
+import { useRafState } from 'ahooks';
+import React, { useEffect } from 'react';
+
+export default () => {
+  const [state, setState] = useRafState({
+    width: 0,
+    height: 0,
+  });
+
+  useEffect(() => {
+    const onResize = () => {
+      setState({
+        width: document.documentElement.clientWidth,
+        height: document.documentElement.clientHeight,
+      });
+    };
+    onResize();
+
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      window.removeEventListener('resize', onResize);
+    };
+  }, []);
+
+  return (
+    <div>
+      <p>Try to resize the window </p>
+      current: {JSON.stringify(state)}
+    </div>
+  );
+};
+```
+
+# 源码
+
+``` javascript
+import { useCallback, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+import useUnmount from '../useUnmount';
+
+function useRafState<S>(initialState: S | (() => S)): [S, Dispatch<SetStateAction<S>>];
+function useRafState<S = undefined>(): [S | undefined, Dispatch<SetStateAction<S | undefined>>];
+
+function useRafState<S>(initialState?: S | (() => S)) {
+  const ref = useRef(0);
+  const [state, setState] = useState(initialState);
+
+  const setRafState = useCallback((value: S | ((prevState: S) => S)) => {
+    cancelAnimationFrame(ref.current);
+
+    ref.current = requestAnimationFrame(() => {
+      setState(value);
+    });
+  }, []);
+
+  useUnmount(() => {
+    cancelAnimationFrame(ref.current);
+  });
+
+  return [state, setRafState] as const;
+}
+
+export default useRafState;
+```
+
+## useState 和 useRef
+
+- useState(initialState)：用来声明状态 state 和更新状态的函数 setState。
+- useRef(state)：用来创建一个持久的引用 stateRef，以便在 requestAnimationFrame 的回调函数中访问最新的状态。
+
+## rafPending

@@ -9,13 +9,14 @@ FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} as app-builder
 
 RUN apk update && apk add build-base git \
     && apk add --no-cache g++ cairo-dev jpeg-dev pango-dev giflib-dev \
-    && apk add --update --repository http://dl-3.alpinelinux.org/alpine/edge/testing libmount
+    && apk add --update libmount
 
 WORKDIR /app
 
 COPY --link package.json turbo.json ./
 
 RUN npm config set registry https://mirrors.cloud.tencent.com/npm/
+
 # We can't run turbo without yarn install first, let's install locally and make sure
 # both local and docker are aligned on the package.json version.
 RUN TURBO_VERSION=$(cat package.json | jq '.devDependencies["turbo"]' -r) npm i -g turbo@${TURBO_VERSION}
