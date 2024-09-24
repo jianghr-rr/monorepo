@@ -37,8 +37,7 @@ WORKDIR /app
 COPY --link .gitignore ./
 COPY .npmrc ./
 
-RUN npm config set registry https://mirrors.cloud.tencent.com/npm/
-RUN npm install pnpm -g --registry https://mirrors.cloud.tencent.com/npm/
+RUN npm install pnpm -g
 RUN pnpm install
 
 
