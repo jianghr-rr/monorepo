@@ -7,9 +7,7 @@ ARG ALPINE_VERSION=3.18
 
 FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} as app-builder
 
-RUN apk update && apk add build-base git \
-    && apk add --no-cache g++ cairo-dev jpeg-dev pango-dev giflib-dev \
-    && apk add --update libmount
+RUN apk add --no-cache git jq && corepack enable
 
 WORKDIR /app
 

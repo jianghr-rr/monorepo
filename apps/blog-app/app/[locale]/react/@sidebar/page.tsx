@@ -134,6 +134,10 @@ export default function PatternsPageSideBar({
                 href: '/react/hooks/a-hooks/use-raf-State ',
                 label: t('useRafState'),
               },
+              {
+                href: '/react/hooks/a-hooks/use-self-state ',
+                label: t('useSelfState'),
+              },
             ],
           },
         ],
