@@ -7,7 +7,8 @@ ARG ALPINE_VERSION=3.18
 
 FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} as app-builder
 
-RUN apk add --no-cache git jq && corepack enable
+RUN apk update && apk add build-base git \
+    && apk add --no-cache g++ cairo-dev jpeg-dev pango-dev giflib-dev
 
 WORKDIR /app
 
@@ -37,6 +38,7 @@ WORKDIR /app
 COPY --link .gitignore ./
 COPY .npmrc ./
 
+RUN npm config set registry https://mirrors.cloud.tencent.com/npm/
 RUN npm install pnpm -g --force
 RUN pnpm install
 
