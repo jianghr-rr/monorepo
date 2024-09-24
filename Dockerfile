@@ -37,7 +37,7 @@ WORKDIR /app
 COPY --link .gitignore ./
 COPY .npmrc ./
 
-RUN npm install pnpm -g
+RUN npm install pnpm -g --force
 RUN pnpm install
 
 
