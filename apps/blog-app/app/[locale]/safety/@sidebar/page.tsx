@@ -13,12 +13,30 @@ export default function PatternsPageSideBar({
   const links = useMemo(
     () => [
       {
+        href: '/safety/base',
+        label: t('base'),
+      },
+      {
         href: '/safety/overview',
         label: t('overview'),
       },
       {
-        href: '/safety/base',
-        label: t('base'),
+        href: '/safety/cve',
+        label: t('cve'),
+      },
+      {
+        href: '/safety/xss',
+        label: t('xss'),
+        children: [
+          { href: '/safety/xss/reflected', label: t('xss-reflected') },
+          { href: '/safety/xss/store', label: t('xss-stored') },
+          { href: '/safety/xss/dom', label: t('xss-dom') },
+          { href: '/safety/xss/worm', label: t('xss-worm') },
+        ],
+      },
+      {
+        href: '/safety/pseudo-protocol',
+        label: t('pseudo-protocol'),
       },
     ],
     [t]

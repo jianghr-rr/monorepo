@@ -5,5 +5,10 @@
     },
     "overview": "概论",
     "base": "web 基础",
+    "cve": "cve",
+    "xss-reflected": "反射型",
+    "xss-stored": "存储型",
+    "xss-dom": "DOM型",
+    "pseudo-protocol": "伪协议",
     "summary": "安全基础是计算机网络安全的基础，它涵盖了网络安全的各个方面。"
 }
