@@ -38,6 +38,10 @@ export default function PatternsPageSideBar({
         href: '/safety/pseudo-protocol',
         label: t('pseudo-protocol'),
       },
+      {
+        href: '/safety/csrf',
+        label: t('csrf'),
+      },
     ],
     [t]
   );

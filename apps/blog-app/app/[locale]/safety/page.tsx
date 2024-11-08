@@ -1,13 +1,22 @@
 'use client';
-
+import dynamic from 'next/dynamic';
+import { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import highlightCode from '~/components/highlight';
+import { MDXWrapper } from '~/components/mdx-wrapper';
 
-export default function InterviewPage() {
-  const { t } = useTranslation();
+const PageZh = dynamic(() => import('./index.zh.mdx'));
+const PageEn = dynamic(() => import('./index.en.mdx'));
+
+export default function Home() {
+  const { i18n } = useTranslation();
+  const currentLocale = i18n.language;
+
+  useLayoutEffect(() => {
+    highlightCode();
+  }, []);
 
   return (
-    <div className="blog-container">
-      <h1 className="blog-h1">{t('title')}</h1>
-    </div>
+    <MDXWrapper>{currentLocale === 'zh' ? <PageZh /> : <PageEn />}</MDXWrapper>
   );
 }
