@@ -18,7 +18,8 @@
     "build-blog-app": "turbo run build-blog-app",
     "migrations-generate-main-app": "turbo run migrations-generate-main-app",
     "start-main": "turbo run start-main",
-    "start-blog": "turbo run start-blog"
+    "start-blog": "turbo run start-blog",
+    "start-ec": "turbo run start-ec"
   },
   "dependencies": {
     "cross-env": "7.0.3"
@@ -33,7 +34,7 @@
     "@bid-np/eslint-config-bases": "workspace:*",
     "eslint": "8.57.0",
     "husky": "9.0.11",
-    "highlight.js": "9.18.5",
+    "highlight.js": "11.9.0",
     "lint-staged": "15.2.2",
     "npm-run-all2": "6.1.2",
     "prettier": "3.2.5",

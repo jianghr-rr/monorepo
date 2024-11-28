@@ -16,6 +16,10 @@ export default function PatternsPageSideBar({
         href: '/aigc/token',
         label: t('token.title'),
       },
+      {
+        href: '/aigc/prompt',
+        label: t('prompt.title'),
+      },
     ],
     [t]
   );

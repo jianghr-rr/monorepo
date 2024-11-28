@@ -36,6 +36,10 @@
       "start-blog": {
         "dependsOn": ["blog-app#dev"],
         "cache": false
+      },
+      "start-ec": {
+        "dependsOn": ["ec-app#dev"],
+        "cache": false
       }
     }
   }

@@ -1,0 +1,40 @@
+{
+  "name": "ec-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev -p 4001",
+    "build": "next build",
+    "start": "next start -p 4001",
+    "migrations:generate": "drizzle-kit generate:mysql --config=drizzle.config.ts",
+    "migrations:drop": "drizzle-kit drop --config=drizzle.config.ts",
+    "db:push": "drizzle-kit push:mysql --config=drizzle.config.ts",
+    "insert:data": "ts-node-esm ./db/insert-data.js"
+  },
+  "dependencies": {
+    "drizzle-kit": "0.20.18",
+    "drizzle-orm": "0.30.10",
+    "i18next": "23.11.5",
+    "react": "19.0.0-rc-66855b96-20241106",
+    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "mysql2": "3.11.4",
+    "next-i18n-router": "5.5.0",
+    "next-i18next": "15.3.0",
+    "next": "15.0.3"
+  },
+  "devDependencies": {
+    "daisyui": "4.12.10",
+    "typescript": "5.4.3",
+    "@types/node": "20.11.30",
+    "@types/react": "18.2.73",
+    "@types/react-dom": "18.2.22",
+    "postcss": "8.4.38",
+    "tailwindcss": "3.4.3",
+    "tailwind-highlightjs": "2.0.1",
+    "tailwind-merge": "2.3.0",
+    "tailwindcss-animate": "1.0.7",
+    "eslint": "8.57.0",
+    "eslint-config-next": "15.0.3"
+  }
+}

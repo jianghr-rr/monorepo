@@ -90,6 +90,20 @@ export default function InterviewPageSideBar({
         href: '/interview/html_css',
         label: t('htmlCss.title'),
       },
+      {
+        href: '/interview/test',
+        label: t('test.title'),
+        children: [
+          {
+            href: '/interview/test/tdd',
+            label: t('TDD'),
+          },
+        ],
+      },
+      {
+        href: '/interview/eslint',
+        label: t('eslint.title'),
+      },
     ],
     [t]
   );

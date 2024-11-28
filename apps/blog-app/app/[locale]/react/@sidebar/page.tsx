@@ -138,6 +138,16 @@ export default function PatternsPageSideBar({
           },
         ],
       },
+      {
+        href: '/react/ui-css-in-js',
+        label: t('css-in-js'),
+        children: [
+          {
+            href: '/react/ui-css-in-js',
+            label: t('css-in-js'),
+          },
+        ],
+      },
     ],
     [t]
   );
