@@ -8,6 +8,13 @@
       "when": 1732779694222,
       "tag": "0000_yielding_hitman",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1732862417141,
+      "tag": "0001_outgoing_kitty_pryde",
+      "breakpoints": true
     }
   ]
 }

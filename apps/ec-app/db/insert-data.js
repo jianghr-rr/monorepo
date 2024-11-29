@@ -8,6 +8,7 @@ import mmallOrderItem from './schema/order-item.js';
 import mmallProduct from './schema/product.js';
 import mmallShipping from './schema/shipping.js';
 import mmallUser from './schema/user.js';
+import mmallPayInfo from './schema/pay-info.js';
 
 // 创建数据库连接池
 const poolConnection = mysql.createPool({

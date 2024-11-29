@@ -12,8 +12,8 @@ const mmallUser = mysqlTable("mmall_user", {
     question: varchar("question", { length: 100 }), // 找回密码问题 找回密码问题
     answer: varchar("answer", { length: 100 }), // 找回密码答案 找回密码答案
     role: int("role").notNull(), // 角色0-管理员,1-普通用户 用户角色
-    createTime: timestamp("create_time").notNull().default(sql`now()`), // 创建时间 创建时间
-    updateTime: timestamp("update_time").notNull().default(sql`now()`), // 最后一次更新时间 最后一次更新时间
+    createTime: timestamp("createTime").notNull().default(sql`now()`), // 创建时间 创建时间
+    updateTime: timestamp("updateTime").notNull().default(sql`now()`), // 最后一次更新时间 最后一次更新时间
 },
 (table) => ({
     usernameUniqueIndex: uniqueIndex('user_name_unique').on(table.username), // 唯一索引：用户名
