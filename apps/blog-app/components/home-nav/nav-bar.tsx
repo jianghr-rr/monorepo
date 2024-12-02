@@ -36,7 +36,7 @@ const Navbar = () => {
       { href: '/algorithm', label: t('algorithm') },
       { href: '/aigc', label: t('aigc') },
       { href: '/safety', label: t('web-safety') },
-      { href: '/summary', label: t('summary') },
+      { href: '/java-web', label: t('java-web') },
     ],
     [t]
   );

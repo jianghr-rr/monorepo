@@ -10,6 +10,7 @@
     "migrations:generate": "drizzle-kit generate:mysql --config=drizzle.config.ts",
     "migrations:drop": "drizzle-kit drop --config=drizzle.config.ts",
     "db:push": "drizzle-kit push:mysql --config=drizzle.config.ts",
+    "db:introspect": "drizzle-kit introspect:mysql --config=drizzle.config.ts",
     "insert:data": "ts-node-esm ./db/insert-data.js"
   },
   "dependencies": {
