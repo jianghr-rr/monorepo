@@ -37,8 +37,8 @@
         "dependsOn": ["blog-app#dev"],
         "cache": false
       },
-      "start-ec": {
-        "dependsOn": ["ec-app#dev"],
+      "start-mall": {
+        "dependsOn": ["mall-app#dev"],
         "cache": false
       }
     }
