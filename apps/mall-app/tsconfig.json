@@ -62,6 +62,12 @@
       "~themes/*": [
         "./themes/*"
       ],
+      "~types/*": [
+        "./types/*"
+      ],
+      "~api/*": [
+        "./pages/api/*"
+      ],
       "@bid-ng/common-i18n": [
         "../../../packages/common-i18n/src/index"
       ],
@@ -74,7 +80,6 @@
         "name": "next"
       }
     ]
-    // "types": ["vitest/globals", "@testing-library/jest-dom/vitest"]
   },
   "exclude": [
     "**/node_modules",

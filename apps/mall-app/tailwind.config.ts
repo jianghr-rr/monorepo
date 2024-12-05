@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -8,11 +9,6 @@ import type { Config } from 'tailwindcss';
 
 const config = {
   darkMode: 'class',
-  // safelist: [
-  //   {
-  //     pattern: /hljs+/,
-  //   },
-  // ],
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}', // Note the addition of the `app` directory.
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -171,32 +167,6 @@ const config = {
           },
         ],
       },
-      // typography: {
-      //   DEFAULT: {
-      //     css: {
-      //       'h2, h3, h4, h5, ul, ol': {
-      //         'margin-top': '1em',
-      //         'margin-bottom': '0.6em',
-      //       },
-      //       'p, pre, blockquote': {
-      //         'margin-top': '0.6em',
-      //         'margin-bottom': '0.6em',
-      //       },
-      //       li: {
-      //         'margin-top': '0px',
-      //         'margin-bottom': '0px',
-      //       },
-      //       'li > p, li > ul, li > ol ': {
-      //         'margin-top': '0px',
-      //         'margin-bottom': '0px',
-      //       },
-      //       hr: {
-      //         'margin-top': '1em',
-      //         'margin-bottom': '1em',
-      //       },
-      //     },
-      //   },
-      // },
     },
   },
   plugins: [
