@@ -38,7 +38,7 @@ jobs:
               git pull origin mall
               DOCKERFILE="Dockerfile.mall"
               IMAGE_NAME="mall-web-docker"
-              PORT=80
+              PORT=4001
             else
               echo "Unknown branch. Exiting..."
               exit 1
