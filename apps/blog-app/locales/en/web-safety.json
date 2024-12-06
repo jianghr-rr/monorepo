@@ -1,0 +1,15 @@
+{
+    "title": "web safety base",
+    "factory": {
+        "title": "web safety"
+    },
+    "overview": "overview",
+    "base": "web base",
+    "cve": "cve",
+    "xss-reflected": "xss reflected",
+    "xss-stored": "xss stored",
+    "xss-dom": "xss dom",
+    "pseudo-protocol": "pseudo protocol",
+    "csrf": "csrf",
+    "summary": "summary"
+}

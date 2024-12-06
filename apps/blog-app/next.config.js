@@ -60,7 +60,7 @@ const nextConfig = {
     config.resolve.alias.canvas = false;
     config.output.publicPath = isProd
       ? 'http://blogstatic.curlyhair.cn/_next/'
-      : '_next/';
+      : '/_next/';
     // config.infrastructureLogging = { debug: /PackFileCache/ };
     // console.log('???', path.join(__dirname, 'components/ui'));
     // config.resolve.alias['~ui'] = path.join(__dirname, 'components/ui');

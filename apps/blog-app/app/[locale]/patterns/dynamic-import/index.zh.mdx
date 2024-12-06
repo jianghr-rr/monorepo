@@ -1,1 +1,30 @@
+import Example1 from './example-1.jsx';
+import Example2 from './example-2.jsx';
+import Example3 from './example-3.jsx';
+
+
 # 动态导入
+
+在聊天应用程序中，我们有四个关键组件： UserInfo 、 ChatList 、 ChatInput和EmojiPicker 。然而，这些组件中只有三个在初始页面加载时立即使用： UserInfo 、 ChatList和ChatInput 。 EmojiPicker不是直接可见的，如果用户甚至不单击Emoji来切换EmojiPicker甚至可能根本不会呈现。这意味着我们不必要地将EmojiPicker模块添加到我们的初始包中，这可能会增加加载时间！
+
+为了解决这个问题，我们可以动态导入EmojiPicker组件。我们不会静态导入它，而是仅在想要显示EmojiPicker时导入它。在 React 中动态导入组件的一种简单方法是使用React Suspense 。 React.Suspense组件接收应该动态加载的组件，这使得App组件可以通过暂停EmojiPicker模块的导入来更快地渲染其内容！当用户单击表情符号时， EmojiPicker组件将首次呈现。 EmojiPicker组件呈现Suspense组件，该组件接收延迟导入的模块：在本例中为EmojiPicker 。 Suspense组件接受一个fallback prop，它接收在挂起的组件仍在加载时应该渲染的组件！
+
+我们可以将其拆分为自己的包并减少初始包的大小，而不是不必要地将EmojiPicker添加到初始包中！
+
+<Example1 />
+
+较小的初始包大小意味着更快的初始加载：用户不必长时间盯着空白加载屏幕。 fallback组件让用户知道我们的应用程序没有冻结：他们只需要等待一段时间即可处理和执行模块。
+
+之前初始捆绑包大小为1.5MiB ，我们已经通过暂停导入EmojiPicker将其减少到1.33 MiB ！
+
+<Example2 />
+
+通过动态导入EmojiPicker组件，我们成功地将初始包大小从1.5MiB减少到1.33 MiB ！尽管用户可能仍需要等待一段时间才能完全加载EmojiPicker ，但我们通过确保在用户等待组件加载时呈现应用程序并进行交互来改善用户体验。
+
+<Example3 />
+
+## Loadable Components 可加载组件
+
+服务器端渲染尚不支持 React Suspense。 React Suspense 的一个很好的替代方案是loadable-components库，它可以在 SSR 应用程序中使用。
+
+与 React Suspense 类似，我们可以将延迟导入的模块传递给loadable ，只有在请求EmojiPicker模块时，它才会导入该模块！当模块被加载时，我们可以渲染一个fallback组件。

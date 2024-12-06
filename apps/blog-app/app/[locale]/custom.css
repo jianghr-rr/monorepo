@@ -237,8 +237,11 @@
   }
 }
 
+.prose{
+  max-width: 100ch;
+}
 .blog-container {
-  max-width: 65ch;
+  max-width: 100ch;
   margin: 0 auto;
   width: 100%;
 }

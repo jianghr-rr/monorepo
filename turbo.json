@@ -25,6 +25,10 @@
         "dependsOn": ["blog-app#build"],
         "cache": false
       },
+      "build-mall-app": {
+        "dependsOn": ["mall-app#build"],
+        "cache": false
+      },
       "migrations-generate-main-app": {
         "dependsOn": ["main-app#migrations:generate"],
         "cache": false
@@ -35,6 +39,10 @@
       },
       "start-blog": {
         "dependsOn": ["blog-app#dev"],
+        "cache": false
+      },
+      "start-mall": {
+        "dependsOn": ["mall-app#dev"],
         "cache": false
       }
     }

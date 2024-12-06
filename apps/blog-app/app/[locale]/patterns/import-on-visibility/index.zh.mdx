@@ -1,1 +1,32 @@
-# 导入可见性
+import Example1 from './example-1.jsx';
+import Example2 from './example-2.jsx';
+
+# 可见时再导入
+
+除了用户交互之外，我们还经常有在初始页面上不可见的组件。一个很好的例子是延迟加载图像，这些图像在视口中不直接可见，但只有在用户向下滚动时才会加载。
+
+<Example1 />
+
+由于我们不会立即请求所有图像，因此可以减少初始加载时间。我们可以对组件做同样的事情！为了了解组件当前是否在我们的视口中，我们可以使用IntersectionObserver API ，或使用诸如react-lazyload或react-loadable-visibility之类的库来快速添加对应用程序可见性的导入。
+
+## Intersection Observer API
+
+https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
+
+``` javascript
+const options = {
+  root: document.querySelector("#scrollArea"),
+  rootMargin: "0px",
+  threshold: 1.0,
+};
+
+const observer = new IntersectionObserver(callback, options);
+```
+
+Intersection Observer API 提供了一种异步观察目标元素与祖先元素或顶级文档视口的交集变化的方法。
+
+每当EmojiPicker渲染到屏幕上时，用户单击 Gif 按钮后， react-loadable-visibility就会检测到EmojiPicker元素应该在屏幕上可见。只有这样，当用户看到正在渲染的加载组件时，它才会开始导入模块。
+
+<Example2 />
+
+这个后备组件让用户知道我们的应用程序没有冻结：他们只需要等待一小会儿，模块就会被加载、解析、编译和执行！

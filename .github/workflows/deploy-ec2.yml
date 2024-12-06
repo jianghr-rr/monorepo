@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - poc
+      - mall
 
 jobs:
   Deploy:
@@ -14,24 +15,47 @@ jobs:
       - name: Build & Deploy
         env:
           PRIVATE_KEY: ${{ secrets.EC2_PEM }}
-          HOSTNAME: ${{secrets.EC2_IP}}
-          USER_NAME: ${{secrets.EC2_USER}}
+          HOSTNAME: ${{ secrets.EC2_IP }}
+          USER_NAME: ${{ secrets.EC2_USER }}
 
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o ServerAliveInterval=60 -o ServerAliveCountMax=10 -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-            # Now we have got the access of EC2 and we will start the deploy .
-            cd /project/monorepo/;
-            echo '------ cd done ------' ;
-            git checkout poc ;
-            git checkout . ;
-            git pull origin poc;
-            echo '------ git pull done ------';
-            docker rm $(docker stop $(docker ps -a -q --filter ancestor=knowledge-web-docker));
-            echo '------ docker rm done ------' ;
-            docker build -t knowledge-web-docker . ;
-            echo '------ docker build done ------'
-            docker run -d -p 4000:4000 knowledge-web-docker;
-            echo '------ docker run done ------' ;
-            '
+            # Access EC2
+            cd /project/monorepo/
+            echo "------ cd done ------"
+
+            # Check the current branch and pull the latest changes
+            echo "Branch name is: ${{ github.ref_name }}"
+            if [ "${{ github.ref_name }}" = "poc" ]; then
+              git checkout poc
+              git pull origin poc
+              DOCKERFILE="Dockerfile.poc"
+              IMAGE_NAME="knowledge-web-docker"
+              PORT=4000
+            elif [ "${{ github.ref_name }}" = "mall" ]; then
+              git checkout mall
+              git pull origin mall
+              DOCKERFILE="Dockerfile.mall"
+              IMAGE_NAME="mall-web-docker"
+              PORT=4001
+            else
+              echo "Unknown branch. Exiting..."
+              exit 1
+            fi
+
+            echo "------ git pull done ------"
+
+            # Stop and remove the existing container for this branch
+            docker rm $(docker stop $(docker ps -a -q --filter ancestor=$IMAGE_NAME)) || echo "No containers to stop."
+            echo "------ docker rm done ------"
+
+            # Build the Docker image using the specific Dockerfile and image name
+            docker build -f $DOCKERFILE -t $IMAGE_NAME .
+            echo "------ docker build done ------"
+
+            # Run the new container with the branch-specific image name and port
+            docker run -d -p $PORT:$PORT $IMAGE_NAME
+            echo "------ docker run done ------"
+          '
           rm -rf private_key

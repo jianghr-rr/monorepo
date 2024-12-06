@@ -11,6 +11,9 @@
   "nodeJs": "NodeJs",
   "nextJs": "NextJs",
   "engineering": "工程化",
+  "web-safety": "Web 安全",
+  "summary": "总结",
+  "java-web": "Java Web",
   "page": {
     "title": "博客"
   },

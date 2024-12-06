@@ -1,1 +1,262 @@
 # 交互导入
+
+您的页面可能包含并非立即需要的组件或资源的代码或数据。例如，除非用户单击或滚动页面的某些部分，否则用户看不到用户界面的一部分。这可以适用于您编写的多种第一方代码，但这也适用于第三方小部件，例如视频播放器或聊天小部件，您通常需要单击按钮来显示主界面。
+
+如果成本高昂，急切（即立即）加载这些资源可能会阻塞主线程，从而推迟用户与页面的更关键部分进行交互的时间。这可能会影响交互准备指标，例如首次输入延迟、总阻塞时间和交互时间。您可以在更合适的时机加载它们，而不是立即加载这些资源，例如：
+- 当用户第一次单击与该组件交互时
+- 将组件滚动到视图中
+- 或者推迟该组件的加载，直到浏览器空闲（通过requestIdleCallback ）
+
+概括地说，加载资源的不同方法是：
+- Eager - 立即加载资源（加载脚本的正常方式）
+- 惰性（基于路由）- 当用户导航到路由或组件时加载
+- 惰性（交互时）- 当用户单击 UI 时加载（例如显示聊天）
+- 惰性（在视口中）- 当用户滚动到组件时加载
+- 预取 - 在需要之前加载，但在加载关键资源之后
+- 预加载 - 急切地、更加紧迫地预载
+
+在交互中延迟导入功能代码是我们将在本文中介绍的许多上下文中使用的一种模式。
+
+## “假”加载带有外观的第三方 UI
+
+您可能正在导入第三方脚本，并且对其呈现的内容或加载代码的时间控制较少。实现交互加载的一种选择很简单：使用facade 。外观是一个简单的“预览”或“占位符”，用于更昂贵的组件，您可以在其中模拟基本体验，例如使用图像或屏幕截图。这是我们在 Lighthouse 团队中一直使用的术语来表达这个想法。
+
+当用户单击“预览”（外观）时，将加载资源的代码。这限制了用户在不打算使用某个功能时需要支付体验成本。同样，外观可以在悬停时预先连接到必要的资源。
+
+## Video Player Embeds 视频播放器嵌入
+
+“外观”的一个很好的例子是 Paul Irish 的YouTube Lite Embed 。这提供了一个自定义元素，它采用 YouTube 视频 ID 并显示最小的缩略图和播放按钮。单击该元素会动态加载完整的 YouTube 嵌入代码，这意味着从不单击播放的用户无需支付获取和处理该代码的成本。
+
+一些 Google 网站的生产中也使用了类似的技术。在 Android.com 上，不是急切地加载嵌入的 YouTube 视频播放器，而是向用户显示带有假播放器按钮的缩略图。当他们单击它时，会加载一个模式，该模式会使用嵌入的全格式 YouTube 视频播放器自动播放视频
+
+## Authentication 验证
+
+应用程序可能需要通过客户端 JavaScript SDK 支持服务身份验证。这些有时会很大，并且 JS 执行成本很高，如果用户不打算登录，人们可能宁愿不急切地预先加载它们。相反，当用户单击“登录”按钮时动态导入身份验证库，从而使主线程在初始加载期间更加自由。
+
+## Chat widgets 聊天小部件
+
+通过使用类似的外观方法，Calibre 应用程序将基于 Intercom 的实时聊天的性能提高了 30% 。他们仅使用 CSS 和 HTML 实现了一个“假”快速加载实时聊天按钮，单击该按钮将加载他们的 Intercom 捆绑包。
+
+## Others 其他的
+
+Ne-digital使用 React 库在用户单击“滚动到顶部”按钮时以动画方式滚动回页面顶部。他们不是急切地加载 React-Scroll 依赖项，而是在与按钮交互时加载它，节省了大约 7KB：
+
+# 如何导入交互？
+
+## 普通 JavaScript
+
+``` javascript
+const btn = document.querySelector("button");
+
+btn.addEventListener("click", (e) => {
+  e.preventDefault();
+  import("lodash.sortby")
+    .then((module) => module.default)
+    .then(sortInput()) // use the imported dependency
+    .catch((err) => {
+      console.log(err);
+    });
+});
+```
+
+在动态导入之前或对于它不太适合的用例，使用基于 Promise 的脚本加载器将脚本动态注入页面也是一种选择（请参阅此处了解演示登录外观的完整实现）：
+
+``` javascript
+const loginBtn = document.querySelector("#login");
+
+loginBtn.addEventListener("click", () => {
+  const loader = new scriptLoader();
+  loader
+    .load(["//apis.google.com/js/client:platform.js?onload=showLoginScreen"])
+    .then(({ length }) => {
+      console.log(`${length} scripts loaded!`);
+    });
+});
+```
+
+``` javascript
+function scriptLoader() {
+  /**
+   * Promise-based script loader
+   * @param {string} url
+   * @param {object=} attr
+   * @returns {Promise}
+   */
+  const loader = (url, attr) => new Promise((resolve, reject) => {
+    const script = window.document.createElement('script');
+    script.src = url;
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    attr = attr || {};
+
+    for (const attrName in attr) {
+      script[attrName] = attr[attrName];
+    }
+
+    script.addEventListener('load', () => {
+      resolve(script);
+    }, false);
+
+    script.addEventListener('error', () => {
+      reject(script);
+    }, false);
+
+    window.document.body.appendChild(script);
+  });
+
+  /**
+   * Loads scripts asynchronously
+   * @param {string|string[]} urls
+   * @param {object=} attr Other script tag attributes
+   * @returns {Promise}
+   */
+  this.load = (urls, attr) => {
+    if (!Array.isArray(urls)) {
+      urls = [urls];
+    }
+
+    return Promise.all(urls.map(url => loader(url, attr)));
+  }
+
+  /**
+   * Loads scripts asynchronously. It supports multiple url arguments, so each one will be loaded right after the
+   * previous is loaded. This is a way of chaining dependency loading.
+   *
+   * @param {string|string[]} urls, ...
+   * @returns {Promise}
+   */
+  this.loadChain = function (urls) {
+    const args = Array.isArray(arguments) ? arguments : Array.prototype.slice.call(arguments);
+    const p = this.require(args.shift());
+    const self = this;
+    return args.length ? p.then(() => {
+      self.requireChain(...args);
+    }) : p;
+  }
+}
+
+// Inspiration: https://gist.github.com/itsjavi/93cc837dd2213ec0636a 
+
+const loginBtn = document.querySelector('#login');
+loginBtn.addEventListener('click', () => {
+  const loader = new scriptLoader();
+  loader.load([
+      '//apis.google.com/js/client:platform.js?onload=showLoginScreen'
+  ]).then(({length}) => {
+      console.log(`${length} scripts loaded!`);
+      loginBtn.style.display = 'none';
+  });
+});
+
+window.showLoginScreen = () => {
+      const container = document.querySelector('.abcRioButtonContentWrapper');
+      container.click();
+};
+```
+
+## React
+
+假设我们有一个聊天应用程序，其中包含`<MessageList>` 、 `<MessageInput>`和`<EmojiPicker>`组件（由emoji-mart提供支持，压缩后大小为 98KB）。在初始页面加载时急切地加载所有这些组件是很常见的。
+
+``` jsx
+import MessageList from './MessageList';
+import MessageInput from './MessageInput';
+import EmojiPicker from './EmojiPicker';
+
+const Channel = () => {
+  return (
+    <div>
+      <MessageList />
+      <MessageInput />
+      {emojiPickerOpen && <EmojiPicker />}
+    </div>
+  );
+};
+```
+
+使用代码分割来分解这项工作的负载相对简单。 React.lazy方法可以使用动态导入轻松地在组件级别上对 React 应用程序进行代码分割。 React.lazy函数提供了一种内置方法，只需很少的跑腿就能将应用程序中的组件分离成单独的 JavaScript 块。然后，当您将其与 Suspense 组件结合使用时，您可以处理加载状态。
+
+``` jsx
+import React, { lazy, Suspense } from 'react';
+import MessageList from './MessageList';
+import MessageInput from './MessageInput';
+
+const EmojiPicker = lazy(
+  () => import('./EmojiPicker')
+);
+
+const Channel = () => {
+  return (
+    <div>
+      <MessageList />
+      <MessageInput />
+      {emojiPickerOpen && (
+        <Suspense fallback={<div>Loading...</div>}>
+          <EmojiPicker />
+        </Suspense>
+      )}
+    </div>
+  );
+};
+```
+
+我们可以扩展这个想法，仅在`<MessageInput>`中单击表情符号图标时导入表情符号选择器组件的代码，而不是在应用程序最初加载时急切地导入：
+
+``` jsx
+import React, { useState, createElement } from "react";
+import MessageList from "./MessageList";
+import MessageInput from "./MessageInput";
+import ErrorBoundary from "./ErrorBoundary";
+
+const Channel = () => {
+  const [emojiPickerEl, setEmojiPickerEl] = useState(null);
+
+  const openEmojiPicker = () => {
+    import(/* webpackChunkName: "emoji-picker" */ "./EmojiPicker")
+      .then((module) => module.default)
+      .then((emojiPicker) => {
+        setEmojiPickerEl(createElement(emojiPicker));
+      });
+  };
+
+  const closeEmojiPickerHandler = () => {
+    setEmojiPickerEl(null);
+  };
+
+  return (
+    <ErrorBoundary>
+      <div>
+        <MessageList />
+        <MessageInput onClick={openEmojiPicker} />
+        {emojiPickerEl}
+      </div>
+    </ErrorBoundary>
+  );
+};
+```
+
+## Vue
+
+在 Vue.js 中，可以通过几种不同的方式完成类似的交互导入模式。一种方法是使用封装在函数中的动态导入来动态导入Emojipicker Vue 组件，即`() => import("./Emojipicker") `。通常这样做会让 Vue.js 在需要渲染时延迟加载组件。
+
+然后我们可以在用户交互后面控制延迟加载。在选择器的父div上使用条件v-if （通过单击按钮进行切换），我们可以在用户单击时有条件地获取和渲染Emojipicker组件。
+
+``` html
+<template>
+  <div>
+    <button @click="show = true">Load Emoji Picker</button>
+    <div v-if="show">
+      <emojipicker></emojipicker>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    data: () => ({ show: false }),
+    components: {
+      Emojipicker: () => import("./Emojipicker"),
+    },
+  };
+</script>
+```

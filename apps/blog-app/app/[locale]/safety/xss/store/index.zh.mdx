@@ -1,0 +1,15 @@
+import Link from 'next/link';
+
+# 存储型XSS
+
+应用程序将代码进行存储到数据库，下次拿到这个数据时执行了代码
+
+工具: https://beefproject.com/
+
+## 防御
+
+对输入进行过滤
+
+采用OWASP ESAPI对数据输出html上下文不同位置进行适当的编码
+
+对cookie进行httponly属性的设置

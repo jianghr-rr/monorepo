@@ -49,5 +49,8 @@
     },
     "htmlCss": {
         "title": "HTML/CSS"
+    },
+    "test": {
+        "title": "Test"
     }
 }

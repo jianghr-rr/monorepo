@@ -11,6 +11,8 @@
   "nodeJs": "NodeJs",
   "nextJs": "NextJs",
   "engineering": "Engineering",
+  "web-safety": "Web-safety",
+  "java-web": "Java Web",
   "page": {
     "title": "Blog"
   },

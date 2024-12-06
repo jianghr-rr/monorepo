@@ -1,0 +1,7 @@
+
+# python
+__pycache__/
+.pytest_cache/
+.coverage
+config.py
+secrets.py

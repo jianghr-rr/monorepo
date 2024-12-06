@@ -4,5 +4,8 @@
     },
     "token": {
         "title": "理解ChatGPT的Tokens"
+    },
+    "prompt": {
+        "title": "Prompt"
     }
 }
