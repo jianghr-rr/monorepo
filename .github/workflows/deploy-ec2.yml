@@ -26,13 +26,14 @@ jobs:
             echo "------ cd done ------"
 
             # Check the current branch and pull the latest changes
-            if [ "${GITHUB_REF_NAME}" = "poc" ]; then
+            echo "Branch name is: ${{ github.ref_name }}"
+            if [ "${{ github.ref_name }}" = "poc" ]; then
               git checkout poc
               git pull origin poc
               DOCKERFILE="Dockerfile.poc"
               IMAGE_NAME="knowledge-web-docker"
               PORT=4000
-            elif [ "${GITHUB_REF_NAME}" = "mall" ]; then
+            elif [ "${{ github.ref_name }}" = "mall" ]; then
               git checkout mall
               git pull origin mall
               DOCKERFILE="Dockerfile.mall"
