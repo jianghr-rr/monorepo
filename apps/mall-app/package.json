@@ -1,8 +1,6 @@
 {
   "name": "mall-app",
   "version": "0.1.0",
-  "private": true,
-  "type": "module",
   "scripts": {
     "dev": "next dev -p 4001",
     "build": "next build",
@@ -50,5 +48,12 @@
     "tailwindcss": "3.4.3",
     "tailwindcss-animate": "1.0.7",
     "typescript": "5.4.3"
-  }
+  },
+  "main": "lint-staged.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
