@@ -1,6 +1,7 @@
 import { dir } from 'i18next';
 import type { ReactNode } from 'react';
 import { inter, lexend } from '~/app/[locale]/fonts';
+import { Toaster } from "~/components/ui/toaster"
 import HomeNav from '~/components/home-nav';
 import i18nConfig from '~/i18nConfig';
 import { AppProviders } from '~/providers/app-providers';
@@ -45,7 +46,10 @@ const RootLayout = async function ({
           resources={resources}
         >
           <HomeNav />
-          <main className="mx-auto max-w-6xl px-8 py-24 ">{children}</main>
+          <main className="mx-auto max-w-6xl px-8 py-24 ">
+            {children}
+          </main>
+          <Toaster />
         </AppProviders>
       </body>
     </html>
