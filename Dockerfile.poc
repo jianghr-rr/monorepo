@@ -32,7 +32,6 @@ RUN turbo prune --scope=blog-app --docker --out-dir=./out/blog-app/
 
 FROM app-builder as app-installer
 
-
 WORKDIR /app
 
 # First install the dependencies (as they change less often)
