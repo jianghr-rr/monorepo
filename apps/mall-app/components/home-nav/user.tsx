@@ -2,21 +2,19 @@
 import { User } from 'lucide-react';
 import { useState } from 'react';
 import { LoginDialog } from '~components/login-dialog';
+import { RegisterDialog } from '~components/register-dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '~components/ui/dropdown-menu';
-import {
-  useUserStore,
-  type UserState,
-  type UserActions,
-} from '../login-dialog/store';
+import { useUserStore, type UserState, type UserActions } from '~store/user';
 
 export default function UserComponent() {
-  const [dialogOpen, setDialogOpen] = useState(false);
   const userStore = useUserStore((state: UserState & UserActions) => state);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [registerDialogOpen, setRegisterDialogOpen] = useState(false);
   const { user } = userStore;
 
   return (
@@ -49,12 +47,36 @@ export default function UserComponent() {
                 Login
               </span>
             </DropdownMenuItem>
-            <DropdownMenuItem>Join</DropdownMenuItem>
+            <DropdownMenuItem>
+              <span
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    setTimeout(() => {
+                      setRegisterDialogOpen(true);
+                    }, 100);
+                  }
+                }}
+                onClick={() => {
+                  setTimeout(() => {
+                    setRegisterDialogOpen(true);
+                  }, 100);
+                }}
+              >
+                Join
+              </span>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )}
 
       <LoginDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+
+      <RegisterDialog
+        open={registerDialogOpen}
+        onOpenChange={setRegisterDialogOpen}
+      />
     </>
   );
 }

@@ -352,6 +352,7 @@ importers:
       '@radix-ui/react-label': ^2.1.0
       '@radix-ui/react-slot': 1.1.0
       '@radix-ui/react-toast': ^1.2.2
+      '@types/lodash': 4.17.13
       '@types/node': 20.11.30
       '@types/react': 18.2.73
       '@types/react-dom': 18.2.22
@@ -366,6 +367,7 @@ importers:
       i18next: 23.11.5
       i18next-browser-languagedetector: 8.0.0
       i18next-resources-to-backend: 1.2.1
+      lodash: 4.17.21
       lucide-react: 0.465.0
       mysql2: 3.11.4
       next: 15.0.3
@@ -392,6 +394,7 @@ importers:
       '@radix-ui/react-label': 2.1.0_ut5pcp5ugkfahmobrhnjouanxe
       '@radix-ui/react-slot': 1.1.0_e4u6bgc65s3yx2ub7sukpdwgja
       '@radix-ui/react-toast': 1.2.2_ut5pcp5ugkfahmobrhnjouanxe
+      '@types/lodash': 4.17.13
       axios: 1.7.8
       class-variance-authority: 0.7.0
       clsx: 2.1.1
@@ -400,6 +403,7 @@ importers:
       i18next: 23.11.5
       i18next-browser-languagedetector: 8.0.0
       i18next-resources-to-backend: 1.2.1
+      lodash: 4.17.21
       lucide-react: 0.465.0_react@19.0.0
       mysql2: 3.11.4
       next: 15.0.3_upmzqgzhjrquwzo2dphtigtdgi
@@ -7363,6 +7367,10 @@ packages:
     resolution: {integrity: sha512-5YUJVv6NwM1z7m6FuYpKfNLTZ932Z6EF6xy2BbtpJSyn13DKNQEkXVffFVSnJHxvwwWh2SAeumpjAYUELqgjyw==}
     dependencies:
       '@types/koa': 2.14.0
+    dev: false
+
+  /@types/lodash/4.17.13:
+    resolution: {integrity: sha512-lfx+dftrEZcdBPczf9d0Qv0x+j/rfNCMuC6OcfXmO8gkfeNAY88PgKUbvG56whcN23gc27yenwF6oJZXGFpYxg==}
     dev: false
 
   /@types/mdast/3.0.15:

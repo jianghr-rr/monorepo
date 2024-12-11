@@ -1,16 +1,17 @@
-import type {ILogin} from "~types/user.types";
-import { instanceCRUD } from "./axios";
+import type { ILogin, IUserInfo, IRegister } from '~types/user.types';
+import { postInstanceCRUD } from './axios';
 
 export const userAPI = {
-    login: async (login: ILogin): Promise<{
-        status: number,
-        msg: string,
-    }> => {
-        const response = await instanceCRUD.post<{
-            status: number,
-            msg: string,
-        }>(`user/login.do`, `username=${login.username}&password=${login.password}`);
-        console.log('response', response);
-        return response.data;
-    },
-}
+  login: async (login: ILogin) => {
+    return await postInstanceCRUD<ILogin, IUserInfo>(`user/login.do`, {
+      username: login.username,
+      password: login.password,
+    });
+  },
+
+  register: async (register: IRegister) => {
+    return await postInstanceCRUD<IRegister, IUserInfo>(`user/register.do`, {
+      ...register,
+    });
+  },
+};

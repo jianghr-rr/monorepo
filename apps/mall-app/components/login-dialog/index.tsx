@@ -22,7 +22,7 @@ import {
   FormMessage,
 } from '~components/ui/form';
 import { Input } from '~components/ui/input';
-import { useUserStore, type UserState, type UserActions } from './store';
+import { useUserStore, type UserState, type UserActions } from '~store/user';
 
 interface LoginDialogProps {
   open: boolean;
@@ -58,26 +58,36 @@ const LoginDialog: FC<LoginDialogProps> = ({ open, onOpenChange }) => {
         username: values.username,
         password: values.password,
       });
-      if (response.status !== 0) {
-        toast({
-          duration: 4000,
-          title: 'login error',
-          description: response.msg,
-        });
-      } else {
-        // @ts-ignore
-        updateUser(response.data);
-        toast({
-          duration: 4000,
-          // @ts-ignore
-          title: `欢迎${response.data?.username}`,
-        });
-        onOpenChange?.(false);
-      }
-    } catch (e: any) {
+      console.log('response', response);
+      // if (response.data?.status !== 0) {
+      //   toast({
+      //     duration: 4000,
+      //     title: 'login error',
+      //     description: response.data?.msg,
+      //   });
+      // } else {
+      //   if (response.data?.msg) {
+      //     toast({
+      //       duration: 4000,
+      //       title: 'login message',
+      //       description: response.data?.msg,
+      //     });
+      //   } else {
+      //     updateUser(response.data);
+      //     toast({
+      //       duration: 4000,
+      //       // @ts-ignore
+      //       title: `欢迎${response.data?.username}`,
+      //     });
+      //     onOpenChange?.(false);
+      //   }
+      // }
+    } catch (e) {
+      console.log('error', e);
       toast({
+        duration: 4000,
         title: 'login error',
-        description: e.msg,
+        description: e?.toString(),
       });
     } finally {
       console.log('finally');
