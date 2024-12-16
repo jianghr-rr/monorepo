@@ -29,6 +29,10 @@
         "dependsOn": ["mall-app#build"],
         "cache": false
       },
+      "build-mall-web": {
+        "dependsOn": ["mall-web#build"],
+        "cache": false
+      },
       "migrations-generate-main-app": {
         "dependsOn": ["main-app#migrations:generate"],
         "cache": false
@@ -43,6 +47,10 @@
       },
       "start-mall": {
         "dependsOn": ["mall-app#dev"],
+        "cache": false
+      },
+      "start-mall-web": {
+        "dependsOn": ["mall-web#dev"],
         "cache": false
       }
     }

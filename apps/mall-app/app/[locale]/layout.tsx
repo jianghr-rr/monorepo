@@ -1,8 +1,8 @@
 import { dir } from 'i18next';
 import type { ReactNode } from 'react';
 import { inter, lexend } from '~/app/[locale]/fonts';
-import { Toaster } from "~/components/ui/toaster"
 import HomeNav from '~/components/home-nav';
+import { Toaster } from '~/components/ui/toaster';
 import i18nConfig from '~/i18nConfig';
 import { AppProviders } from '~/providers/app-providers';
 import initTranslations from '../i18n';
@@ -20,16 +20,13 @@ interface LayoutProps {
   };
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return i18nConfig.locales.map((locale) => ({ locale }));
 }
 
 const i18nNamespaces = ['home'];
 
-const RootLayout = async function ({
-  children,
-  params,
-}: LayoutProps) {
+const RootLayout = async function ({ children, params }: LayoutProps) {
   const { locale } = await Promise.resolve(params); // 处理异步 `params`
   const { resources } = await initTranslations(locale, i18nNamespaces);
 
@@ -46,9 +43,7 @@ const RootLayout = async function ({
           resources={resources}
         >
           <HomeNav />
-          <main className="mx-auto max-w-6xl px-8 py-24 ">
-            {children}
-          </main>
+          <main className="mx-auto w-full py-24 ">{children}</main>
           <Toaster />
         </AppProviders>
       </body>

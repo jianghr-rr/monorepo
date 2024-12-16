@@ -58,39 +58,22 @@ const LoginDialog: FC<LoginDialogProps> = ({ open, onOpenChange }) => {
         username: values.username,
         password: values.password,
       });
-      console.log('response', response);
-      // if (response.data?.status !== 0) {
-      //   toast({
-      //     duration: 4000,
-      //     title: 'login error',
-      //     description: response.data?.msg,
-      //   });
-      // } else {
-      //   if (response.data?.msg) {
-      //     toast({
-      //       duration: 4000,
-      //       title: 'login message',
-      //       description: response.data?.msg,
-      //     });
-      //   } else {
-      //     updateUser(response.data);
-      //     toast({
-      //       duration: 4000,
-      //       // @ts-ignore
-      //       title: `欢迎${response.data?.username}`,
-      //     });
-      //     onOpenChange?.(false);
-      //   }
-      // }
+      if (response.data?.data) {
+        onOpenChange?.(false);
+
+        toast({
+          duration: 4000,
+          title: `欢迎${response.data?.data?.username}`,
+        });
+
+        updateUser(response.data?.data);
+      }
     } catch (e) {
-      console.log('error', e);
       toast({
         duration: 4000,
         title: 'login error',
         description: e?.toString(),
       });
-    } finally {
-      console.log('finally');
     }
   };
 
@@ -123,7 +106,7 @@ const LoginDialog: FC<LoginDialogProps> = ({ open, onOpenChange }) => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <Input type="password" placeholder="Password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

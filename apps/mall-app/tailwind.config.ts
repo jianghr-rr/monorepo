@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import daisyuiThemes from 'daisyui/src/theming/themes';
 import type { Config } from 'tailwindcss';
 // import { fontFamily } from 'tailwindcss/defaultTheme';
 
@@ -69,14 +70,23 @@ const config = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+
       keyframes: {
         'accordion-down': {
-          from: { height: '0' },
-          to: { height: 'var(--radix-accordion-content-height)' },
+          from: {
+            height: '0',
+          },
+          to: {
+            height: 'var(--radix-accordion-content-height)',
+          },
         },
         'accordion-up': {
-          from: { height: 'var(--radix-accordion-content-height)' },
-          to: { height: '0' },
+          from: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+          to: {
+            height: '0',
+          },
         },
       },
       animation: {
@@ -160,7 +170,7 @@ const config = {
         themes: [
           {
             light: {
-              ...require('daisyui/src/theming/themes')?.light,
+              ...daisyuiThemes?.light,
               primary: '#8b5cf6',
               secondary: 'teal',
             },

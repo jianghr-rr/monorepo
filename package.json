@@ -17,10 +17,12 @@
     "build-main-app": "turbo run build-main-app",
     "build-blog-app": "turbo run build-blog-app",
     "build-mall-app": "turbo run build-mall-app",
+    "build-mall-web": "turbo run build-mall-web",
     "migrations-generate-main-app": "turbo run migrations-generate-main-app",
     "start-main": "turbo run start-main",
     "start-blog": "turbo run start-blog",
-    "start-mall": "turbo run start-mall"
+    "start-mall": "turbo run start-mall",
+    "start-mall-web": "turbo run start-mall-web"
   },
   "dependencies": {
     "cross-env": "7.0.3"
