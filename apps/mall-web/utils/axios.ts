@@ -4,7 +4,6 @@ import axios, {
   type AxiosResponse,
   type AxiosError,
 } from 'axios';
-import { isUndefined } from 'lodash';
 import type { CustomAxiosResponse } from '~types/request.types';
 
 export const instanceCRUD = axios.create({
@@ -29,13 +28,12 @@ instanceCRUD.interceptors.response.use(
   <T>(
     response: AxiosResponse<CustomAxiosResponse<T>>
   ): AxiosResponse<CustomAxiosResponse<T>> | Promise<never> => {
-    const { status, msg, data } = response.data;
+    console.log('response', response);
+    const { code, msg, data } = response.data;
     console.log('response.data', response.data);
     // 如果是自定义的业务逻辑错误
-    if (status !== 0) {
+    if (code !== 0) {
       return Promise.reject(new Error(msg ?? '业务逻辑错误'));
-    } else if (isUndefined(data as unknown)) {
-      return Promise.reject(new Error('业务逻辑错误'));
     }
     // 返回正常响应
     return response;
@@ -69,7 +67,6 @@ instanceCRUD.interceptors.response.use(
       // 无响应错误，可能是网络问题
       console.error('网络连接错误，请稍后重试');
     }
-
     return Promise.reject(error); // 抛出错误供调用方捕获
   }
 );

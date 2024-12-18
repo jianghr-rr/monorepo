@@ -11,7 +11,7 @@ if (
 }
 
 export default {
-  schema: './db/schema/index.ts',
+  schema: './db/migrations/schema.ts',
   out: './db/migrations',
   driver: 'mysql2',
   dbCredentials: {

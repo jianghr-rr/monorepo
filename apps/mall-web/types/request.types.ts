@@ -15,7 +15,7 @@ const ResponseCode = {
 
 // Axios 的响应数据格式，扩展 ApiResponse 类型
 interface CustomAxiosResponse<T> {
-  status: (typeof ResponseCode)[keyof typeof ResponseCode]; // 状态码（1成功，0失败）
+  code: (typeof ResponseCode)[keyof typeof ResponseCode]; // 状态码（1成功，0失败）
   msg?: string; // 消息，存在表示业务失败
   data?: T | null; // 返回的数据，可能为空
 }

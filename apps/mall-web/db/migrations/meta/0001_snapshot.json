@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "7817b1e5-80dd-4ef4-be19-8cc5ec7844b8",
-  "prevId": "6a0fe520-df37-497c-8f01-d650f1dfeffb",
+  "id": "8e00def6-6b8f-486e-a169-75fdcd9f32f2",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "mmall_cart": {
       "name": "mmall_cart",
@@ -48,7 +48,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "now()"
+          "default": "'CURRENT_TIMESTAMP'"
         },
         "updateTime": {
           "name": "updateTime",
@@ -56,17 +56,10 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "now()"
+          "default": "'CURRENT_TIMESTAMP'"
         }
       },
       "indexes": {
-        "mmall_cart__user_id__unique": {
-          "name": "mmall_cart__user_id__unique",
-          "columns": [
-            "userId"
-          ],
-          "isUnique": true
-        },
         "mmall_cart__user_id__idx": {
           "name": "mmall_cart__user_id__idx",
           "columns": [
@@ -76,22 +69,22 @@
         }
       },
       "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "mmall_cart_id": {
-          "name": "mmall_cart_id",
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "mmall_cart__user_id__unique": {
+          "name": "mmall_cart__user_id__unique",
           "columns": [
-            "id"
+            "userId"
           ]
         }
-      },
-      "uniqueConstraints": {}
+      }
     },
     "mmall_category": {
       "name": "mmall_category",
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": true
@@ -131,7 +124,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "now()"
+          "default": "'CURRENT_TIMESTAMP'"
         },
         "updateTime": {
           "name": "updateTime",
@@ -139,17 +132,10 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "now()"
+          "default": "'CURRENT_TIMESTAMP'"
         }
       },
       "indexes": {
-        "mmall_category_id__unique": {
-          "name": "mmall_category_id__unique",
-          "columns": [
-            "id"
-          ],
-          "isUnique": true
-        },
         "mmall_category_id__idx": {
           "name": "mmall_category_id__idx",
           "columns": [
@@ -159,22 +145,28 @@
         }
       },
       "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "mmall_category_id": {
-          "name": "mmall_category_id",
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "id": {
+          "name": "id",
+          "columns": [
+            "id"
+          ]
+        },
+        "mmall_category_id__unique": {
+          "name": "mmall_category_id__unique",
           "columns": [
             "id"
           ]
         }
-      },
-      "uniqueConstraints": {}
+      }
     },
     "mmall_order": {
       "name": "mmall_order",
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": true
@@ -272,13 +264,6 @@
         }
       },
       "indexes": {
-        "mmall_order_id__unique": {
-          "name": "mmall_order_id__unique",
-          "columns": [
-            "id"
-          ],
-          "isUnique": true
-        },
         "mmall_order_id__idx": {
           "name": "mmall_order_id__idx",
           "columns": [
@@ -288,15 +273,21 @@
         }
       },
       "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "mmall_order_id": {
-          "name": "mmall_order_id",
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "id": {
+          "name": "id",
+          "columns": [
+            "id"
+          ]
+        },
+        "mmall_order_id__unique": {
+          "name": "mmall_order_id__unique",
           "columns": [
             "id"
           ]
         }
-      },
-      "uniqueConstraints": {}
+      }
     },
     "mmall_order_item": {
       "name": "mmall_order_item",
@@ -380,13 +371,6 @@
         }
       },
       "indexes": {
-        "mmall_order_item_id__unique": {
-          "name": "mmall_order_item_id__unique",
-          "columns": [
-            "id"
-          ],
-          "isUnique": true
-        },
         "mmall_order_item_id__idx__order_no": {
           "name": "mmall_order_item_id__idx__order_no",
           "columns": [
@@ -397,22 +381,22 @@
         }
       },
       "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "mmall_order_item_id": {
-          "name": "mmall_order_item_id",
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "mmall_order_item_id__unique": {
+          "name": "mmall_order_item_id__unique",
           "columns": [
             "id"
           ]
         }
-      },
-      "uniqueConstraints": {}
+      }
     },
     "mmall_pay_info": {
       "name": "mmall_pay_info",
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": true
@@ -458,7 +442,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "now()"
+          "default": "'CURRENT_TIMESTAMP'"
         },
         "updateTime": {
           "name": "updateTime",
@@ -466,17 +450,10 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "now()"
+          "default": "'CURRENT_TIMESTAMP'"
         }
       },
       "indexes": {
-        "mmall_pay_info_id__unique": {
-          "name": "mmall_pay_info_id__unique",
-          "columns": [
-            "id"
-          ],
-          "isUnique": true
-        },
         "mmall_pay_info_id__idx": {
           "name": "mmall_pay_info_id__idx",
           "columns": [
@@ -486,22 +463,28 @@
         }
       },
       "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "mmall_pay_info_id": {
-          "name": "mmall_pay_info_id",
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "id": {
+          "name": "id",
+          "columns": [
+            "id"
+          ]
+        },
+        "mmall_pay_info_id__unique": {
+          "name": "mmall_pay_info_id__unique",
           "columns": [
             "id"
           ]
         }
-      },
-      "uniqueConstraints": {}
+      }
     },
     "mmall_product": {
       "name": "mmall_product",
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": true
@@ -574,27 +557,20 @@
           "name": "createTime",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "now()"
+          "default": "'CURRENT_TIMESTAMP'"
         },
         "updateTime": {
           "name": "updateTime",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "now()"
+          "default": "'CURRENT_TIMESTAMP'"
         }
       },
       "indexes": {
-        "mmall_product_id__unique": {
-          "name": "mmall_product_id__unique",
-          "columns": [
-            "id"
-          ],
-          "isUnique": true
-        },
         "mmall_product_id__idx": {
           "name": "mmall_product_id__idx",
           "columns": [
@@ -604,22 +580,28 @@
         }
       },
       "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "mmall_product_id": {
-          "name": "mmall_product_id",
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "id": {
+          "name": "id",
+          "columns": [
+            "id"
+          ]
+        },
+        "mmall_product_id__unique": {
+          "name": "mmall_product_id__unique",
           "columns": [
             "id"
           ]
         }
-      },
-      "uniqueConstraints": {}
+      }
     },
     "mmall_shipping": {
       "name": "mmall_shipping",
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": true
@@ -691,27 +673,20 @@
           "name": "createTime",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "now()"
+          "default": "'CURRENT_TIMESTAMP'"
         },
         "updateTime": {
           "name": "updateTime",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "now()"
+          "default": "'CURRENT_TIMESTAMP'"
         }
       },
       "indexes": {
-        "mmall_shipping_id__unique": {
-          "name": "mmall_shipping_id__unique",
-          "columns": [
-            "id"
-          ],
-          "isUnique": true
-        },
         "mmall_shipping_id__idx": {
           "name": "mmall_shipping_id__idx",
           "columns": [
@@ -721,22 +696,28 @@
         }
       },
       "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "mmall_shipping_id": {
-          "name": "mmall_shipping_id",
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "id": {
+          "name": "id",
+          "columns": [
+            "id"
+          ]
+        },
+        "mmall_shipping_id__unique": {
+          "name": "mmall_shipping_id__unique",
           "columns": [
             "id"
           ]
         }
-      },
-      "uniqueConstraints": {}
+      }
     },
     "mmall_user": {
       "name": "mmall_user",
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": true
@@ -796,7 +777,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "now()"
+          "default": "'CURRENT_TIMESTAMP'"
         },
         "updateTime": {
           "name": "updateTime",
@@ -804,28 +785,121 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "now()"
+          "default": "'CURRENT_TIMESTAMP'"
         }
       },
-      "indexes": {
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "id": {
+          "name": "id",
+          "columns": [
+            "id"
+          ]
+        },
         "user_name_unique": {
           "name": "user_name_unique",
           "columns": [
             "username"
-          ],
-          "isUnique": true
+          ]
+        }
+      }
+    },
+    "sessions": {
+      "name": "sessions",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "session_token": {
+          "name": "session_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+        },
+        "ip_address": {
+          "name": "ip_address",
+          "type": "varchar(45)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "user_agent": {
+          "name": "user_agent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
-      "foreignKeys": {},
+      "indexes": {},
+      "foreignKeys": {
+        "sessions_user_id_mmall_user_id_fk": {
+          "name": "sessions_user_id_mmall_user_id_fk",
+          "tableFrom": "sessions",
+          "tableTo": "mmall_user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {
-        "mmall_user_id": {
-          "name": "mmall_user_id",
+        "sessions_id": {
+          "name": "sessions_id",
           "columns": [
             "id"
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "sessions_session_token_unique": {
+          "name": "sessions_session_token_unique",
+          "columns": [
+            "session_token"
+          ]
+        }
+      }
     }
   },
   "schemas": {},
