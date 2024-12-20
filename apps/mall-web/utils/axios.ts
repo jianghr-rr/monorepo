@@ -7,7 +7,7 @@ import axios, {
 import type { CustomAxiosResponse } from '~types/request.types';
 
 export const instanceCRUD = axios.create({
-  baseURL: '/api/',
+  baseURL: 'http://localhost:4002/api/',
   withCredentials: true,
 });
 
@@ -28,9 +28,7 @@ instanceCRUD.interceptors.response.use(
   <T>(
     response: AxiosResponse<CustomAxiosResponse<T>>
   ): AxiosResponse<CustomAxiosResponse<T>> | Promise<never> => {
-    console.log('response', response);
-    const { code, msg, data } = response.data;
-    console.log('response.data', response.data);
+    const { code, msg } = response.data;
     // 如果是自定义的业务逻辑错误
     if (code !== 0) {
       return Promise.reject(new Error(msg ?? '业务逻辑错误'));
@@ -77,5 +75,6 @@ export const postInstanceCRUD = <T = undefined, D = unknown>(
   data?: T, // 允许传递请求体（POST 请求）
   config?: AxiosRequestConfig // 允许传递其他配置项
 ): Promise<AxiosResponse<CustomAxiosResponse<D>>> => {
+  console.log('postInstanceCRUD', url, data, config);
   return instanceCRUD.post(url, data, config);
 };

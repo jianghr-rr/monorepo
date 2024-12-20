@@ -1,4 +1,3 @@
-import LanguageChanger from '../language-changer';
 import Navbar from './nav-bar';
 import User from './user';
 
@@ -11,7 +10,6 @@ export default function HomeNav() {
       <div className="flex flex-1 justify-end p-2 align-middle">
         <div className="inline-flex items-center">
           <User />
-          <LanguageChanger />
         </div>
       </div>
     </div>

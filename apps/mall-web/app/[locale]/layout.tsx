@@ -1,9 +1,7 @@
 import { dir } from 'i18next';
 import type { ReactNode } from 'react';
 import { inter, lexend } from '~/app/[locale]/fonts';
-import HomeNav from '~/components/home-nav';
 import i18nConfig from '~/i18nConfig';
-import { AppProviders } from '~/providers/app-providers';
 import initTranslations from '../i18n';
 import './globals.css';
 
@@ -36,14 +34,7 @@ const RootLayout = async function ({ children, params }: LayoutProps) {
       className={`h-full scroll-smooth ${inter.variable} ${inter.className} ${lexend.className}`}
     >
       <body className="flex h-full flex-col">
-        <AppProviders
-          namespaces={i18nNamespaces}
-          locale={locale}
-          resources={resources}
-        >
-          <HomeNav />
-          <main className="mx-auto w-full py-24">{children}</main>
-        </AppProviders>
+        <main className="mx-auto w-full py-24">{children}</main>
       </body>
     </html>
   );

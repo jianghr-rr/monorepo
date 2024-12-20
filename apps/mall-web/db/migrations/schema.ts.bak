@@ -212,12 +212,12 @@ export const mmallUser = mysqlTable(
     question: varchar('question', { length: 100 }),
     answer: varchar('answer', { length: 100 }),
     role: int('role'),
-    createTime: timestamp('createTime', { mode: 'string' })
-      .default('CURRENT_TIMESTAMP')
-      .notNull(),
-    updateTime: timestamp('updateTime', { mode: 'string' })
-      .default('CURRENT_TIMESTAMP')
-      .notNull(),
+    createTime: timestamp('createTime', { mode: 'string' }).default(
+      'CURRENT_TIMESTAMP'
+    ),
+    updateTime: timestamp('updateTime', { mode: 'string' }).default(
+      'CURRENT_TIMESTAMP'
+    ),
   },
   (table) => {
     return {

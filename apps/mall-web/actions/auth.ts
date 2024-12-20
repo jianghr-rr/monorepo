@@ -1,8 +1,9 @@
-// import 'server-only';
+'use server';
 import CryptoJS from 'crypto-js';
+import { userAPI } from '~/apis/user.api';
 import { SignupFormSchema, type FormState } from '~/lib/definitions';
 
-export function signup(state: FormState, formData: FormData) {
+export async function signup(state: FormState, formData: FormData) {
   // Validate form fields
   const validatedFields = SignupFormSchema.safeParse({
     username: formData.get('username'),
@@ -13,7 +14,6 @@ export function signup(state: FormState, formData: FormData) {
     question: formData.get('question'),
     answer: formData.get('answer'),
   });
-  console.log('validatedFields', validatedFields);
 
   // If any form fields are invalid, return early
   if (!validatedFields.success) {
@@ -22,26 +22,22 @@ export function signup(state: FormState, formData: FormData) {
     };
   }
 
-  // 2. Prepare data for insertion into database
+  console.log('validatedFields.data:::', validatedFields.data);
+
   const { username, email, password, phone, question, answer } =
     validatedFields.data;
-  console.log('validatedFields.data', validatedFields.data);
-  // e.g. Hash the user's password before storing it
-  // const hashedPassword = await bcrypt.hash(password, 10);
   const hashedPassword = CryptoJS.MD5(password + process.env.SALT).toString();
-  console.log('hashedPassword', hashedPassword);
-  // // 3. Insert the user into the database or call an Auth Library's API
+  console.log('hashedPassword:::', hashedPassword);
+  console.log('userAPI:::', userAPI);
   try {
-    // const data = await db.insert(mmallUser).values({
-    //   username,
-    //   email,
-    //   password: hashedPassword,
-    //   phone,
-    //   question,
-    //   answer,
-    //   role: 1,
-    // });
-    // console.log('data', data);
+    await userAPI.singup({
+      username,
+      email,
+      password: hashedPassword,
+      phone,
+      question,
+      answer,
+    });
   } catch (error) {
     return {
       message: 'An error occurred while creating your account.',

@@ -1,23 +1,10 @@
 'use client';
-
-import { Button, Checkbox, Label, TextInput } from 'flowbite-react';
-import { useActionState, useEffect } from 'react';
+import { Button, Label, TextInput } from 'flowbite-react';
+import { useActionState } from 'react';
 import { signup } from '~/actions/auth';
-import { userAPI } from '~/services/user.api';
 
 function SignupForm() {
   const [state, action, pending] = useActionState(signup, undefined);
-
-  useEffect(() => {
-    userAPI
-      .singup()
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
 
   return (
     <form action={action}>

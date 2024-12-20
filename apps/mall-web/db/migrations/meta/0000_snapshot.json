@@ -85,7 +85,7 @@
         "id": {
           "autoincrement": true,
           "name": "id",
-          "type": "bigint(20) unsigned",
+          "type": "bigint(20)",
           "primaryKey": false,
           "notNull": true
         },
@@ -167,7 +167,7 @@
         "id": {
           "autoincrement": true,
           "name": "id",
-          "type": "bigint(20) unsigned",
+          "type": "bigint(20)",
           "primaryKey": false,
           "notNull": true
         },
@@ -397,7 +397,7 @@
         "id": {
           "autoincrement": true,
           "name": "id",
-          "type": "bigint(20) unsigned",
+          "type": "bigint(20)",
           "primaryKey": false,
           "notNull": true
         },
@@ -485,7 +485,7 @@
         "id": {
           "autoincrement": true,
           "name": "id",
-          "type": "bigint(20) unsigned",
+          "type": "bigint(20)",
           "primaryKey": false,
           "notNull": true
         },
@@ -602,7 +602,7 @@
         "id": {
           "autoincrement": true,
           "name": "id",
-          "type": "bigint(20) unsigned",
+          "type": "bigint(20)",
           "primaryKey": false,
           "notNull": true
         },
@@ -718,7 +718,7 @@
         "id": {
           "autoincrement": true,
           "name": "id",
-          "type": "bigint(20) unsigned",
+          "type": "bigint(20)",
           "primaryKey": false,
           "notNull": true
         },

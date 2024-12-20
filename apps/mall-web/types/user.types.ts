@@ -4,13 +4,14 @@ export interface ILogin {
   password: string;
 }
 
-export interface IRegister {
+export interface ISingUp {
   username: string;
   password: string;
   email: string;
   phone: string;
   question: string;
   answer: string;
+  role?: number;
 }
 
 export interface IUserInfo {
