@@ -12,15 +12,17 @@ export interface ISingUp {
   question: string;
   answer: string;
   role?: number;
+  confirmPassword?: string;
 }
 
 export interface IUserInfo {
+  id: number;
   username: string;
-  email: string;
-  phone: string;
-  question: string;
-  answer: string;
-  role: number;
+  email: string | null;
+  phone: string | null;
+  question: string | null;
+  answer: string | null;
+  role: number | null;
 }
 
 export interface IUpdateUserInfo {

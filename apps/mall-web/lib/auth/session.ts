@@ -1,4 +1,4 @@
-'use server';
+import 'server-only';
 import { eq } from 'drizzle-orm';
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
@@ -38,7 +38,6 @@ export async function createSession(userId: string): Promise<boolean> {
   try {
     await db.insert(sessions).values({ userId, expiresAt });
     const sessionToken = await encrypt({ userId, expiresAt });
-
     const cookieStore = await cookies();
     cookieStore.set('Authentication', sessionToken, {
       httpOnly: true,

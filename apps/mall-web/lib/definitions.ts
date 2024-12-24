@@ -26,7 +26,7 @@ export const SignupFormSchema = z
     path: ['confirmPassword'], // 错误消息指向 `confirmPassword` 字段
   });
 
-export type FormState =
+export type FormState<T = undefined> =
   | {
       errors?: {
         username?: string[];
@@ -37,7 +37,8 @@ export type FormState =
         question?: string[];
         answer?: string[];
       };
-      message?: string;
+      message?: string; // 异常返回的消息;
+      formData?: T;
     }
   | undefined;
 

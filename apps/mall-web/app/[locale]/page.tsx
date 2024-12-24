@@ -1,5 +1,5 @@
-import { SignupForm } from '~components/signup-form';
+import { Alert } from 'flowbite-react';
 
 export default function Home() {
-  return <SignupForm />;
+  return <Alert color="info">Mall!</Alert>;
 }

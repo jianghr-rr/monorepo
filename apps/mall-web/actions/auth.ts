@@ -1,4 +1,3 @@
-'use server';
 import CryptoJS from 'crypto-js';
 import { userAPI } from '~/apis/user.api';
 import { SignupFormSchema, type FormState } from '~/lib/definitions';
@@ -30,7 +29,7 @@ export async function signup(state: FormState, formData: FormData) {
   console.log('hashedPassword:::', hashedPassword);
   console.log('userAPI:::', userAPI);
   try {
-    await userAPI.singup({
+    await userAPI.signup({
       username,
       email,
       password: hashedPassword,

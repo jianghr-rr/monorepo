@@ -1,27 +1,42 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { cookies } from 'next/headers';
 import { type NextRequest, NextResponse } from 'next/server';
 import { i18nRouter } from 'next-i18n-router';
+import { decrypt } from '~/lib/auth/session';
 import i18nConfig from './i18nConfig';
 
-export function middleware(request: NextRequest) {
+// 1. Specify protected and public routes
+const protectedRoutes = ['/dashboard'];
+// const publicRoutes = ['/'];
+
+export async function middleware(request: NextRequest) {
   const response = i18nRouter(request as any, i18nConfig);
   // 获取当前路径
   const { pathname } = request.nextUrl;
+  const isProtectedRoute = protectedRoutes.includes(pathname);
+  // const isPublicRoute = publicRoutes.includes(pathname);
 
-  // 检查是否访问受保护路由
-  if (pathname.startsWith('/user-info')) {
-    const isAuthenticated = request.cookies.get('authToken'); // 替换为实际的认证逻辑
-    console.log('isAuthenticated', isAuthenticated);
-    console.log('isAuthenticated2', isAuthenticated);
-    if (!isAuthenticated) {
-      // 未认证，重定向到登录页面
-      return NextResponse.redirect(new URL('http://localhost:4001/'));
-    }
+  // 3. Decrypt the session from the cookie
+  const cookie = (await cookies()).get('session')?.value;
+  const session = await decrypt(cookie);
+
+  if (isProtectedRoute && !session?.userId) {
+    return NextResponse.redirect(new URL('/', request.nextUrl));
   }
+
+  // // 5. Redirect to /dashboard if the user is authenticated
+  // if (
+  //   isPublicRoute &&
+  //   session?.userId &&
+  //   !req.nextUrl.pathname.startsWith('/dashboard')
+  // ) {
+  //   return NextResponse.redirect(new URL('/dashboard', req.nextUrl));
+  // }
 
   // 返回处理后的响应
   return response;
+  // return NextResponse.next();
 }
 
 // only applies this middleware to files in the app directory

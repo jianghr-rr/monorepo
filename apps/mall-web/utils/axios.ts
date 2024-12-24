@@ -7,7 +7,7 @@ import axios, {
 import type { CustomAxiosResponse } from '~types/request.types';
 
 export const instanceCRUD = axios.create({
-  baseURL: 'http://localhost:4002/api/',
+  baseURL: '/api/',
   withCredentials: true,
 });
 
