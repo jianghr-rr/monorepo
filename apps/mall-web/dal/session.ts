@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { cache } from 'react';
 import { decrypt } from '~/lib/auth/session';
 
+// 验证session
 export const verifySession = cache(async () => {
   const cookie = (await cookies()).get('Authentication')?.value;
   const session = await decrypt(cookie);

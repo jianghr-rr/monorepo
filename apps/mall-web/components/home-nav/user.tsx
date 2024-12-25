@@ -1,35 +1,56 @@
 'use client';
 import { Dropdown, Modal } from 'flowbite-react';
 import { User } from 'lucide-react';
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LoginForm } from '~components/login/form';
 import { SignupForm } from '~components/signup/form';
-import { UserInfo } from '~components/user-info';
 import { useUserStore, type UserState, type UserActions } from '~store/user';
 
-export default function UserComponent() {
+const UserComponent = ({ locale }: { locale: string }) => {
+  const { t } = useTranslation();
   const userStore = useUserStore((state: UserState & UserActions) => state);
   const [openSignupModal, setOpenSignupModal] = useState(false);
   const [openLoginModal, setOpenLoginModal] = useState(false);
-  const { user, reset } = userStore;
+  // const [openToast, setOpenToast] = useState(false);
+  const { user, reset, updateUser } = userStore;
 
   const onHandlerLogout = useCallback(async () => {
     if (!user?.id) return;
     try {
-      const { logout } = await import('~/app/actions/user');
-      const data = await logout(user.id);
+      const { logout } = await import('~/actions/user');
+      const data = await logout(user.id, locale);
       if (data) {
         reset();
       }
     } catch (error) {
       console.error('Error fetching user info:', error);
     }
-  }, [user?.id]);
+  }, [user?.id, locale]);
+
+  const fetchUserInfo = async () => {
+    try {
+      const { getUserInfo } = await import('~/actions/user');
+      const { data } = await getUserInfo(locale);
+      // if (code === 10) {
+      //   setOpenToast(true);
+      // }
+      if (data) {
+        updateUser(data);
+      }
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserInfo().catch((error) => {
+      console.error('Error fetching user info in useEffect:', error);
+    });
+  }, []);
 
   return (
     <>
-      <UserInfo />
-
       {user ? (
         <Dropdown
           label={
@@ -41,37 +62,56 @@ export default function UserComponent() {
           dismissOnClick={false}
         >
           <Dropdown.Item onClick={() => onHandlerLogout()}>
-            Logout
+            {t('logout')}
           </Dropdown.Item>
         </Dropdown>
       ) : (
         <Dropdown label={<User />} dismissOnClick={false}>
           <Dropdown.Item onClick={() => setOpenSignupModal(true)}>
-            Signup
+            {t('signUp')}
           </Dropdown.Item>
           <Dropdown.Item onClick={() => setOpenLoginModal(true)}>
-            Login
+            {t('login')}
           </Dropdown.Item>
         </Dropdown>
       )}
 
       <Modal show={openSignupModal} onClose={() => setOpenSignupModal(false)}>
-        <Modal.Header>Sign Up</Modal.Header>
+        <Modal.Header>{t('signUp')}</Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
-            <SignupForm />
+            <SignupForm
+              callBack={() => setOpenSignupModal(false)}
+              locale={locale}
+            />
           </div>
         </Modal.Body>
       </Modal>
 
       <Modal show={openLoginModal} onClose={() => setOpenLoginModal(false)}>
-        <Modal.Header>Login</Modal.Header>
+        <Modal.Header>{t('login')}</Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
-            <LoginForm callBack={() => setOpenLoginModal(false)} />
+            <LoginForm
+              callBack={() => setOpenLoginModal(false)}
+              locale={locale}
+            />
           </div>
         </Modal.Body>
       </Modal>
+
+      {/* {openToast && (
+        <Toast className="fixed bottom-5 right-5 z-10">
+          <div className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-orange-100 text-orange-500 dark:bg-orange-700 dark:text-orange-200">
+            <ShieldAlert />
+          </div>
+          <div className="ml-3 text-sm font-normal">请登录</div>
+          <Toast.Toggle onClick={() => setOpenToast(false)} />
+        </Toast>
+      )} */}
     </>
   );
-}
+};
+
+export default UserComponent;
+export { UserComponent };

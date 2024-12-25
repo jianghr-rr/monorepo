@@ -1,21 +1,33 @@
 'use client';
 import { Button, Label, TextInput, Toast } from 'flowbite-react';
 import { ShieldAlert } from 'lucide-react';
-import { useActionState } from 'react';
+import { useActionState, type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { signupAdapter } from './action';
 
-function SignupForm() {
+const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
+  callBack,
+  locale,
+}) => {
+  const { t } = useTranslation();
   const [state, action, pending] = useActionState(signupAdapter, undefined);
 
   return (
     <>
-      <form action={action}>
+      <form
+        action={(formData) =>
+          action({
+            formData,
+            locale, // 将 locale 传递到 action
+          })
+        }
+      >
         <div className="mb-2 block">
-          <Label htmlFor="username" value="Username" />
+          <Label htmlFor="username" value={t('username')} />
           <TextInput
             id="username"
             name="username"
-            placeholder="username"
+            placeholder={`${t('input')} ${t('username')}`}
             defaultValue={(state?.formData?.get('username') as string) || ''}
             color={state?.errors?.username ? 'failure' : ''}
           />
@@ -31,18 +43,18 @@ function SignupForm() {
         )}
 
         <div className="mb-2 block">
-          <Label htmlFor="password" value="password" />
+          <Label htmlFor="password" value={t('password')} />
           <TextInput
             id="password"
             name="password"
-            placeholder="password"
+            placeholder={`${t('input')} ${t('password')}`}
             defaultValue={(state?.formData?.get('password') as string) || ''}
             color={state?.errors?.password ? 'failure' : ''}
           />
         </div>
         {state?.errors?.password && (
           <div>
-            <p>Password must:</p>
+            <p>{t('passwordMust')}</p>
             <ul>
               {state.errors.password.map((error) => (
                 <li key={error}>{error}</li>
@@ -52,11 +64,11 @@ function SignupForm() {
         )}
 
         <div className="mb-2 block">
-          <Label htmlFor="confirmPassword" value="confirmPassword" />
+          <Label htmlFor="confirmPassword" value={t('confirmPassword')} />
           <TextInput
             id="confirmPassword"
             name="confirmPassword"
-            placeholder="confirmPassword"
+            placeholder={`${t('input')} ${t('confirmPassword')}`}
             defaultValue={
               (state?.formData?.get('confirmPassword') as string) || ''
             }
@@ -72,11 +84,11 @@ function SignupForm() {
         )}
 
         <div className="mb-2 block">
-          <Label htmlFor="email" value="email" />
+          <Label htmlFor="email" value={t('email')} />
           <TextInput
             id="email"
             name="email"
-            placeholder="email"
+            placeholder={`${t('input')} ${t('email')}`}
             defaultValue={(state?.formData?.get('email') as string) || ''}
             color={state?.errors?.email ? 'failure' : ''}
           />
@@ -90,11 +102,11 @@ function SignupForm() {
         )}
 
         <div className="mb-2 block">
-          <Label htmlFor="phone" value="phone" />
+          <Label htmlFor="phone" value={t('phone')} />
           <TextInput
             id="phone"
             name="phone"
-            placeholder="phone"
+            placeholder={`${t('input')} ${t('phone')}`}
             defaultValue={(state?.formData?.get('phone') as string) || ''}
             color={state?.errors?.phone ? 'failure' : ''}
           />
@@ -108,11 +120,11 @@ function SignupForm() {
         )}
 
         <div className="mb-2 block">
-          <Label htmlFor="question" value="question" />
+          <Label htmlFor="question" value={t('question')} />
           <TextInput
             id="question"
             name="question"
-            placeholder="question"
+            placeholder={`${t('input')} ${t('question')}`}
             defaultValue={(state?.formData?.get('question') as string) || ''}
             color={state?.errors?.question ? 'failure' : ''}
           />
@@ -126,11 +138,11 @@ function SignupForm() {
         )}
 
         <div className="mb-2 block">
-          <Label htmlFor="answer" value="answer" />
+          <Label htmlFor="answer" value={t('answer')} />
           <TextInput
             id="answer"
             name="answer"
-            placeholder="answer"
+            placeholder={`${t('input')} ${t('answer')}`}
             defaultValue={(state?.formData?.get('answer') as string) || ''}
             color={state?.errors?.answer ? 'failure' : ''}
           />
@@ -144,7 +156,7 @@ function SignupForm() {
         )}
 
         <Button disabled={pending} type="submit">
-          Sign Up
+          {t('signup')}
         </Button>
       </form>
 
@@ -159,7 +171,7 @@ function SignupForm() {
       )}
     </>
   );
-}
+};
 
 export default SignupForm;
 export { SignupForm };

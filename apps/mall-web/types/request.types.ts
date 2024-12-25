@@ -21,3 +21,4 @@ interface CustomAxiosResponse<T> {
 }
 
 export type { CustomAxiosResponse };
+export type { ResponseCode };

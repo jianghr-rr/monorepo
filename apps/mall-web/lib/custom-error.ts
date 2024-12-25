@@ -1,9 +1,15 @@
-class CustomError extends Error {
-  statusCode: number;
+import type { ResponseCode } from '~/types/request.types';
 
-  constructor(message: string, statusCode = 400) {
-    super(message);
-    this.statusCode = statusCode;
+class CustomError {
+  msg: string;
+  code: (typeof ResponseCode)[keyof typeof ResponseCode];
+
+  constructor(
+    msg: string,
+    statusCode: (typeof ResponseCode)[keyof typeof ResponseCode] = 1001 as (typeof ResponseCode)[keyof typeof ResponseCode]
+  ) {
+    this.msg = msg;
+    this.code = statusCode;
   }
 }
 

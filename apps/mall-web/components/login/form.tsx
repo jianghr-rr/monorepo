@@ -2,13 +2,18 @@
 import { Button, Label, TextInput, Toast } from 'flowbite-react';
 import { ShieldAlert } from 'lucide-react';
 import { useActionState, useEffect, type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useUserStore, type UserState, type UserActions } from '~store/user';
-import { signupAdapter } from './action';
+import { loginAdapter } from './action';
 
-const LoginForm: FC<{ callBack: () => void }> = ({ callBack }) => {
+const LoginForm: FC<{ callBack: () => void; locale: string }> = ({
+  callBack,
+  locale,
+}) => {
   const userStore = useUserStore((state: UserState & UserActions) => state);
-  const [state, action, pending] = useActionState(signupAdapter, undefined);
+  const [state, action, pending] = useActionState(loginAdapter, undefined);
   const { updateUser } = userStore;
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (state?.data) {
@@ -19,13 +24,20 @@ const LoginForm: FC<{ callBack: () => void }> = ({ callBack }) => {
 
   return (
     <>
-      <form action={action}>
+      <form
+        action={(formData) =>
+          action({
+            formData,
+            locale, // 将 locale 传递到 action
+          })
+        }
+      >
         <div className="mb-2 block">
-          <Label htmlFor="username" value="Username" />
+          <Label htmlFor="username" value={t('username')} />
           <TextInput
             id="username"
             name="username"
-            placeholder="username"
+            placeholder={`${t('input')} ${t('username')}`}
             defaultValue={(state?.formData?.get('username') as string) || ''}
             color={state?.errors?.username ? 'failure' : ''}
           />
@@ -41,38 +53,39 @@ const LoginForm: FC<{ callBack: () => void }> = ({ callBack }) => {
         )}
 
         <div className="mb-2 block">
-          <Label htmlFor="password" value="password" />
+          <Label htmlFor="password" value={t('password')} />
           <TextInput
             id="password"
             name="password"
-            placeholder="password"
+            placeholder={`${t('input')} ${t('password')}`}
             defaultValue={(state?.formData?.get('password') as string) || ''}
             color={state?.errors?.password ? 'failure' : ''}
           />
         </div>
         {state?.errors?.password && (
           <div>
-            <p>Password must:</p>
             <ul>
               {state.errors.password.map((error) => (
-                <li key={error}>{error}</li>
+                <li className="text-sm text-red-500" key={error}>
+                  {error}
+                </li>
               ))}
             </ul>
           </div>
         )}
 
         <Button disabled={pending} type="submit">
-          Login
+          {t('login')}
         </Button>
       </form>
 
-      {state?.message && (
+      {state?.msg && (
         <Toast className="fixed bottom-5 right-5 z-10">
           <div className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-orange-100 text-orange-500 dark:bg-orange-700 dark:text-orange-200">
             <ShieldAlert />
           </div>
-          <div className="ml-3 text-sm font-normal">{state?.message}</div>
-          <Toast.Toggle onClick={() => (state.message = '')} />
+          <div className="ml-3 text-sm font-normal">{state?.msg}</div>
+          <Toast.Toggle onClick={() => (state.msg = '')} />
         </Toast>
       )}
     </>

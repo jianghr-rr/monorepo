@@ -36,7 +36,7 @@ export default function LanguageChanger() {
       //   currentPathname.replace(`/${currentLocale}`, `/${newLocale}`)
       // );
     }
-
+    i18n.changeLanguage(newLocale).catch(console.error);
     router.refresh();
   };
 

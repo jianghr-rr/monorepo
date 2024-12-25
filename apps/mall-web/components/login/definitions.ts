@@ -1,20 +1,25 @@
+import type { TFunction } from 'i18next';
 import { z } from 'zod';
 
-export const LoginFormSchema = z.object({
-  username: z
-    .string()
-    .min(2, { message: 'Username must be at least 2 characters long.' })
-    .trim(),
-  password: z
-    .string()
-    .min(3, { message: 'Be at least 3 characters long' })
-    // .regex(/[a-z]/i, { message: 'Contain at least one letter.' })
-    // .regex(/\d/, { message: 'Contain at least one number.' })
-    // .regex(/[^a-z0-9]/i, {
-    //   message: 'Contain at least one special character.',
-    // })
-    .trim(),
-});
+export const createLoginFormSchema = (t: TFunction) => {
+  return z.object({
+    username: z
+      .string()
+      .min(2, {
+        message: t('usernameZError'),
+      })
+      .trim(),
+    password: z
+      .string()
+      .min(3, { message: t('passwordZError1') })
+      // .regex(/[a-z]/i, { message: 'Contain at least one letter.' })
+      // .regex(/\d/, { message: 'Contain at least one number.' })
+      // .regex(/[^a-z0-9]/i, {
+      //   message: 'Contain at least one special character.',
+      // })
+      .trim(),
+  });
+};
 
 export type FormState<T = undefined, D = undefined> =
   | {
@@ -22,7 +27,7 @@ export type FormState<T = undefined, D = undefined> =
         username?: string[];
         password?: string[];
       };
-      message?: string; // 异常返回的消息;
+      msg?: string; // 异常返回的消息;
       formData?: T;
       data?: D;
     }

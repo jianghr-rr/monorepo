@@ -8,14 +8,21 @@ import { cookies } from 'next/headers';
 import { db } from '~/db';
 import { mmallUser, sessions } from '~/db/migrations/schema';
 import { encrypt } from '~/lib/auth/session';
+import { initServerTranslations } from '~/lib/i18n';
 import type { IUserInfo } from '~/types/user.types';
-import { LoginFormSchema, type FormState } from './definitions';
+import { createLoginFormSchema, type FormState } from './definitions';
 
 const login = async (
   state: FormState<FormData, IUserInfo>,
-  formData: FormData
+  { formData, locale }: { formData: FormData; locale: string }
 ) => {
+  // const { t } = useTranslation();
   // Validate form fields
+  const i18n = await initServerTranslations(locale, ['common', 'auth']);
+  const t = i18n.t.bind(i18n); // 使用服务器端翻译实例
+
+  const LoginFormSchema = createLoginFormSchema(t);
+
   const validatedFields = LoginFormSchema.safeParse({
     username: formData.get('username'),
     password: formData.get('password'),
@@ -97,26 +104,24 @@ const login = async (
     }
   } catch (e) {
     return {
-      message:
-        (e as Error).message ??
-        'An error occurred while creating your account.',
+      msg: t('dbError'),
       formData: formData,
     };
   }
 };
 
-const signupAdapter = async (
+const loginAdapter = async (
   state: FormState<FormData, IUserInfo>,
-  payload: FormData
+  payload: { formData: FormData; locale: string }
 ): Promise<FormState<FormData, IUserInfo>> => {
   const result = await login(state, payload);
 
   // 确保返回值符合类型
   return {
     ...result,
-    message: result?.message ?? undefined, // message 必须是 string | undefined
+    msg: result?.msg ?? undefined, // message 必须是 string | undefined
   };
 };
 
-export { signupAdapter };
-export default signupAdapter;
+export { loginAdapter };
+export default loginAdapter;

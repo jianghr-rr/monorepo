@@ -28,7 +28,7 @@ export default async function initTranslations(
     fallbackLng: i18nConfig.defaultLocale,
     supportedLngs: i18nConfig.locales,
     defaultNS: namespaces[0],
-    fallbackNS: namespaces[0],
+    fallbackNS: namespaces,
     ns: namespaces,
     preload: resources ? [] : i18nConfig.locales,
   });
@@ -38,4 +38,31 @@ export default async function initTranslations(
     resources: i18nInstance.services.resourceStore.data,
     t: i18nInstance.t,
   };
+}
+
+export async function initServerTranslations(
+  locale: string,
+  namespaces: string[]
+) {
+  const i18nInstance = createInstance();
+
+  i18nInstance
+    .use(initReactI18next)
+    .use(
+      resourcesToBackend(
+        (language: string, namespace: string) =>
+          import(`~/locales/${language}/${namespace}.json`)
+      )
+    );
+
+  await i18nInstance.init({
+    lng: locale,
+    fallbackLng: i18nConfig.defaultLocale,
+    supportedLngs: i18nConfig.locales,
+    ns: namespaces,
+    defaultNS: namespaces[0],
+    fallbackNS: namespaces,
+  });
+
+  return i18nInstance;
 }

@@ -2,9 +2,9 @@ import 'server-only';
 import { eq } from 'drizzle-orm';
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
+import type { SessionPayload } from '~/components/signup/definitions';
 import { db } from '~/db';
 import { sessions } from '~/db/migrations/schema';
-import type { SessionPayload } from '~/lib/definitions';
 
 const secretKey = process.env.SESSION_SECRET;
 if (!secretKey) {

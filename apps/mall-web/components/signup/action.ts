@@ -8,10 +8,18 @@ import { cookies } from 'next/headers';
 import { db } from '~/db';
 import { mmallUser, sessions } from '~/db/migrations/schema';
 import { encrypt } from '~/lib/auth/session';
-import { SignupFormSchema, type FormState } from '~/lib/definitions';
+import { initServerTranslations } from '~/lib/i18n';
+import { createSignupFormSchema, type FormState } from './definitions';
 
-const signup = async (state: FormState<FormData>, formData: FormData) => {
+const signup = async (
+  state: FormState<FormData>,
+  { formData, locale }: { formData: FormData; locale: string }
+) => {
   // Validate form fields
+  const i18n = await initServerTranslations(locale, ['common', 'auth']);
+  const t = i18n.t.bind(i18n); // 使用服务器端翻译实例
+
+  const SignupFormSchema = createSignupFormSchema(t);
   const validatedFields = SignupFormSchema.safeParse({
     username: formData.get('username'),
     password: formData.get('password'),
@@ -45,10 +53,7 @@ const signup = async (state: FormState<FormData>, formData: FormData) => {
       answer,
       role: 1,
     };
-    // const session = await verifySession();
-    // if (!session.isAuth) {
-    //   throw new Error('heiheihei.');
-    // }
+
     // 校验是否重名
     const existingUser = await db
       .select()
@@ -58,7 +63,7 @@ const signup = async (state: FormState<FormData>, formData: FormData) => {
     if (existingUser.length > 0) {
       return {
         errors: {
-          username: ['用户名已存在'],
+          username: [t('existingUser')],
         },
         formData: formData,
       };
@@ -73,7 +78,7 @@ const signup = async (state: FormState<FormData>, formData: FormData) => {
     if (existingEmail.length > 0) {
       return {
         errors: {
-          email: ['邮箱已存在'],
+          email: [t('existingEmail')],
         },
         formData: formData,
       };
@@ -88,7 +93,7 @@ const signup = async (state: FormState<FormData>, formData: FormData) => {
     if (existingPhone.length > 0) {
       return {
         errors: {
-          phone: ['手机号已存在'],
+          email: [t('existingPhone')],
         },
         formData: formData,
       };
@@ -131,7 +136,7 @@ const signup = async (state: FormState<FormData>, formData: FormData) => {
 
 const signupAdapter = async (
   state: FormState<FormData>,
-  payload: FormData
+  payload: { formData: FormData; locale: string }
 ): Promise<FormState<FormData>> => {
   const result = await signup(state, payload);
 
