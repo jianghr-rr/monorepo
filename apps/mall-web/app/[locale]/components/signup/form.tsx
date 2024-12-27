@@ -57,7 +57,9 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
             <p>{t('passwordMust')}</p>
             <ul>
               {state.errors.password.map((error) => (
-                <li key={error}>{error}</li>
+                <li className="text-sm text-red-500" key={error}>
+                  {error}
+                </li>
               ))}
             </ul>
           </div>
@@ -78,7 +80,9 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
         {state?.errors?.confirmPassword && (
           <ul>
             {state.errors.confirmPassword.map((error) => (
-              <li key={error}>{error}</li>
+              <li className="text-sm text-red-500" key={error}>
+                {error}
+              </li>
             ))}
           </ul>
         )}
@@ -96,7 +100,9 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
         {state?.errors?.email && (
           <ul>
             {state.errors.email.map((error) => (
-              <li key={error}>{error}</li>
+              <li className="text-sm text-red-500" key={error}>
+                {error}
+              </li>
             ))}
           </ul>
         )}
@@ -114,7 +120,9 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
         {state?.errors?.phone && (
           <ul>
             {state.errors.phone.map((error) => (
-              <li key={error}>{error}</li>
+              <li className="text-sm text-red-500" key={error}>
+                {error}
+              </li>
             ))}
           </ul>
         )}
@@ -132,7 +140,9 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
         {state?.errors?.question && (
           <ul>
             {state.errors.question.map((error) => (
-              <li key={error}>{error}</li>
+              <li className="text-sm text-red-500" key={error}>
+                {error}
+              </li>
             ))}
           </ul>
         )}
@@ -150,7 +160,9 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
         {state?.errors?.answer && (
           <ul>
             {state.errors.answer.map((error) => (
-              <li key={error}>{error}</li>
+              <li className="text-sm text-red-500" key={error}>
+                {error}
+              </li>
             ))}
           </ul>
         )}

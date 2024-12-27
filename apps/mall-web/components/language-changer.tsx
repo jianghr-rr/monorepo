@@ -1,7 +1,6 @@
 'use client';
-
+import { Avatar } from 'flowbite-react';
 import { useRouter, usePathname } from 'next/navigation';
-import type { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import i18nConfig from '~/i18nConfig';
 
@@ -11,8 +10,8 @@ export default function LanguageChanger() {
   const router = useRouter();
   const currentPathname = usePathname();
 
-  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const newLocale = e.target.value;
+  const handleChange = (value: string) => {
+    const newLocale = value;
 
     // set cookie for next-i18n-router
     const days = 30;
@@ -32,18 +31,17 @@ export default function LanguageChanger() {
           currentPathname.replace(`/${currentLocale}`, `/${newLocale}`)
         );
       }
-      // router.push(
-      //   currentPathname.replace(`/${currentLocale}`, `/${newLocale}`)
-      // );
     }
     i18n.changeLanguage(newLocale).catch(console.error);
     router.refresh();
   };
 
   return (
-    <select onChange={handleChange} value={currentLocale}>
-      <option value="zh">简体中文</option>
-      <option value="en">English</option>
-    </select>
+    <Avatar
+      className="cursor-pointer"
+      placeholderInitials={currentLocale}
+      onClick={() => handleChange(currentLocale === 'zh' ? 'en' : 'zh')}
+      rounded
+    />
   );
 }

@@ -100,7 +100,10 @@ const login = async (
         },
       };
     } else {
-      throw new Error('An error occurred while creating your account.');
+      return {
+        msg: t('loginError'),
+        formData: formData,
+      };
     }
   } catch (e) {
     return {

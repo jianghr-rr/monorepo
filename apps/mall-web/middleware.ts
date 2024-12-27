@@ -7,18 +7,23 @@ import { decrypt } from '~/lib/auth/session';
 import i18nConfig from './i18nConfig';
 
 // 1. Specify protected and public routes
-const protectedRoutes = ['/dashboard'];
+const protectedRoutes = ['/personal-center', '/personal-center/*'];
 // const publicRoutes = ['/'];
 
 export async function middleware(request: NextRequest) {
   const response = i18nRouter(request as any, i18nConfig);
   // 获取当前路径
   const { pathname } = request.nextUrl;
-  const isProtectedRoute = protectedRoutes.includes(pathname);
+
+  // 匹配受保护路由
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    pathname.startsWith(route.replace('/*', ''))
+  );
+
   // const isPublicRoute = publicRoutes.includes(pathname);
 
   // 3. Decrypt the session from the cookie
-  const cookie = (await cookies()).get('session')?.value;
+  const cookie = (await cookies()).get('Authentication')?.value;
   const session = await decrypt(cookie);
 
   if (isProtectedRoute && !session?.userId) {

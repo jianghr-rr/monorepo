@@ -1,4 +1,6 @@
 {
     "dbError": "date base connect error",
-    "input": "place input"
+    "input": "place input",
+    "ok": "ok",
+    "cancel": "cancel"
 }

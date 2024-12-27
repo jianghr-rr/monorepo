@@ -1,10 +1,11 @@
 'use client';
-import { Dropdown, Modal } from 'flowbite-react';
-import { User } from 'lucide-react';
+import { Dropdown, Modal, Avatar } from 'flowbite-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LoginForm } from '~components/login/form';
-import { SignupForm } from '~components/signup/form';
+import { LoginForm } from '~/app/[locale]/components/login/form';
+import { SignupForm } from '~/app/[locale]/components/signup/form';
 import { useUserStore, type UserState, type UserActions } from '~store/user';
 
 const UserComponent = ({ locale }: { locale: string }) => {
@@ -12,7 +13,7 @@ const UserComponent = ({ locale }: { locale: string }) => {
   const userStore = useUserStore((state: UserState & UserActions) => state);
   const [openSignupModal, setOpenSignupModal] = useState(false);
   const [openLoginModal, setOpenLoginModal] = useState(false);
-  // const [openToast, setOpenToast] = useState(false);
+  const router = useRouter();
   const { user, reset, updateUser } = userStore;
 
   const onHandlerLogout = useCallback(async () => {
@@ -23,6 +24,7 @@ const UserComponent = ({ locale }: { locale: string }) => {
       if (data) {
         reset();
       }
+      router.replace('/');
     } catch (error) {
       console.error('Error fetching user info:', error);
     }
@@ -53,20 +55,30 @@ const UserComponent = ({ locale }: { locale: string }) => {
     <>
       {user ? (
         <Dropdown
+          size="sm"
+          arrowIcon={false}
+          inline
           label={
-            <>
-              <User />
-              {user?.username}
-            </>
+            <Avatar
+              placeholderInitials={user.username.charAt(0).toUpperCase()}
+              rounded
+            />
           }
-          dismissOnClick={false}
         >
+          <Dropdown.Item as={Link} href="/personal-center">
+            {t('personalCenter')}
+          </Dropdown.Item>
           <Dropdown.Item onClick={() => onHandlerLogout()}>
             {t('logout')}
           </Dropdown.Item>
         </Dropdown>
       ) : (
-        <Dropdown label={<User />} dismissOnClick={false}>
+        <Dropdown
+          size="sm"
+          label={<Avatar alt={t('signUp')} rounded />}
+          arrowIcon={false}
+          inline
+        >
           <Dropdown.Item onClick={() => setOpenSignupModal(true)}>
             {t('signUp')}
           </Dropdown.Item>
