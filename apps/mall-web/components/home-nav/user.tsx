@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 'use client';
 import { Dropdown, Modal, Avatar, Toast } from 'flowbite-react';
 import { ShieldAlert } from 'lucide-react';
@@ -6,17 +8,20 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LoginForm } from '~components/login/form';
+import { ResetPasswordForm } from '~components/reset-password';
 import { SignupForm } from '~components/signup/form';
 import { useUserStore, type UserState, type UserActions } from '~store/user';
 
 const UserComponent = ({ locale }: { locale: string }) => {
   const { t } = useTranslation();
+  const router = useRouter();
   const userStore = useUserStore((state: UserState & UserActions) => state);
+  const { user, reset, updateUser } = userStore;
   const [openSignupModal, setOpenSignupModal] = useState(false);
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const [openSignUpToast, setOpenSignUpToast] = useState(false);
-  const router = useRouter();
-  const { user, reset, updateUser } = userStore;
+  const [isForgetPassword, setIsForgetPassword] = useState(false);
+  const [openResetPasswordToast, setOpenResetPasswordToast] = useState(false);
 
   const onHandlerLogout = useCallback(async () => {
     if (!user?.id) return;
@@ -111,16 +116,45 @@ const UserComponent = ({ locale }: { locale: string }) => {
         </Modal.Body>
       </Modal>
 
-      <Modal show={openLoginModal} onClose={() => setOpenLoginModal(false)}>
-        <Modal.Header>{t('login')}</Modal.Header>
+      <Modal
+        show={openLoginModal}
+        onClose={() => {
+          setOpenLoginModal(false);
+          setIsForgetPassword(false);
+        }}
+      >
+        <Modal.Header>
+          {isForgetPassword ? t('forgotPassword') : t('login')}
+        </Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
-            <LoginForm
-              callBack={() => setOpenLoginModal(false)}
-              locale={locale}
-            />
+            {isForgetPassword ? (
+              <ResetPasswordForm
+                onSuccessCallBack={() => {
+                  setOpenResetPasswordToast(true);
+                  setOpenLoginModal(false);
+                  setTimeout(() => {
+                    setOpenResetPasswordToast(false);
+                  }, 2000);
+                }}
+              />
+            ) : (
+              <LoginForm
+                callBack={() => setOpenLoginModal(false)}
+                locale={locale}
+              />
+            )}
           </div>
         </Modal.Body>
+        <Modal.Footer>
+          {isForgetPassword ? (
+            <span onClick={() => setIsForgetPassword(false)}>返回登录</span>
+          ) : (
+            <span onClick={() => setIsForgetPassword(true)}>
+              {t('forgotPassword')}?
+            </span>
+          )}
+        </Modal.Footer>
       </Modal>
 
       {openSignUpToast && (
@@ -130,6 +164,18 @@ const UserComponent = ({ locale }: { locale: string }) => {
           </div>
           <div className="ml-3 text-sm font-normal">{t('signUpSuccess')}</div>
           <Toast.Toggle onClick={() => setOpenSignUpToast(false)} />
+        </Toast>
+      )}
+
+      {openResetPasswordToast && (
+        <Toast className="fixed bottom-5 right-5 z-10">
+          <div className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-700 dark:text-green-200">
+            <ShieldAlert />
+          </div>
+          <div className="ml-3 text-sm font-normal">
+            {t('resetPasswordSuccess')}
+          </div>
+          <Toast.Toggle onClick={() => setOpenResetPasswordToast(false)} />
         </Toast>
       )}
     </>

@@ -53,6 +53,7 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
           <TextInput
             id="password"
             name="password"
+            type="password"
             placeholder={`${t('input')} ${t('password')}`}
             defaultValue={(state?.formData?.get('password') as string) || ''}
             color={state?.errors?.password ? 'failure' : 'gray'}
@@ -76,6 +77,7 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
           <TextInput
             id="confirmPassword"
             name="confirmPassword"
+            type="password"
             placeholder={`${t('input')} ${t('confirmPassword')}`}
             defaultValue={
               (state?.formData?.get('confirmPassword') as string) || ''

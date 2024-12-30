@@ -7,11 +7,9 @@ const MainNav = () => {
   const { t } = useTranslation();
 
   return (
-    <>
-      <Navbar.Link as={Link} href="/">
-        {t('home')}
-      </Navbar.Link>
-    </>
+    <Navbar.Link as={Link} href="/">
+      {t('home')}
+    </Navbar.Link>
   );
 };
 
