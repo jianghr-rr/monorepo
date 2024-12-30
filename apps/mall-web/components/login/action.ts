@@ -45,6 +45,7 @@ const login = async (
       username,
       password: hashedPassword,
     };
+    console.log('params::', params);
     // 查询数据, 匹配名字和密码
     const searchData = await db
       .select()

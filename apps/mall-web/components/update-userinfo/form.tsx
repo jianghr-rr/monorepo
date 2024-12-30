@@ -3,20 +3,24 @@ import { Button, Label, TextInput, Toast } from 'flowbite-react';
 import { ShieldAlert } from 'lucide-react';
 import { useActionState, useEffect, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { signupAdapter } from './action';
+import type { IUserInfo } from '~/types/user.types';
+import { updateUserInfoAdapter } from './action';
 
-const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
-  callBack,
-  locale,
-}) => {
+const UpdateUserInfoForm: FC<{
+  initFormData: IUserInfo;
+  onCallback: () => void;
+}> = ({ initFormData, onCallback }) => {
   const { t } = useTranslation();
-  const [state, action, pending] = useActionState(signupAdapter, undefined);
+  const [state, action, pending] = useActionState(
+    updateUserInfoAdapter,
+    undefined
+  );
 
   useEffect(() => {
     if (state?.code === 0) {
-      callBack?.();
+      onCallback?.();
     }
-  }, [state, callBack]);
+  }, [state, onCallback]);
 
   return (
     <>
@@ -24,17 +28,21 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
         action={(formData) =>
           action({
             formData,
-            locale, // 将 locale 传递到 action
           })
         }
       >
         <div className="mb-2 block">
           <Label htmlFor="username" value={t('username')} />
           <TextInput
+            disabled
             id="username"
             name="username"
             placeholder={`${t('input')} ${t('username')}`}
-            defaultValue={(state?.formData?.get('username') as string) || ''}
+            defaultValue={
+              (state?.formData?.get('username') as string) ??
+              initFormData.username ??
+              ''
+            }
             color={state?.errors?.username ? 'failure' : 'gray'}
           />
         </div>
@@ -49,57 +57,16 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
         )}
 
         <div className="mb-2 block">
-          <Label htmlFor="password" value={t('password')} />
-          <TextInput
-            id="password"
-            name="password"
-            placeholder={`${t('input')} ${t('password')}`}
-            defaultValue={(state?.formData?.get('password') as string) || ''}
-            color={state?.errors?.password ? 'failure' : 'gray'}
-          />
-        </div>
-        {state?.errors?.password && (
-          <div>
-            <p>{t('passwordMust')}</p>
-            <ul>
-              {state.errors.password.map((error) => (
-                <li className="text-sm text-red-500" key={error}>
-                  {error}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        <div className="mb-2 block">
-          <Label htmlFor="confirmPassword" value={t('confirmPassword')} />
-          <TextInput
-            id="confirmPassword"
-            name="confirmPassword"
-            placeholder={`${t('input')} ${t('confirmPassword')}`}
-            defaultValue={
-              (state?.formData?.get('confirmPassword') as string) || ''
-            }
-            color={state?.errors?.confirmPassword ? 'failure' : 'gray'}
-          />
-        </div>
-        {state?.errors?.confirmPassword && (
-          <ul>
-            {state.errors.confirmPassword.map((error) => (
-              <li className="text-sm text-red-500" key={error}>
-                {error}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <div className="mb-2 block">
           <Label htmlFor="email" value={t('email')} />
           <TextInput
             id="email"
             name="email"
             placeholder={`${t('input')} ${t('email')}`}
-            defaultValue={(state?.formData?.get('email') as string) || ''}
+            defaultValue={
+              (state?.formData?.get('email') as string) ??
+              initFormData.email ??
+              ''
+            }
             color={state?.errors?.email ? 'failure' : 'gray'}
           />
         </div>
@@ -119,7 +86,11 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
             id="phone"
             name="phone"
             placeholder={`${t('input')} ${t('phone')}`}
-            defaultValue={(state?.formData?.get('phone') as string) || ''}
+            defaultValue={
+              (state?.formData?.get('phone') as string) ??
+              initFormData.phone ??
+              ''
+            }
             color={state?.errors?.phone ? 'failure' : 'gray'}
           />
         </div>
@@ -139,7 +110,11 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
             id="question"
             name="question"
             placeholder={`${t('input')} ${t('question')}`}
-            defaultValue={(state?.formData?.get('question') as string) || ''}
+            defaultValue={
+              (state?.formData?.get('question') as string) ??
+              initFormData.question ??
+              ''
+            }
             color={state?.errors?.question ? 'failure' : 'gray'}
           />
         </div>
@@ -159,7 +134,11 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
             id="answer"
             name="answer"
             placeholder={`${t('input')} ${t('answer')}`}
-            defaultValue={(state?.formData?.get('answer') as string) || ''}
+            defaultValue={
+              (state?.formData?.get('answer') as string) ??
+              initFormData.answer ??
+              ''
+            }
             color={state?.errors?.answer ? 'failure' : 'gray'}
           />
         </div>
@@ -174,7 +153,7 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
         )}
 
         <Button disabled={pending} type="submit">
-          {t('signup')}
+          {t('update')}
         </Button>
       </form>
 
@@ -191,5 +170,5 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
   );
 };
 
-export default SignupForm;
-export { SignupForm };
+export default UpdateUserInfoForm;
+export { UpdateUserInfoForm };

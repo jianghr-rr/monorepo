@@ -1,5 +1,7 @@
-import 'server-only';
+'use server';
+import type { InferSelectModel } from 'drizzle-orm';
 import { getUserInfo } from '~/dal/get-user-info';
+import type { mmallUser } from '~/db/migrations/schema';
 import type { CustomAxiosResponse } from '~/types/request.types';
 import type { IUserInfo } from '~/types/user.types';
 
@@ -40,3 +42,25 @@ const getUserInfoDTO = async (
 
 export default getUserInfoDTO;
 export { getUserInfoDTO };
+
+/** ******** 上面的代码直接用的DAL层，这里区分，下面只是DTO层 ********** **/
+
+const userInfoDTO = (
+  data: InferSelectModel<typeof mmallUser> | undefined
+): Promise<IUserInfo | undefined> => {
+  if (!data) {
+    return Promise.resolve(undefined);
+  }
+  const { id, username, email, phone, question, answer, role } = data;
+  return Promise.resolve({
+    id,
+    username,
+    email,
+    phone,
+    question,
+    answer,
+    role,
+  });
+};
+
+export { userInfoDTO };

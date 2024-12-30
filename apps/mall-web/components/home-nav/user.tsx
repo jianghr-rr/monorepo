@@ -1,5 +1,6 @@
 'use client';
-import { Dropdown, Modal, Avatar } from 'flowbite-react';
+import { Dropdown, Modal, Avatar, Toast } from 'flowbite-react';
+import { ShieldAlert } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
@@ -13,6 +14,7 @@ const UserComponent = ({ locale }: { locale: string }) => {
   const userStore = useUserStore((state: UserState & UserActions) => state);
   const [openSignupModal, setOpenSignupModal] = useState(false);
   const [openLoginModal, setOpenLoginModal] = useState(false);
+  const [openSignUpToast, setOpenSignUpToast] = useState(false);
   const router = useRouter();
   const { user, reset, updateUser } = userStore;
 
@@ -93,7 +95,16 @@ const UserComponent = ({ locale }: { locale: string }) => {
         <Modal.Body>
           <div className="space-y-6">
             <SignupForm
-              callBack={() => setOpenSignupModal(false)}
+              callBack={() => {
+                setOpenSignupModal(false);
+                setOpenSignUpToast(true);
+                fetchUserInfo().catch((error) => {
+                  console.error(
+                    'Error fetching user info in useEffect:',
+                    error
+                  );
+                });
+              }}
               locale={locale}
             />
           </div>
@@ -112,15 +123,15 @@ const UserComponent = ({ locale }: { locale: string }) => {
         </Modal.Body>
       </Modal>
 
-      {/* {openToast && (
+      {openSignUpToast && (
         <Toast className="fixed bottom-5 right-5 z-10">
-          <div className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-orange-100 text-orange-500 dark:bg-orange-700 dark:text-orange-200">
+          <div className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-700 dark:text-green-200">
             <ShieldAlert />
           </div>
-          <div className="ml-3 text-sm font-normal">请登录</div>
-          <Toast.Toggle onClick={() => setOpenToast(false)} />
+          <div className="ml-3 text-sm font-normal">{t('signUpSuccess')}</div>
+          <Toast.Toggle onClick={() => setOpenSignUpToast(false)} />
         </Toast>
-      )} */}
+      )}
     </>
   );
 };

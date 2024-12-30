@@ -42,6 +42,7 @@ export type FormState<T = undefined> =
         question?: string[];
         answer?: string[];
       };
+      code: number;
       message?: string; // 异常返回的消息;
       formData?: T;
     }

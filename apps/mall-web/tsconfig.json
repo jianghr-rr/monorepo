@@ -71,6 +71,12 @@
       "~store/*": [
         "./store/*"
       ],
+      "~dal/*": [
+        "./dal/*"
+      ],
+      "~dto/*": [
+        "./dto/*"
+      ],
       "@bid-ng/common-i18n": [
         "../../../packages/common-i18n/src/index"
       ],

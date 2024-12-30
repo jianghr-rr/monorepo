@@ -33,6 +33,7 @@ const signup = async (
   // If any form fields are invalid, return early
   if (!validatedFields.success) {
     return {
+      code: 1,
       errors: validatedFields.error.flatten().fieldErrors,
       formData: formData,
     };
@@ -62,6 +63,7 @@ const signup = async (
       .execute();
     if (existingUser.length > 0) {
       return {
+        code: 1,
         errors: {
           username: [t('existingUser')],
         },
@@ -77,6 +79,7 @@ const signup = async (
       .execute();
     if (existingEmail.length > 0) {
       return {
+        code: 1,
         errors: {
           email: [t('existingEmail')],
         },
@@ -92,6 +95,7 @@ const signup = async (
       .execute();
     if (existingPhone.length > 0) {
       return {
+        code: 1,
         errors: {
           email: [t('existingPhone')],
         },
@@ -121,11 +125,18 @@ const signup = async (
         expires: expiresAt,
         path: '/',
       });
+
+      return {
+        code: 0,
+        message: t('signupSuccess'),
+        formData: formData,
+      };
     } else {
       throw new Error('An error occurred while creating your account.');
     }
   } catch (e) {
     return {
+      code: 1,
       message:
         (e as Error).message ??
         'An error occurred while creating your account.',

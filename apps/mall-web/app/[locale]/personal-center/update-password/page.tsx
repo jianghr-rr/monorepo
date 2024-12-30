@@ -1,6 +1,6 @@
 'use client';
 import { useTranslation } from 'react-i18next';
-import { UpdatePasswordForm } from '~/app/[locale]/components/update-password';
+import { UpdatePasswordForm } from '~components/update-password';
 
 const Page = () => {
   const { i18n, t } = useTranslation();
