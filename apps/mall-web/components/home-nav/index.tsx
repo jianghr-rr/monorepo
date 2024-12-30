@@ -1,12 +1,9 @@
 import {
-  Button,
   Navbar,
   NavbarBrand,
   NavbarCollapse,
-  NavbarLink,
   NavbarToggle,
 } from 'flowbite-react';
-import { useTranslation } from 'react-i18next';
 import { initServerTranslations } from '~/lib/i18n';
 import LanguageChanger from '../language-changer';
 import { ThemeChanger } from '../theme-changer';

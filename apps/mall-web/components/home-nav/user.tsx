@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LoginForm } from '~/app/[locale]/components/login/form';
-import { SignupForm } from '~/app/[locale]/components/signup/form';
+import { LoginForm } from '~components/login/form';
+import { SignupForm } from '~components/signup/form';
 import { useUserStore, type UserState, type UserActions } from '~store/user';
 
 const UserComponent = ({ locale }: { locale: string }) => {

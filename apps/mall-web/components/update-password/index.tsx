@@ -15,8 +15,6 @@ const UpdatePasswordForm: FC<{ callBack: () => void; locale: string }> = ({
     undefined
   );
 
-  console.log('state', state);
-
   return (
     <>
       <form
@@ -34,7 +32,7 @@ const UpdatePasswordForm: FC<{ callBack: () => void; locale: string }> = ({
             name="oldPassword"
             placeholder={`${t('input')} ${t('oldPassword')}`}
             defaultValue={(state?.formData?.get('oldPassword') as string) || ''}
-            color={state?.errors?.oldPassword ? 'failure' : ''}
+            color={state?.errors?.oldPassword ? 'failure' : 'gray'}
           />
         </div>
         {state?.errors?.oldPassword && (
@@ -56,7 +54,7 @@ const UpdatePasswordForm: FC<{ callBack: () => void; locale: string }> = ({
             name="newPassword"
             placeholder={`${t('input')} ${t('newPassword')}`}
             defaultValue={(state?.formData?.get('newPassword') as string) || ''}
-            color={state?.errors?.newPassword ? 'failure' : ''}
+            color={state?.errors?.newPassword ? 'failure' : 'gray'}
           />
         </div>
         {state?.errors?.newPassword && (
@@ -80,7 +78,7 @@ const UpdatePasswordForm: FC<{ callBack: () => void; locale: string }> = ({
             defaultValue={
               (state?.formData?.get('confirmPassword') as string) || ''
             }
-            color={state?.errors?.confirmPassword ? 'failure' : ''}
+            color={state?.errors?.confirmPassword ? 'failure' : 'gray'}
           />
         </div>
         {state?.errors?.confirmPassword && (

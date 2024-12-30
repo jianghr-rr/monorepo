@@ -39,7 +39,7 @@ const LoginForm: FC<{ callBack: () => void; locale: string }> = ({
             name="username"
             placeholder={`${t('input')} ${t('username')}`}
             defaultValue={(state?.formData?.get('username') as string) || ''}
-            color={state?.errors?.username ? 'failure' : ''}
+            color={state?.errors?.username ? 'failure' : 'gray'}
           />
         </div>
         {state?.errors?.username && (
@@ -57,9 +57,10 @@ const LoginForm: FC<{ callBack: () => void; locale: string }> = ({
           <TextInput
             id="password"
             name="password"
+            type="password"
             placeholder={`${t('input')} ${t('password')}`}
             defaultValue={(state?.formData?.get('password') as string) || ''}
-            color={state?.errors?.password ? 'failure' : ''}
+            color={state?.errors?.password ? 'failure' : 'gray'}
           />
         </div>
         {state?.errors?.password && (

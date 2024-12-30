@@ -29,7 +29,7 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
             name="username"
             placeholder={`${t('input')} ${t('username')}`}
             defaultValue={(state?.formData?.get('username') as string) || ''}
-            color={state?.errors?.username ? 'failure' : ''}
+            color={state?.errors?.username ? 'failure' : 'gray'}
           />
         </div>
         {state?.errors?.username && (
@@ -49,7 +49,7 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
             name="password"
             placeholder={`${t('input')} ${t('password')}`}
             defaultValue={(state?.formData?.get('password') as string) || ''}
-            color={state?.errors?.password ? 'failure' : ''}
+            color={state?.errors?.password ? 'failure' : 'gray'}
           />
         </div>
         {state?.errors?.password && (
@@ -74,7 +74,7 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
             defaultValue={
               (state?.formData?.get('confirmPassword') as string) || ''
             }
-            color={state?.errors?.confirmPassword ? 'failure' : ''}
+            color={state?.errors?.confirmPassword ? 'failure' : 'gray'}
           />
         </div>
         {state?.errors?.confirmPassword && (
@@ -94,7 +94,7 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
             name="email"
             placeholder={`${t('input')} ${t('email')}`}
             defaultValue={(state?.formData?.get('email') as string) || ''}
-            color={state?.errors?.email ? 'failure' : ''}
+            color={state?.errors?.email ? 'failure' : 'gray'}
           />
         </div>
         {state?.errors?.email && (
@@ -114,7 +114,7 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
             name="phone"
             placeholder={`${t('input')} ${t('phone')}`}
             defaultValue={(state?.formData?.get('phone') as string) || ''}
-            color={state?.errors?.phone ? 'failure' : ''}
+            color={state?.errors?.phone ? 'failure' : 'gray'}
           />
         </div>
         {state?.errors?.phone && (
@@ -134,7 +134,7 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
             name="question"
             placeholder={`${t('input')} ${t('question')}`}
             defaultValue={(state?.formData?.get('question') as string) || ''}
-            color={state?.errors?.question ? 'failure' : ''}
+            color={state?.errors?.question ? 'failure' : 'gray'}
           />
         </div>
         {state?.errors?.question && (
@@ -154,7 +154,7 @@ const SignupForm: FC<{ callBack: () => void; locale: string }> = ({
             name="answer"
             placeholder={`${t('input')} ${t('answer')}`}
             defaultValue={(state?.formData?.get('answer') as string) || ''}
-            color={state?.errors?.answer ? 'failure' : ''}
+            color={state?.errors?.answer ? 'failure' : 'gray'}
           />
         </div>
         {state?.errors?.answer && (
