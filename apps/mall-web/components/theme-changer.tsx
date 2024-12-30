@@ -3,17 +3,18 @@ import { Sun, Moon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 const ThemeChanger = () => {
-  const { setTheme, theme } = useTheme();
+  const { setTheme, theme, systemTheme } = useTheme();
+  const activeTheme = theme === 'system' ? systemTheme : theme;
 
   return (
     <>
-      {theme === 'light' && (
+      {activeTheme === 'light' && (
         <Sun
           onClick={() => setTheme('dark')}
           className="block cursor-pointer justify-center self-center"
         />
       )}
-      {theme === 'dark' && (
+      {activeTheme === 'dark' && (
         <Moon
           onClick={() => setTheme('light')}
           className="block cursor-pointer justify-center self-center"

@@ -49,7 +49,7 @@ const RootLayout = async function ({ children, params }: LayoutProps) {
           resources={resources}
         >
           <HomeNav locale={locale} />
-          <main className="mx-auto w-full">{children}</main>
+          <main className="mx-auto size-full">{children}</main>
         </AppProviders>
       </body>
     </html>
