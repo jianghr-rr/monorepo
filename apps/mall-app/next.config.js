@@ -37,10 +37,10 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        // destination: 'http://www.curlyhair.cn:8080/mmall/:path*', // 替换为后端 URL
-        destination: isProd
-          ? 'http://www.curlyhair.cn:8080/:path*'
-          : 'http://localhost:8080/:path*', // 替换为后端 URL
+        destination: 'http://www.curlyhair.cn:8080/mmall/:path*', // 替换为后端 URL
+        // destination: isProd
+        //   ? 'http://www.curlyhair.cn:8080/:path*'
+        //   : 'http://localhost:8080/:path*', // 替换为后端 URL
       },
     ];
   },

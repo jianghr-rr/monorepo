@@ -41,8 +41,8 @@ jobs:
               IMAGE_NAME="mall-web-docker"
               PORT=4001
             elif [ "${{ github.ref_name }}" = "mall-fullstack" ]; then
-              git checkout mall
-              git pull origin mall
+              git checkout mall-fullstack
+              git pull origin mall-fullstack
               DOCKERFILE="Dockerfile.mall.fullstack"
               IMAGE_NAME="mall-web-fullstack-docker"
               PORT=4002
