@@ -23,10 +23,10 @@ export const mmallCart = mysqlTable(
     quantity: int('quantity'),
     checked: int('checked'),
     createTime: timestamp('createTime', { mode: 'string' })
-      .default('CURRENT_TIMESTAMP')
+      .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updateTime: timestamp('updateTime', { mode: 'string' })
-      .default('CURRENT_TIMESTAMP')
+      .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
   (table) => {
@@ -48,10 +48,10 @@ export const mmallCategory = mysqlTable(
     status: tinyint('status').default(1),
     sortOrder: int('sortOrder'),
     createTime: timestamp('createTime', { mode: 'string' })
-      .default('CURRENT_TIMESTAMP')
+      .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updateTime: timestamp('updateTime', { mode: 'string' })
-      .default('CURRENT_TIMESTAMP')
+      .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
   (table) => {
@@ -128,10 +128,10 @@ export const mmallPayInfo = mysqlTable(
     platformNumber: varchar('platformNumber', { length: 200 }),
     platformStatus: varchar('platformStatus', { length: 20 }),
     createTime: timestamp('createTime', { mode: 'string' })
-      .default('CURRENT_TIMESTAMP')
+      .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updateTime: timestamp('updateTime', { mode: 'string' })
-      .default('CURRENT_TIMESTAMP')
+      .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
   (table) => {
@@ -157,10 +157,10 @@ export const mmallProduct = mysqlTable(
     stock: int('stock').notNull(),
     status: int('status').default(1),
     createTime: timestamp('createTime', { mode: 'string' })
-      .default('CURRENT_TIMESTAMP')
+      .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updateTime: timestamp('updateTime', { mode: 'string' })
-      .default('CURRENT_TIMESTAMP')
+      .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
   (table) => {
@@ -186,10 +186,10 @@ export const mmallShipping = mysqlTable(
     receiverAddress: varchar('receiverAddress', { length: 200 }),
     receiverZip: varchar('receiverZip', { length: 6 }),
     createTime: timestamp('createTime', { mode: 'string' })
-      .default('CURRENT_TIMESTAMP')
+      .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updateTime: timestamp('updateTime', { mode: 'string' })
-      .default('CURRENT_TIMESTAMP')
+      .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
   (table) => {
@@ -213,10 +213,10 @@ export const mmallUser = mysqlTable(
     answer: varchar('answer', { length: 100 }),
     role: int('role'),
     createTime: timestamp('createTime', { mode: 'string' })
-      .default('CURRENT_TIMESTAMP')
+      .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updateTime: timestamp('updateTime', { mode: 'string' })
-      .default('CURRENT_TIMESTAMP')
+      .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
   (table) => {

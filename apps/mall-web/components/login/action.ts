@@ -69,7 +69,7 @@ const login = async (
     if (searchData[0]) {
       const { id, username, email, phone, question, answer, role } =
         searchData[0];
-      const expiresAt = new Date(Date.now() + 1 * 1 * 60 * 60 * 1000);
+      const expiresAt = new Date(Date.now() + 24 * 1 * 60 * 60 * 1000);
 
       // 先查询是否存在该用户的session, 若存在则进行更新, 若不存在则进行插入
       const session = await db

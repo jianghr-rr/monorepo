@@ -8,7 +8,7 @@
     "migrations:generate": "DEBUG=drizzle-kit drizzle-kit  generate:mysql --config=drizzle.config.ts",
     "migrations:drop": "DEBUG=drizzle-kit drizzle-kit drop --config=drizzle.config.ts",
     "generate:types": "DEBUG=drizzle-kit drizzle-kit push:mysql --config=drizzle.config.ts",
-    "db:push": "DEBUG=drizzle-kit drizzle-kit generate:types --config=drizzle.config.ts",
+    "db:push": "DEBUG=drizzle-kit drizzle-kit push:mysql --config=drizzle.config.ts",
     "db:introspect": "drizzle-kit introspect:mysql --config=drizzle.config.ts",
     "insert:data": "ts-node-esm ./db/insert-data.js"
   },
