@@ -92,7 +92,7 @@ const login = async (
       const cookieStore = await cookies();
       cookieStore.set('Authentication', sessionToken, {
         httpOnly: true,
-        secure: true,
+        secure: false,
         expires: expiresAt,
         path: '/',
       });
