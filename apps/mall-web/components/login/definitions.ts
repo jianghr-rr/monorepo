@@ -27,6 +27,7 @@ export type FormState<T = undefined, D = undefined> =
         username?: string[];
         password?: string[];
       };
+      code?: number; // 异常返回的错误码;
       msg?: string; // 异常返回的消息;
       formData?: T;
       data?: D;

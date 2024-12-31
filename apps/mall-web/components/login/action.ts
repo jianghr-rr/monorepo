@@ -10,6 +10,7 @@ import { mmallUser, sessions } from '~/db/migrations/schema';
 import { encrypt } from '~/lib/auth/session';
 import { initServerTranslations } from '~/lib/i18n';
 import type { IUserInfo } from '~/types/user.types';
+import { ServerResponse } from '~utils/server-response';
 import { createLoginFormSchema, type FormState } from './definitions';
 
 const login = async (
@@ -18,8 +19,14 @@ const login = async (
 ) => {
   // const { t } = useTranslation();
   // Validate form fields
-  const i18n = await initServerTranslations(locale, ['common', 'auth']);
+  const i18n = await initServerTranslations(locale, [
+    'common',
+    'response',
+    'auth',
+  ]);
   const t = i18n.t.bind(i18n); // 使用服务器端翻译实例
+
+  ServerResponse.setT(t);
 
   const LoginFormSchema = createLoginFormSchema(t);
 
@@ -32,6 +39,8 @@ const login = async (
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
+      msg: undefined,
+      data: undefined,
       formData: formData,
     };
   }
@@ -45,7 +54,6 @@ const login = async (
       username,
       password: hashedPassword,
     };
-    console.log('params::', params);
     // 查询数据, 匹配名字和密码
     const searchData = await db
       .select()
@@ -89,26 +97,25 @@ const login = async (
         path: '/',
       });
 
-      return {
-        data: {
-          id,
-          username,
-          email,
-          phone,
-          question,
-          answer,
-          role,
-        },
-      };
+      return ServerResponse.createSuccess<IUserInfo>({
+        id,
+        username,
+        email,
+        phone,
+        question,
+        answer,
+        role,
+      });
     } else {
       return {
-        msg: t('loginError'),
+        ...ServerResponse.createError(t('loginError')),
+        data: undefined,
         formData: formData,
       };
     }
   } catch (e) {
     return {
-      msg: t('dbError'),
+      ...ServerResponse.createError(2001),
       formData: formData,
     };
   }
@@ -123,7 +130,7 @@ const loginAdapter = async (
   // 确保返回值符合类型
   return {
     ...result,
-    msg: result?.msg ?? undefined, // message 必须是 string | undefined
+    msg: result?.msg ?? '',
   };
 };
 

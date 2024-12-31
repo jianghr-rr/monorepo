@@ -25,7 +25,7 @@ export function generateStaticParams() {
   return i18nConfig.locales.map((locale) => ({ locale }));
 }
 
-const i18nNamespaces = ['common', 'home', 'auth'];
+const i18nNamespaces = ['common', 'response', 'home', 'auth'];
 
 const RootLayout = async function ({ children, params }: LayoutProps) {
   const { locale } = await Promise.resolve(params); // 处理异步 `params`
