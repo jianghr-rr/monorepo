@@ -5,6 +5,7 @@ on:
     branches:
       - poc
       - mall
+      - mall-fullstack
 
 jobs:
   Deploy:
@@ -39,6 +40,12 @@ jobs:
               DOCKERFILE="Dockerfile.mall"
               IMAGE_NAME="mall-web-docker"
               PORT=4001
+            elif [ "${{ github.ref_name }}" = "mall-fullstack" ]; then
+              git checkout mall
+              git pull origin mall
+              DOCKERFILE="Dockerfile.mall.fullstack"
+              IMAGE_NAME="mall-web-fullstack-docker"
+              PORT=4002
             else
               echo "Unknown branch. Exiting..."
               exit 1
