@@ -75,7 +75,7 @@ RUN adduser --system --uid 1001 nextjs
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 RUN mkdir logs
-RUN chown logs:logs logs
+RUN chown nextjs:nodejs logs
 
 USER nextjs
 
