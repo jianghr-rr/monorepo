@@ -6,10 +6,11 @@ import CryptoJS from 'crypto-js';
 import { eq, and } from 'drizzle-orm';
 import { cookies } from 'next/headers';
 import { db } from '~/db';
-import { mmallUser, sessions } from '~/db/migrations/schema';
+import { mmallUser } from '~/db/migrations/schema';
 import { encrypt } from '~/lib/auth/session';
 import { initServerTranslations } from '~/lib/i18n';
 import type { IUserInfo } from '~/types/user.types';
+import { logger } from '~utils/logger';
 import { ServerResponse } from '~utils/server-response';
 import { createLoginFormSchema, type FormState } from './definitions';
 
@@ -98,6 +99,7 @@ const login = async (
       };
     }
   } catch (e) {
+    logger.error('登录失败，数据库查询错误', e);
     return {
       ...ServerResponse.createError(2001),
       formData: formData,
