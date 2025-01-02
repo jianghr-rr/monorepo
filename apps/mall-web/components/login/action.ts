@@ -69,31 +69,15 @@ const login = async (
     if (searchData[0]) {
       const { id, username, email, phone, question, answer, role } =
         searchData[0];
-      const expiresAt = new Date(Date.now() + 24 * 1 * 60 * 60 * 1000);
 
-      // 先查询是否存在该用户的session, 若存在则进行更新, 若不存在则进行插入
-      const session = await db
-        .select()
-        .from(sessions)
-        .where(eq(sessions.userId, String(id)))
-        .execute();
-      if (session[0]) {
-        await db
-          .update(sessions)
-          .set({ expiresAt })
-          .where(eq(sessions.userId, String(id)))
-          .execute();
-      } else {
-        // 插入新的session记录
-        await db.insert(sessions).values({ userId: String(id), expiresAt });
-      }
+      const maxAge = 24 * 60 * 60; // Cookie 存活时间为24小时
 
-      const sessionToken = await encrypt({ userId: String(id), expiresAt });
+      const sessionToken = await encrypt({ userId: String(id), maxAge });
       const cookieStore = await cookies();
       cookieStore.set('Authentication', sessionToken, {
         httpOnly: true,
         secure: false,
-        expires: expiresAt,
+        maxAge: maxAge,
         path: '/',
       });
 

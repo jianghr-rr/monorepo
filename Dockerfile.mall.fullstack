@@ -74,6 +74,8 @@ RUN adduser --system --uid 1001 nextjs
 # Set the correct permission for prerender cache
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
+RUN mkdir logs
+RUN chown logs:logs logs
 
 USER nextjs
 

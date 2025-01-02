@@ -33,16 +33,16 @@ export async function decrypt(session: string | undefined = '') {
 }
 
 export async function createSession(userId: string): Promise<boolean> {
-  const expiresAt = new Date(Date.now() + 1 * 1 * 60 * 60 * 1000);
-
+  // const expiresAt = new Date(Date.now() + 1 * 1 * 60 * 60 * 1000);
+  const maxAge = 24 * 60 * 60; // Cookie 存活时间为24小时
   try {
-    await db.insert(sessions).values({ userId, expiresAt });
-    const sessionToken = await encrypt({ userId, expiresAt });
+    // await db.insert(sessions).values({ userId, maxAge });
+    const sessionToken = await encrypt({ userId, maxAge });
     const cookieStore = await cookies();
     cookieStore.set('Authentication', sessionToken, {
       httpOnly: true,
       secure: true,
-      expires: expiresAt,
+      maxAge: maxAge,
       path: '/',
     });
 

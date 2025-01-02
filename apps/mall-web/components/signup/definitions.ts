@@ -50,5 +50,5 @@ export type FormState<T = undefined> =
 
 export type SessionPayload = {
   userId: string;
-  expiresAt: Date;
+  maxAge: number;
 };

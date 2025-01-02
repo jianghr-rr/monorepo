@@ -13,6 +13,10 @@ export default function PatternsPageSideBar({
   const links = useMemo(
     () => [
       {
+        href: '/java-web/mysql',
+        label: t('mysql'),
+      },
+      {
         href: '/java-web/mybatis',
         label: t('mybatis'),
       },
