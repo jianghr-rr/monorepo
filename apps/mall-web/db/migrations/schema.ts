@@ -17,7 +17,7 @@ import {
 export const mmallCart = mysqlTable(
   'mmall_cart',
   {
-    id: int('id').autoincrement().notNull(),
+    id: int('id').autoincrement().primaryKey().notNull(),
     userId: int('userId').notNull(),
     productId: int('productId'),
     quantity: int('quantity'),
