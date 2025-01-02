@@ -2,7 +2,7 @@ import path from 'path';
 import { createLogger, format, transports } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
-const logDir = path.join(process.cwd(), 'logs');
+const logDir = '/app/logs';
 
 const logger = createLogger({
   level: 'info',
