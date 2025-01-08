@@ -50,7 +50,7 @@ do {
         - 保持简短，1 行，不超过 50 个字符
         - 遵循 https://www.conventionalcommits.org/zh-cn/v1.0.0/#specification 的规范
         - 不要混淆以 '-' 开头的删除行和以 '+' 开头的新增行
-        - 描述信息最后加上 "（由模型生成）"，其中“模型”指的是生成提交信息所使用的 LLM 模型的名称，例如 "deepseek-chat"
+        - 描述信息最后加上由什么模型生成，其中'什么模型'指的是生成提交信息所使用的 LLM 模型的名称，例如 'deepseek-chat'
         - 只返回提交信息，不要输出其他内容
         `
             },
@@ -83,7 +83,7 @@ do {
         - 保持简短，1 行，不超过 50 个字符
         - 遵循 https://www.conventionalcommits.org/zh-cn/v1.0.0/#specification 的规范
         - 不要混淆以 '-' 开头的删除行和以 '+' 开头的新增行
-        - 描述信息最后加上 "（由模型生成）"，其中“模型”指的是生成提交信息所使用的 LLM 模型的名称，例如 "deepseek-chat"
+        - 描述信息最后加上由什么模型生成，其中'什么模型'指的是生成提交信息所使用的 LLM 模型的名称，例如 'deepseek-chat'
         - 只返回提交信息，不要输出其他内容
 
         COMMIT_MESSAGES:
@@ -145,7 +145,7 @@ do {
             // const pushCommand = `git push origin HEAD:refs/for/${branchName}`;
             // console.log(`执行推送命令: ${pushCommand}`);
             // console.log(await git.exec(pushCommand.split(" ")));
-            const pushCommand = `git push ${branchName}`;
+            const pushCommand = `git push`;
             console.log(`执行推送命令: ${pushCommand}`);
             const data = await host.exec(pushCommand);
             console.log(data.stderr);
