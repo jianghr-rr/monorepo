@@ -8,10 +8,6 @@ script({
     description: "为所有已暂存的更改生成提交信息",
 })
 
-const prefix = await host.input("请输入卡片ID:", {
-    required: true,
-})
-
 // 检查是否有已暂存的更改，如果没有则暂存所有更改
 const diff = await git.diff({
     staged: true,
@@ -54,7 +50,7 @@ do {
         - 保持简短，1 行，不超过 50 个字符
         - 遵循 https://www.conventionalcommits.org/zh-cn/v1.0.0/#specification 的规范
         - 不要混淆以 '-' 开头的删除行和以 '+' 开头的新增行
-        - 告诉我是由哪个模型生成的信息
+        - 描述信息最后加上 "（由模型生成）"，其中“模型”指的是生成提交信息所使用的 LLM 模型的名称，例如 "deepseek-chat"
         - 只返回提交信息，不要输出其他内容
         `
             },
@@ -87,7 +83,7 @@ do {
         - 保持简短，1 行，不超过 50 个字符
         - 遵循 https://www.conventionalcommits.org/zh-cn/v1.0.0/#specification 的规范
         - 不要混淆以 '-' 开头的删除行和以 '+' 开头的新增行
-        - 告诉我是由哪个模型生成的信息
+        - 描述信息最后加上 "（由模型生成）"，其中“模型”指的是生成提交信息所使用的 LLM 模型的名称，例如 "deepseek-chat"
         - 只返回提交信息，不要输出其他内容
 
         COMMIT_MESSAGES:
@@ -107,8 +103,6 @@ do {
     }
 
     message = message?.trim()
-
-    message = `${prefix} ${message}`
 
     if (!message) {
         console.log(
