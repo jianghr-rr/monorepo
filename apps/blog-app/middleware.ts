@@ -3,6 +3,7 @@ import { i18nRouter } from 'next-i18n-router';
 import i18nConfig from './i18nConfig';
 
 export function middleware(request: NextRequest) {
+  console.log('request.url', request.url);
   return i18nRouter(request, i18nConfig);
 }
 

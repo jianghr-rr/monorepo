@@ -1,14 +1,13 @@
-'use client';
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
-const NotFound = () => {
-  const { t } = useTranslation();
+import initTranslations from '~/app/i18n';
+const NotFound = async ({ locale }: { locale: string }) => {
+  const { t } = await initTranslations(locale, ['home']);
 
   return (
-    <div className="hero min-h-screen bg-base-200">
+    <div className="hero h-full">
       <div className="hero-content text-center">
         <div className="max-w-md">
-          <h1 className="mb-4 text-5xl font-bold">123123</h1>
+          <h1 className="mb-4 text-5xl font-bold">{t('not_found.title')}</h1>
           <Link className="btn btn-primary" href="/">
             {t('not_found.go_back')}
           </Link>
@@ -19,3 +18,4 @@ const NotFound = () => {
 };
 
 export default NotFound;
+export { NotFound };

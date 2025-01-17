@@ -1,19 +1,11 @@
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import type { ReactNode } from 'react';
 import NavPageLayout from '~/components/nav-page-layout';
-
+import Sidebar from './@sidebar/page';
 const i18nNamespaces = ['engineering'];
-
-const DynamicSidebar = dynamic<{
-  children: ReactNode;
-  direction: string; // 添加 direction 属性
-}>(() => import('./@sidebar/page'), {
-  ssr: false,
-});
 
 function InterviewLayout({
   params,
-  sidebar,
   children,
 }: {
   params: { locale: string };
@@ -24,12 +16,7 @@ function InterviewLayout({
     <NavPageLayout
       params={params}
       i18nNamespaces={i18nNamespaces}
-      sidebar={
-        <DynamicSidebar direction="horizontal">{sidebar}</DynamicSidebar>
-      }
-      breadcrumb={
-        <DynamicSidebar direction="vertical">{sidebar}</DynamicSidebar>
-      }
+      sidebar={<Sidebar direction="horizontal" locale={params.locale} />}
     >
       {children}
     </NavPageLayout>

@@ -3,6 +3,7 @@
         "title": "工程化",
         "webpack": "Webpack",
         "functional": "函数式",
+        "buildSystem": "构建系统",
         "webpack4": {
             "title": "webpack 4",
             "bound": "产物",

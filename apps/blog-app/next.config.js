@@ -17,8 +17,6 @@ const withMDX = require('@next/mdx')({
   },
 });
 
-console.log('isProd', isProd);
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
