@@ -44,7 +44,7 @@ jobs:
               git checkout mall-fullstack
               git pull origin mall-fullstack
               DOCKERFILE="Dockerfile.mall.fullstack"
-              IMAGE_NAME="mall-web-fullstack-docker"
+              IMAGE_NAME=" jianghr/mall-web-docker:latest"
               PORT=4002
             else
               echo "Unknown branch. Exiting..."
@@ -59,9 +59,9 @@ jobs:
             echo "------ docker rm done ------"
 
             # Build the Docker image using the specific Dockerfile and image name
-            echo "Building $IMAGE_NAME..."
-            docker build -f $DOCKERFILE -t $IMAGE_NAME .
-            echo "------ docker build done ------"
+            # echo "Building $IMAGE_NAME..."
+            # docker build -f $DOCKERFILE -t $IMAGE_NAME .
+            # echo "------ docker build done ------"
 
             # Run the new container with the branch-specific image name and port
             docker run -d -p $PORT:$PORT $IMAGE_NAME

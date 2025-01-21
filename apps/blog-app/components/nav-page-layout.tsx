@@ -31,7 +31,7 @@ async function PatternsLayout({
   params: { locale: string };
   i18nNamespaces: string[];
   sidebar: ReactNode;
-  breadcrumb: ReactNode;
+  breadcrumb?: ReactNode;
   children: ReactNode;
 }) {
   const { resources } = await initTranslations(locale, i18nNamespaces);

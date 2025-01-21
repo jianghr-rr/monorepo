@@ -1,2 +1,21 @@
 # Mysql 5.7
 
+``` shell
+docker run -id --name=mysql -p 3306:3306 \
+-v /root/mysql/logs:/logs \
+-v /root/mysql/data:/var/lib/mysql \
+-v /root/mysql/conf:/etc/mysql/conf.d \
+-e MYSQL_ROOT_PASSWORD=123456 \
+mysql:5.7
+
+docker cp mysql:/etc/mysql/conf.d .
+```
+
+``` shell
+docker exec -it mysql mysql -uroot -p
+```
+
+``` shell
+SHOW VARIABLES LIKE 'wait_timeout';
+SHOW VARIABLES LIKE 'interactive_timeout';
+```
