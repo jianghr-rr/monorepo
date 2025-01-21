@@ -14,7 +14,6 @@ class GameView {
   }
 
   showGamePage() {
-    console.log('showGamePage');
     this.gameOverPage.hide();
     this.gamePage.restart();
     this.gamePage.show();

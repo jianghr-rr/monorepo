@@ -7,6 +7,7 @@ class GameController {
     this.gameModel = gameModel;
     this.gameModel.stageChanged.attach((sender, args) => {
       const stageName = args.stage;
+      console.log('stage changed', stageName);
       switch (stageName) {
         case 'game-over':
           this.gameView.showGameOverPage();

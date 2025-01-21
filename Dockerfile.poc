@@ -1,11 +1,7 @@
-ARG NODE_VERSION=18.19.0
-ARG ALPINE_VERSION=3.18
-
 #############################################################
 # Stage 1 - App extraction / pruning                        #
 #############################################################
-
-FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} as app-builder
+FROM node:18-alpine as app-builder
 
 RUN sed -i 's|https://dl-cdn.alpinelinux.org/alpine/|https://mirrors.cloud.tencent.com/alpine/|g' /etc/apk/repositories \
     && apk update && apk add build-base git \
