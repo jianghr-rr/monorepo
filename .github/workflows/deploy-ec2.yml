@@ -41,8 +41,8 @@ jobs:
               IMAGE_NAME="mall-web-docker"
               PORT=4001
             elif [ "${{ github.ref_name }}" = "mall-fullstack" ]; then
-              git checkout mall-fullstack
-              git pull origin mall-fullstack
+              # git checkout mall-fullstack
+              # git pull origin mall-fullstack
               DOCKERFILE="Dockerfile.mall.fullstack"
               IMAGE_NAME=" jianghr/mall-web-docker:latest"
               PORT=4002
@@ -64,6 +64,7 @@ jobs:
             # echo "------ docker build done ------"
 
             # Run the new container with the branch-specific image name and port
+           echo docker info | grep "Registry Mirrors"
             docker pull $IMAGE_NAME
             echo "------ docker pull done ------"
             docker run -d -p $PORT:$PORT $IMAGE_NAME
