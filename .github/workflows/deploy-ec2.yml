@@ -44,7 +44,7 @@ jobs:
               # git checkout mall-fullstack
               # git pull origin mall-fullstack
               DOCKERFILE="Dockerfile.mall.fullstack"
-              IMAGE_NAME=" jianghr/mall-web-docker:latest"
+              IMAGE_NAME="jianghr/mall-web-docker:latest"
               PORT=4002
             else
               echo "Unknown branch. Exiting..."
@@ -53,14 +53,9 @@ jobs:
 
             echo "------ git pull done ------"
 
-            # 停止并删除现有容器
-            containers=$(docker ps -a -q --filter ancestor=$IMAGE_NAME)
-            if [ ! -z "$containers" ]; then
-                echo "Stopping and removing container for $IMAGE_NAME..."
-                docker stop $containers && docker rm $containers
-            else
-                echo "No containers to stop."
-            fi
+            # Stop and remove the existing container for this branch
+            echo "Stopping and removing container for $IMAGE_NAME..."
+            docker rm $(docker stop $(docker ps -a -q --filter ancestor=$IMAGE_NAME)) || echo "No containers to stop."
             echo "------ docker rm done ------"
 
             # Build the Docker image using the specific Dockerfile and image name
