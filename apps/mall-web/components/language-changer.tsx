@@ -4,7 +4,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import i18nConfig from '~/i18nConfig';
 
-export default function LanguageChanger() {
+function LanguageChanger() {
   const { i18n } = useTranslation();
   const currentLocale = i18n.language;
   const router = useRouter();
@@ -45,3 +45,6 @@ export default function LanguageChanger() {
     />
   );
 }
+
+export default LanguageChanger;
+export { LanguageChanger };

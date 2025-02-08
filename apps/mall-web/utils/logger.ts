@@ -2,7 +2,7 @@ import path from 'path';
 import { createLogger, format, transports } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
-const logDir = '/app/logs';
+const logDir = '../logs'; // 日志存储目录 部署后的地址 /app/logs
 
 const logger = createLogger({
   level: 'info',

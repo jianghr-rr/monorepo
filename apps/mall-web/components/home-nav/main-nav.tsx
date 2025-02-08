@@ -1,15 +1,15 @@
-'use client';
-import { Navbar } from 'flowbite-react';
+import { NavbarLink } from 'flowbite-react';
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
+import { initServerTranslations } from '~/lib/i18n';
 
-const MainNav = () => {
-  const { t } = useTranslation();
+const MainNav = async ({ locale }: { locale: string }) => {
+  const i18n = await initServerTranslations(locale, ['home']);
+  const t = i18n.t.bind(i18n); // 使用服务器端翻译实例
 
   return (
-    <Navbar.Link as={Link} href="/">
+    <NavbarLink as={Link} href="/">
       {t('home')}
-    </Navbar.Link>
+    </NavbarLink>
   );
 };
 
