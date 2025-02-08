@@ -4,11 +4,13 @@ import {
   NavbarCollapse,
   NavbarToggle,
 } from 'flowbite-react';
+import dynamic from 'next/dynamic';
 import { initServerTranslations } from '~/lib/i18n';
-import LanguageChanger from '../language-changer';
-import { ThemeChanger } from '../theme-changer';
 import { MainNav } from './main-nav';
 import User from './user';
+
+const LanguageChanger = dynamic(() => import('../language-changer'));
+const ThemeChanger = dynamic(() => import('../theme-changer'));
 
 const HomeNav = async ({ locale }: { locale: string }) => {
   const i18n = await initServerTranslations(locale, ['home']);
@@ -28,7 +30,7 @@ const HomeNav = async ({ locale }: { locale: string }) => {
         <NavbarToggle />
       </div>
       <NavbarCollapse>
-        <MainNav />
+        <MainNav locale={locale} />
       </NavbarCollapse>
     </Navbar>
   );

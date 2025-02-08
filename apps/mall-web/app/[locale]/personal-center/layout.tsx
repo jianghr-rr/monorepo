@@ -1,7 +1,6 @@
 import dynamic from 'next/dynamic';
 import * as React from 'react';
 import type { ReactNode } from 'react';
-import { ThemeProvider } from '~/components/theme-provider';
 import { TranslationsProvider } from '~/components/translations-provider';
 import initTranslations from '~/lib/i18n';
 
@@ -21,19 +20,17 @@ export default async function Layout({
   const { resources } = await initTranslations(locale, i18nNamespaces);
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <TranslationsProvider
-        namespaces={i18nNamespaces}
-        locale={locale}
-        resources={resources}
-      >
-        <div className="grid grid-cols-12 gap-4 p-4">
-          <div className="col-span-3">
-            <DynamicSidebar />
-          </div>
-          <div className="col-span-9">{children}</div>
+    <TranslationsProvider
+      namespaces={i18nNamespaces}
+      locale={locale}
+      resources={resources}
+    >
+      <div className="grid grid-cols-12 gap-4 p-4">
+        <div className="col-span-3">
+          <DynamicSidebar />
         </div>
-      </TranslationsProvider>
-    </ThemeProvider>
+        <div className="col-span-9">{children}</div>
+      </div>
+    </TranslationsProvider>
   );
 }

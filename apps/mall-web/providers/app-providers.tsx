@@ -1,9 +1,7 @@
-'use client';
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import dynamic from 'next/dynamic';
 import type { FC, PropsWithChildren } from 'react';
-import TranslationsProvider from './translations-provider';
-const ThemeProvider = dynamic(() => import('./theme-provider'), { ssr: false });
+import { ThemeProvider } from './theme-provider';
+import { TranslationsProvider } from './translations-provider';
 
 type Props = PropsWithChildren<{
   locale: string;
