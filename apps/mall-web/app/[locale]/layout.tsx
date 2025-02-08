@@ -1,5 +1,6 @@
 import { ThemeModeScript } from 'flowbite-react';
 import { dir } from 'i18next';
+import Link from 'next/link';
 import NextTopLoader from 'nextjs-toploader';
 import type { ReactNode } from 'react';
 import { inter, lexend } from '~/app/[locale]/fonts';
@@ -50,6 +51,17 @@ const RootLayout = async function ({ children, params }: LayoutProps) {
         >
           <HomeNav locale={locale} />
           <main className="mx-auto size-full">{children}</main>
+          <footer className="mt-auto p-3 text-center text-sm">
+            备案号:{' '}
+            <Link
+              href="https://beian.miit.gov.cn/"
+              className="text-blue-500 no-underline hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              京ICP备19003478号-1
+            </Link>
+          </footer>
         </AppProviders>
       </body>
     </html>
