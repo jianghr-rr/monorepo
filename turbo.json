@@ -42,7 +42,7 @@
         "cache": false
       },
       "start-blog": {
-        "dependsOn": ["blog-app#dev"],
+        "dependsOn": ["blog-web#dev"],
         "cache": false
       },
       "start-mall": {

@@ -1,0 +1,10 @@
+{
+  "title": "Blog",
+  "home": "home",
+  "personalCenter": "Personal Center",
+  "sourceCode": "Source Code",
+  "not_found": {
+    "title": "Not found",
+    "go_back": "Go back"
+  }
+}
