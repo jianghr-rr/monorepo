@@ -14,7 +14,7 @@ const ThemeChanger = () => {
   }, []);
 
   if (!mounted) {
-    return null;
+    return <div style={{ width: '24px', height: '24px' }} />;
   }
 
   return (

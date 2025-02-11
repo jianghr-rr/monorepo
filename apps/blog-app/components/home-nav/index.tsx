@@ -25,9 +25,9 @@ const HomeNav = async ({ locale }: { locale: string }) => {
       </NavbarBrand>
       <div className="flex gap-2 md:order-2">
         {/* <User locale={locale} /> */}
-        <ThemeChanger />
         <LanguageChanger />
         <NavbarToggle />
+        <ThemeChanger />
       </div>
       <NavbarCollapse>
         <MainNav locale={locale} />

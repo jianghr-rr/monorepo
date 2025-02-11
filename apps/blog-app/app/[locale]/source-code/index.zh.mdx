@@ -1,9 +1,92 @@
-# 图形基础  
+# 基础思想
 
-第 1 种是传统的 HTML+CSS。这种方式通常用来呈现普通的 Web 网页。  
+通过滑动窗口来控制控制单位时间内的请求数量
 
-第 2 种是使用 SVG。SVG 和传统的 HTML+CSS 的绘图方式差别不大。只不过，HTML 元素在绘制矢量图形方面的能力有些不足，而 SVG 恰好弥补了这方面的缺陷。  
+# 滑动窗口
 
-第 3 种是使用 Canvas2D。这是浏览器提供的 Canvas API 中的其中一种上下文，使用它可以非常方便地绘制出基础的几何图形。  
+求字符串的无重复最长子串（可变窗口）
 
-第 4 种是使用 WebGL。这是浏览器提供的 Canvas API 中的另一种上下文，它是 OpenGL ES 规范在 Web 端的实现。我们可以通过它，用 GPU 渲染各种复杂的 2D 和 3D 图形。  
+``` javascript
+function lengthOfLongestSubstring(s) {
+  let left = 0;
+  let maxLength = 0;
+  const seen = new Set();
+
+  for (let right = 0; right < s.length; right++) {
+    while (seen.has(s[right])) {
+      seen.delete(s[left]); // 收缩窗口
+      left++;
+    }
+    seen.add(s[right]);
+    maxLength = Math.max(maxLength, right - left + 1);
+  }
+
+  return maxLength;
+}
+
+console.log(lengthOfLongestSubstring("abcabcbb")); // 输出 3 ("abc")
+```
+- 当遇到重复字符时，通过移动 left 收缩窗口。
+- 动态维护窗口中的无重复字符，更新最大长度。
+
+# 高并发请求场景
+- 请求队列维护：使用一个队列来存储所有待发送的请求。
+- 窗口控制：定义一个滑动窗口（时间区间内最多发出固定数量请求）。
+- 限流与调度：定时扫描窗口，确保请求按节奏发送，避免超载。
+
+## 假设需要控制 每秒最多发送 3 个请求
+
+``` javascript
+class SlidingWindowRequestScheduler {
+  constructor(limit, windowSize) {
+    this.limit = limit; // 每个窗口内允许的最大请求数
+    this.windowSize = windowSize; // 窗口时间（毫秒）
+    this.requestQueue = []; // 存储待处理的请求
+    this.currentWindowRequests = 0; // 当前窗口已处理的请求数
+  }
+
+  // 添加请求到队列
+  scheduleRequest(requestFn) {
+    this.requestQueue.push(requestFn);
+    this.processQueue(); // 处理队列
+  }
+
+  processQueue() {
+    if (this.currentWindowRequests >= this.limit) {
+      return; // 当前窗口已满，等待下个窗口
+    }
+
+    // 在窗口内处理请求
+    while (this.requestQueue.length > 0 && this.currentWindowRequests < this.limit) {
+      const requestFn = this.requestQueue.shift(); // 取出请求
+      this.currentWindowRequests++;
+      
+      requestFn().finally(() => {
+        setTimeout(() => {
+          this.currentWindowRequests--;
+          this.processQueue(); // 继续处理队列
+        }, this.windowSize);
+      });
+    }
+  }
+}
+
+// 模拟 API 请求函数
+function mockApiRequest(id) {
+  return new Promise((resolve) => {
+    console.log(`请求 ${id} 开始`);
+    setTimeout(() => {
+      console.log(`请求 ${id} 结束`);
+      resolve();
+    }, 1000); // 模拟请求耗时 1 秒
+  });
+}
+
+// 示例
+const scheduler = new SlidingWindowRequestScheduler(3, 1000); // 每秒最多 3 个请求
+
+// 模拟一次性发送10个请求
+for (let i = 1; i <= 10; i++) {
+  scheduler.scheduleRequest(() => mockApiRequest(i));
+}
+```

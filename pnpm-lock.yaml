@@ -150,6 +150,9 @@ importers:
       flowbite-react:
         specifier: 0.10.2
         version: 0.10.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.28.1)(tailwindcss@3.4.3)
+      highlight.js:
+        specifier: 11.9.0
+        version: 11.9.0
       i18next:
         specifier: 23.11.5
         version: 23.11.5
@@ -255,7 +258,7 @@ importers:
         version: 8.4.38
       tailwind-highlightjs:
         specifier: 2.0.1
-        version: 2.0.1(highlight.js@11.11.0)(tailwindcss@3.4.3)
+        version: 2.0.1(highlight.js@11.9.0)(tailwindcss@3.4.3)
       tailwind-merge:
         specifier: 2.3.0
         version: 2.3.0
@@ -20596,6 +20599,17 @@ snapshots:
       app-root-path: 3.1.0
       css: 3.0.0
       highlight.js: 11.11.0
+      lodash.merge: 4.6.2
+      sync-fetch: 0.3.1
+      tailwindcss: 3.4.3
+    transitivePeerDependencies:
+      - encoding
+
+  tailwind-highlightjs@2.0.1(highlight.js@11.9.0)(tailwindcss@3.4.3):
+    dependencies:
+      app-root-path: 3.1.0
+      css: 3.0.0
+      highlight.js: 11.9.0
       lodash.merge: 4.6.2
       sync-fetch: 0.3.1
       tailwindcss: 3.4.3

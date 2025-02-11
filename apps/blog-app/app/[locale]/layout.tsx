@@ -50,19 +50,25 @@ const RootLayout = async function ({ children, params }: LayoutProps) {
           locale={locale}
           resources={resources}
         >
-          <HomeNav locale={locale} />
-          <main className="relative mx-auto size-full">{children}</main>
-          <footer className="mt-auto p-3 text-center text-sm">
-            备案号:{' '}
-            <Link
-              href="https://beian.miit.gov.cn/"
-              className="text-blue-500 no-underline hover:underline"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              京ICP备19003478号-1
-            </Link>
-          </footer>
+          <div className="flex h-full flex-col">
+            <div className="h-16">
+              <HomeNav locale={locale} />
+            </div>
+            <div className="h-0 flex-1">
+              <main className="relative mx-auto size-full">{children}</main>
+            </div>
+            <footer className="mt-auto h-12 p-3 text-center text-sm">
+              备案号:{' '}
+              <Link
+                href="https://beian.miit.gov.cn/"
+                className="text-blue-500 no-underline hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                京ICP备19003478号-1
+              </Link>
+            </footer>
+          </div>
         </AppProviders>
       </body>
     </html>

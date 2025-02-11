@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import PageLayout from '~/components/page-layout';
 import initTranslations from '~/lib/i18n';
 
-const i18nNamespaces = ['home', 'source-code'];
+const i18nNamespaces = ['resource-code'];
 
 const SourceCodeLayout = async function ({
   params,
@@ -10,13 +10,18 @@ const SourceCodeLayout = async function ({
   children,
 }: {
   params: Promise<{ locale: string }>;
-  sidebar: ReactNode;
   children: ReactNode;
+  sidebar: ReactNode | ((t: (key: string) => string) => ReactNode);
 }) {
   const { locale } = await params;
-  await initTranslations(locale, i18nNamespaces);
+  const i18n = await initTranslations(locale, i18nNamespaces);
+  const t = i18n.t.bind(i18n);
 
-  return <PageLayout sidebar={sidebar}>{children}</PageLayout>;
+  return (
+    <PageLayout sidebar={typeof sidebar === 'function' ? sidebar(t) : sidebar}>
+      {children}
+    </PageLayout>
+  );
 };
 
 export default SourceCodeLayout;

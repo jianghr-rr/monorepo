@@ -1,26 +1,29 @@
-'use client';
-import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { SideBar } from '~/components/sidebar';
+import initTranslations from '~/lib/i18n';
+
+const i18nNamespaces = ['resource-code'];
 
 const mainRouter = '/source-code';
-export default function Page({ params }: { params: { locale: string } }) {
-  const { t } = useTranslation();
-
-  const links = useMemo(() => {
-    return [
-      {
-        href: mainRouter,
-        label: t('title'),
-        children: [
-          {
-            href: `${mainRouter}/api`,
-            label: t('api'),
-          },
-        ],
-      },
-    ];
-  }, [t]);
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const i18n = await initTranslations(locale, i18nNamespaces);
+  const t = i18n.t.bind(i18n);
+  const links = [
+    {
+      href: mainRouter,
+      label: t?.('hc-requests'),
+      children: [
+        {
+          href: `${mainRouter}/p-queue`,
+          label: t?.('P-Queue'),
+        },
+      ],
+    },
+  ];
 
   return <SideBar links={links} />;
 }
