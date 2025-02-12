@@ -144,7 +144,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="info-title-options absolute bottom-48 left-24 w-2/6 rounded-sm bg-white/[.06] p-2">
+      {/* <div className="info-title-options absolute bottom-48 left-24 w-2/6 rounded-sm bg-white/[.06] p-2">
         <div id="options_box">
           <div className="options-row mb-2 flex items-center justify-center gap-4">
             <div className="basis-48 text-white">Random Seed</div>
@@ -155,7 +155,7 @@ const HomePage = () => {
               onChange={onSeedChange}
             />
           </div>
-          {/* <div className="options-row mb-2 flex items-center justify-center gap-4">
+          <div className="options-row mb-2 flex items-center justify-center gap-4">
             <div className="basis-48 text-white">Loop speed</div>
             <Slider
               className="flex-auto"
@@ -218,9 +218,9 @@ const HomePage = () => {
               onValueChange={onBackgroundChange}
             />
             <p className="basis-14 text-white">{background?.[0]}</p>
-          </div> */}
+          </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="info-title-options absolute bottom-24 left-2/4 w-40 rounded-sm bg-white/[.06] p-2">
         <div className="play-pause">

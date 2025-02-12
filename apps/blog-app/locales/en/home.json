@@ -3,6 +3,7 @@
   "home": "home",
   "personalCenter": "Personal Center",
   "sourceCode": "Source Code",
+  "algorithm": "Algorithm",
   "not_found": {
     "title": "Not found",
     "go_back": "Go back"

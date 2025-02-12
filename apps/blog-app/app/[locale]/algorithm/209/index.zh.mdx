@@ -1,0 +1,105 @@
+import Image from 'next/image';
+
+# 长度最小的子数组
+
+给定一个含有 n 个正整数的数组和一个正整数 target 。
+
+找出该数组中满足其总和大于等于 target 的长度最小的子数组 [numsl, numsl+1, ..., numsr-1, numsr]，并返回其长度。如果不存在符合条件的子数组，返回 0 。
+
+示例 1：
+
+> 输入：target = 7, nums = [2,3,1,2,4,3]  
+> 输出：2  
+> 解释：子数组 [4,3] 是该条件下的长度最小的子数组。
+
+示例 2：
+
+> 输入：target = 4, nums = [1,4,4]  
+> 输出：1
+
+示例 3：
+
+> 输入：target = 11, nums = [1,1,1,1,1,1,1,1]  
+> 输出：0
+
+- 两个循环，从第一个数开始，依次往后遍历
+- 如果子数组和小于target, 继续遍历
+- 如果大于，则从后面一个数开始，依次往后遍历
+- 如果相等，则返回数组
+- 如果总和小于target, 直接返回0
+- 如果总和大于target, 那么从后面一个数开始，依次遍历
+- 重复以上
+``` typescript
+function minSubArrayLen(target: number, nums: number[]): number {
+    let res = [];
+	let tempCount = 0;
+    let resCount = 0;
+
+	for (let i = 0; i < nums.length; i++) {
+		res = [nums[i]];
+		tempCount = nums[i];
+		if (tempCount >= target) {
+			return 1;
+		}
+		// 遍历到最后一个还是小于target 直接返回0
+		if ((i === (nums.length - 1)) && (tempCount < target) && resCount === 0) {
+			res = [];
+			return 0;
+		}
+		for(let j = i + 1; j < nums.length; j++) {
+			// 匹配
+			if (tempCount + nums[j] >= target) {
+				res.push(nums[j]);
+                resCount === 0 ? resCount = res.length : resCount = Math.min(resCount, res.length);
+                break;
+			}
+			// 遍历到最后一个还是小于target 直接返回0
+			if ((j === (nums.length - 1)) && (tempCount + nums[j] < target) && resCount === 0) {
+				res = [];
+				return 0;
+			}
+            res.push(nums[j]);
+			tempCount = tempCount + nums[j];
+		}
+	}
+
+    return resCount;
+};
+```
+
+**费了半天劲，写完超时了。**
+
+<Image
+    src={'/images/algorithm/209.1.gif'}
+    width={800}
+    height={450}
+    alt="extend"
+/>
+
+``` typescript
+/**
+ * @param {number} target
+ * @param {number[]} nums
+ * @return {number}
+ */
+var minSubArrayLen = function(target, nums) {
+    let left: number = 0, right: number = 0;
+    let res: number = nums.length + 1;
+    let sum: number = 0;
+
+    while (right < nums.length) {
+        sum += nums[right];
+        if (sum >= target) {
+            // 不断移动左指针，直到不能再缩小为止
+            while (sum - nums[left] >= target) {
+                sum -= nums[left];
+                left++;
+            }
+            res = Math.min(res, right - left + 1);
+        }
+        right++;
+    }
+
+    return res === nums.length + 1 ? 0 : res;
+};
+```
