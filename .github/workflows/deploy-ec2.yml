@@ -32,7 +32,7 @@ jobs:
               # git checkout poc
               # git pull origin poc
               DOCKERFILE="Dockerfile.poc"
-              IMAGE_NAME="jianghr/mall-web-docker:latest"
+              IMAGE_NAME="jianghr/blog-web-docker:latest"
               PORT=4000
             elif [ "${{ github.ref_name }}" = "mall" ]; then
               git checkout mall
