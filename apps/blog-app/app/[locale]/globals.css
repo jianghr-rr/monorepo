@@ -66,11 +66,8 @@
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+.main-title {
+  @apply text-2xl font-bold mb-4;
+  color: #0e7ea3;
 }
+

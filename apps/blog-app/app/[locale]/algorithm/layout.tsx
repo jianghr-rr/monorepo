@@ -1,40 +1,27 @@
-import dynamic from 'next/dynamic';
 import type { ReactNode } from 'react';
-import NavPageLayout from '~/components/nav-page-layout';
+import PageLayout from '~/components/page-layout';
+import initTranslations from '~/lib/i18n';
 
 const i18nNamespaces = ['algorithm'];
 
-const DynamicSidebar = dynamic<{
-  children: ReactNode;
-  direction: string; // 添加 direction 属性
-}>(() => import('./@sidebar/page'), {
-  ssr: false,
-  loading: () => null,
-});
-
-function PatternsLayout({
+const SourceCodeLayout = async function ({
   params,
   sidebar,
   children,
 }: {
-  params: { locale: string };
-  sidebar: ReactNode;
+  params: Promise<{ locale: string }>;
   children: ReactNode;
+  sidebar: ReactNode | ((t: (key: string) => string) => ReactNode);
 }) {
-  return (
-    <NavPageLayout
-      params={params}
-      i18nNamespaces={i18nNamespaces}
-      sidebar={
-        <DynamicSidebar direction="horizontal">{sidebar}</DynamicSidebar>
-      }
-      breadcrumb={
-        <DynamicSidebar direction="vertical">{sidebar}</DynamicSidebar>
-      }
-    >
-      {children}
-    </NavPageLayout>
-  );
-}
+  const { locale } = await params;
+  const i18n = await initTranslations(locale, i18nNamespaces);
+  const t = i18n.t.bind(i18n);
 
-export default PatternsLayout;
+  return (
+    <PageLayout sidebar={typeof sidebar === 'function' ? sidebar(t) : sidebar}>
+      {children}
+    </PageLayout>
+  );
+};
+
+export default SourceCodeLayout;

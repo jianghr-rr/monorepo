@@ -1,54 +1,29 @@
-'use client';
-import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { SideBar } from '~/components/sidebar';
+import initTranslations from '~/lib/i18n';
 
-export default function PatternsPageSideBar({
-  direction,
+const i18nNamespaces = ['algorithm'];
+
+const mainRouter = '/algorithm';
+export default async function Page({
+  params,
 }: {
-  direction: string;
+  params: Promise<{ locale: string }>;
 }) {
-  const { t } = useTranslation();
+  const { locale } = await params;
+  const i18n = await initTranslations(locale, i18nNamespaces);
+  const t = i18n.t.bind(i18n);
+  const links = [
+    {
+      href: '',
+      label: t?.('slidingWindow'),
+      children: [
+        {
+          href: `${mainRouter}/209`,
+          label: t?.('209'),
+        },
+      ],
+    },
+  ];
 
-  const links = useMemo(
-    () => [
-      {
-        href: '/algorithm',
-        label: t('algorithm'),
-        children: [
-          {
-            href: '/algorithm/two-sum',
-            label: t('twoSum'),
-          },
-          {
-            href: '/algorithm/group-anagrams',
-            label: t('groupAnagrams'),
-          },
-          {
-            href: '/algorithm/move-zeroes',
-            label: t('moveZeroes'),
-          },
-          {
-            href: '/algorithm/max-area',
-            label: t('maxArea'),
-          },
-          {
-            href: '/algorithm/three-sum',
-            label: t('threeSum'),
-          },
-          {
-            href: '/algorithm/rainwater-trap',
-            label: t('rainwaterTrap'),
-          },
-          {
-            href: '/algorithm/length-of-longest-substring',
-            label: t('lengthOfLongestSubstring'),
-          },
-        ],
-      },
-    ],
-    [t]
-  );
-
-  return <SideBar direction={direction} links={links} />;
+  return <SideBar links={links} />;
 }

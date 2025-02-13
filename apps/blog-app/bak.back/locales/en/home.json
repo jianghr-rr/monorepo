@@ -1,0 +1,23 @@
+{
+  "home": "Home",
+  "patterns": "Patterns",
+  "interview": "Interview",
+  "fabric": "FabricJs",
+  "three": "ThreeJs",
+  "react": "React",
+  "vue": "Vue",
+  "algorithm": "Algorithm",
+  "graphics": "Graphics",
+  "nodeJs": "NodeJs",
+  "nextJs": "NextJs",
+  "engineering": "Engineering",
+  "web-safety": "Web-safety",
+  "java-web": "Java Web",
+  "page": {
+    "title": "Blog"
+  },
+  "not_found": {
+    "title": "Not found",
+    "go_back": "Go back"
+  }
+}

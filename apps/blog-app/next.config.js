@@ -20,7 +20,7 @@ const withMDX = require('@next/mdx')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  assetPrefix: isProd ? 'http://blogstatic.curlyhair.cn/' : '/',
+  // assetPrefix: isProd ? 'http://blogstatic.curlyhair.cn/' : '/',
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   transpilePackages: ['next-international', 'international-types'],
   eslint: {
@@ -48,6 +48,17 @@ const nextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        // destination: 'http://www.curlyhair.cn:8080/mmall/:path*', // 替换为后端 URL
+        destination: isProd
+          ? 'http://www.curlyhair.cn:8080/:path*'
+          : 'http://localhost:8080/:path*', // 替换为后端 URL
+      },
+    ];
+  },
   webpack: (config) => {
     config.externals.push({
       'utf-8-validate': 'commonjs utf-8-validate',
@@ -56,9 +67,9 @@ const nextConfig = {
     });
     // config.externals.push('canvas');
     config.resolve.alias.canvas = false;
-    config.output.publicPath = isProd
-      ? 'http://blogstatic.curlyhair.cn/_next/'
-      : '/_next/';
+    // config.output.publicPath = isProd
+    //   ? 'http://blogstatic.curlyhair.cn/_next/'
+    //   : '/_next/';
     // config.infrastructureLogging = { debug: /PackFileCache/ };
     // console.log('???', path.join(__dirname, 'components/ui'));
     // config.resolve.alias['~ui'] = path.join(__dirname, 'components/ui');

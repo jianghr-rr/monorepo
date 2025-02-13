@@ -29,10 +29,10 @@ jobs:
             # Check the current branch and pull the latest changes
             echo "Branch name is: ${{ github.ref_name }}"
             if [ "${{ github.ref_name }}" = "poc" ]; then
-              git checkout poc
-              git pull origin poc
+              # git checkout poc
+              # git pull origin poc
               DOCKERFILE="Dockerfile.poc"
-              IMAGE_NAME="knowledge-web-docker"
+              IMAGE_NAME="jianghr/mall-web-docker:latest"
               PORT=4000
             elif [ "${{ github.ref_name }}" = "mall" ]; then
               git checkout mall

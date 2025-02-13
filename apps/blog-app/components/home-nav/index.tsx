@@ -1,21 +1,40 @@
-import LanguageChanger from '../language-changer';
-import ChangeTheme from './change-theme';
-import Navbar from './nav-bar';
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarCollapse,
+  NavbarToggle,
+} from 'flowbite-react';
+import dynamic from 'next/dynamic';
+import { initServerTranslations } from '~/lib/i18n';
+import { MainNav } from './main-nav';
+// import User from './user';
 
-export default function HomeNav() {
+const LanguageChanger = dynamic(() => import('../language-changer'));
+const ThemeChanger = dynamic(() => import('../theme-changer'));
+
+const HomeNav = async ({ locale }: { locale: string }) => {
+  const i18n = await initServerTranslations(locale, ['home']);
+  const t = i18n.t.bind(i18n); // 使用服务器端翻译实例
+
   return (
-    <div className="supports-backdrop-blur:bg-white/60 sticky top-0 z-40 w-full flex-none bg-white/55 backdrop-blur transition-colors duration-500 dark:border-slate-50/[0.06] dark:bg-transparent lg:z-50 lg:border-b">
-      <div className="max-w-8xl mx-auto">
-        <div className="mx-4 py-4 dark:border-slate-300/10 lg:mx-0 lg:px-8">
-          <div className="relative flex items-center">
-            <Navbar />
-            <div className="relative ml-auto flex items-center">
-              <ChangeTheme />
-              <LanguageChanger />
-            </div>
-          </div>
-        </div>
+    <Navbar fluid rounded>
+      <NavbarBrand>
+        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+          {t('title')}
+        </span>
+      </NavbarBrand>
+      <div className="flex gap-2 md:order-2">
+        {/* <User locale={locale} /> */}
+        <LanguageChanger />
+        <NavbarToggle />
+        <ThemeChanger />
       </div>
-    </div>
+      <NavbarCollapse>
+        <MainNav locale={locale} />
+      </NavbarCollapse>
+    </Navbar>
   );
-}
+};
+
+export default HomeNav;
+export { HomeNav };

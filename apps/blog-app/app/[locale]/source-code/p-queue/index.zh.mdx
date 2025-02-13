@@ -1,0 +1,230 @@
+# P-Queue
+
+用于限制速率异步（或同步）操作。
+
+使用示例:
+
+``` javascript
+import PQueue from 'p-queue';
+import got from 'got';
+
+const queue = new PQueue({concurrency: 1}); // 设置并发数
+
+(async () => {
+	await queue.add(() => got('https://sindresorhus.com'));
+	console.log('Done: sindresorhus.com');
+})();
+
+(async () => {
+	await queue.add(() => got('https://avajs.dev'));
+	console.log('Done: avajs.dev');
+})();
+
+(async () => {
+	const task = await getUnicornTask();
+	await queue.add(task);
+	console.log('Done: Unicorn task');
+})();
+```
+
+## 目标
+
+学习它的实现思想
+
+### 先过一下它的API和options
+
+options: 
+
+返回一个新的queue实例，该实例是EventEmitter3子类。(熟悉的订阅发布 ：）)
+``` javascript
+{
+  concurrency: number // 并发
+  timeout: 毫秒级的超时
+  throwOnTimeout: 超时是否视为“例外” // Whether or not a timeout is considered an exception.
+  queueClass: 自定义队列，需要满足一些参数
+  intervalCap: 在给定的时间间隔中的最大运行数
+  interval: // The length of time in milliseconds before the interval count resets. Must be finite.
+  carryoverConcurrencyCount: 如果为true ，则指定任何待处理的请求，应将其转移到下一个间隔中，并计入intervalCap
+  queue: pqueue实例
+}
+```
+
+api:
+``` javascript
+.add(fn, options?)
+.addAll(fns, options?)
+.pause()
+.start()
+.onEmpty()
+.onIdle()
+.onSizeLessThan(limit)
+// ...
+```
+
+可以看出这个对象可以暂停，可以重新开始，在一些节点完成时会通知用户
+
+### 数据结构
+
+优先队列: 其中每个元素都有一个关联的 优先级（priority），在出队（dequeue）时，总是返回优先级最高的元素，而不是按照插入顺序返回。
+
+插入时使用二分查找函数
+
+``` typescript
+import {type Queue, type RunFunction} from './queue.js';
+import lowerBound from './lower-bound.js';
+import {type QueueAddOptions} from './options.js';
+
+export type PriorityQueueOptions = {
+	priority?: number;
+} & QueueAddOptions;
+
+export default class PriorityQueue implements Queue<RunFunction, PriorityQueueOptions> {
+	readonly #queue: Array<PriorityQueueOptions & {run: RunFunction}> = [];
+
+	enqueue(run: RunFunction, options?: Partial<PriorityQueueOptions>): void {
+		options = {
+			priority: 0,
+			...options,
+		};
+
+		const element = {
+			priority: options.priority,
+			id: options.id,
+			run,
+		};
+
+		if (this.size === 0 || this.#queue[this.size - 1]!.priority! >= options.priority!) {
+			this.#queue.push(element);
+			return;
+		}
+
+		const index = lowerBound(
+			this.#queue, element,
+			(a: Readonly<PriorityQueueOptions>, b: Readonly<PriorityQueueOptions>) => b.priority! - a.priority!,
+		);
+		this.#queue.splice(index, 0, element);
+	}
+
+	setPriority(id: string, priority: number) {
+		const index: number = this.#queue.findIndex((element: Readonly<PriorityQueueOptions>) => element.id === id);
+		if (index === -1) {
+			throw new ReferenceError(`No promise function with the id "${id}" exists in the queue.`);
+		}
+
+		const [item] = this.#queue.splice(index, 1);
+		this.enqueue(item!.run, {priority, id});
+	}
+
+	dequeue(): RunFunction | undefined {
+		const item = this.#queue.shift();
+		return item?.run;
+	}
+
+	filter(options: Readonly<Partial<PriorityQueueOptions>>): RunFunction[] {
+		return this.#queue.filter(
+			(element: Readonly<PriorityQueueOptions>) => element.priority === options.priority,
+		).map((element: Readonly<{run: RunFunction}>) => element.run);
+	}
+
+	get size(): number {
+		return this.#queue.length;
+	}
+}
+```
+
+``` typescript
+/**
+ * 二分查找算法，返回第一个大于等于给定值的元素的索引位置
+ *
+ * @param array 查找的数组
+ * @param value 需要查找的值
+ * @param comparator 比较函数，用于比较数组中的元素与给定值
+ * @returns 第一个大于等于给定值的元素的索引位置，如果数组中所有元素都小于给定值，则返回数组长度
+ */
+export default function lowerBound<T>(array: readonly T[], value: T, comparator: (a: T, b: T) => number): number {
+	let first = 0;
+	let count = array.length;
+
+	while (count > 0) {
+		const step = Math.trunc(count / 2);
+		let it = first + step;
+
+		if (comparator(array[it]!, value) <= 0) {
+			first = ++it;
+			count -= step + 1;
+		} else {
+			count = step;
+		}
+	}
+
+	return first;
+}
+```
+
+维护了一个有序的队列（priority的大小），大的在最前面
+
+### 执行方式
+
+``` javascript
+/**
+	 * 处理队列中的任务
+	 */
+	#processQueue(): void {
+		while (this.#tryToStartAnother()) {}
+	}
+```
+
+tryToStartAnother: 
+
+``` javascript
+
+	/**
+	 * 尝试启动另一个任务。
+	 *
+	 * @returns 如果成功启动任务，则返回true；否则返回false。
+	 */
+	#tryToStartAnother(): boolean {
+		if (this.#queue.size === 0) {
+			// We can clear the interval ("pause")
+			// Because we can redo it later ("resume")
+			if (this.#intervalId) {
+				clearInterval(this.#intervalId);
+			}
+
+			this.#intervalId = undefined;
+
+			this.emit('empty');
+
+			if (this.#pending === 0) {
+				this.emit('idle');
+			}
+
+			return false;
+		}
+
+		if (!this.#isPaused) {
+			const canInitializeInterval = !this.#isIntervalPaused;
+			if (this.#doesIntervalAllowAnother && this.#doesConcurrentAllowAnother) {
+				const job = this.#queue.dequeue();
+				if (!job) {
+					return false;
+				}
+
+				this.emit('active');
+				job();
+
+				if (canInitializeInterval) {
+					this.#initializeIntervalIfNeeded();
+				}
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+```
+
+熟悉的` while true `。
+
+options里的参数在函数执行时进行设置，在执行的过程去检测或者重新赋值同时通过订阅发布器来触发事件。

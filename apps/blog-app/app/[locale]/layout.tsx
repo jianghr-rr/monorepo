@@ -1,30 +1,20 @@
+import { ThemeModeScript } from 'flowbite-react';
 import { dir } from 'i18next';
+import Link from 'next/link';
 import NextTopLoader from 'nextjs-toploader';
 import type { ReactNode } from 'react';
 import { inter, lexend } from '~/app/[locale]/fonts';
-import CodeSnippet from '~/components/code-snippet';
-import HomeNav from '~/components/home-nav';
-// import { Picture } from '~/components/picture';
+import { HomeNav } from '~/components/home-nav';
 import i18nConfig from '~/i18nConfig';
+import initTranslations from '~/lib/i18n';
 import { AppProviders } from '~/providers/app-providers';
-import initTranslations from '../i18n';
-import PageTransition from './page-transition';
-
 import './globals.css';
 import './custom.css';
 
-const i18nNamespaces = ['home'];
-
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
-  const { t } = await initTranslations(locale, i18nNamespaces);
-  return {
-    title: t('page.title'),
-  };
-}
+export const metadata = {
+  title: 'blog-web',
+  description: 'blog-web',
+};
 
 interface LayoutProps {
   children: ReactNode;
@@ -37,10 +27,10 @@ export function generateStaticParams() {
   return i18nConfig.locales.map((locale) => ({ locale }));
 }
 
-const RootLayout = async function ({
-  children,
-  params: { locale },
-}: LayoutProps) {
+const i18nNamespaces = ['common', 'response', 'home', 'auth'];
+
+const RootLayout = async function ({ children, params }: LayoutProps) {
+  const { locale } = await Promise.resolve(params); // 处理异步 `params`
   const { resources } = await initTranslations(locale, i18nNamespaces);
 
   return (
@@ -49,19 +39,36 @@ const RootLayout = async function ({
       dir={dir(locale)}
       className={`h-full scroll-smooth ${inter.variable} ${inter.className} ${lexend.className}`}
     >
+      <head>
+        <ThemeModeScript />
+      </head>
+
       <body className="flex h-full flex-col">
-        <NextTopLoader color="#8b5cf6" />
+        <NextTopLoader />
         <AppProviders
           namespaces={i18nNamespaces}
           locale={locale}
           resources={resources}
         >
-          {/* <Picture /> */}
-          <CodeSnippet />
-          <HomeNav />
-          <main className="self-main grow overflow-y-auto">
-            <PageTransition>{children}</PageTransition>
-          </main>
+          <div className="flex h-full flex-col">
+            <div className="h-16">
+              <HomeNav locale={locale} />
+            </div>
+            <div className="h-0 flex-1">
+              <main className="relative mx-auto size-full">{children}</main>
+            </div>
+            <footer className="mt-auto h-12 p-3 text-center text-sm">
+              备案号:{' '}
+              <Link
+                href="https://beian.miit.gov.cn/"
+                className="text-blue-500 no-underline hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                京ICP备19003478号-1
+              </Link>
+            </footer>
+          </div>
         </AppProviders>
       </body>
     </html>
