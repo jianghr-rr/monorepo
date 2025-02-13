@@ -3,16 +3,13 @@
 #############################################################
 FROM node:18-alpine as app-builder
 
-RUN sed -i 's|https://dl-cdn.alpinelinux.org/alpine/|https://mirrors.cloud.tencent.com/alpine/|g' /etc/apk/repositories \
-    && apk update && apk add build-base git \
+RUN apk update && apk add build-base git \
     && apk add --no-cache g++ cairo-dev jpeg-dev pango-dev giflib-dev \
     && apk add libmount
 
 WORKDIR /app
 
 COPY --link package.json turbo.json ./
-
-RUN npm config set registry https://mirrors.cloud.tencent.com/npm/
 
 # We can't run turbo without yarn install first, let's install locally and make sure
 # both local and docker are aligned on the package.json version.
@@ -35,7 +32,6 @@ WORKDIR /app
 COPY --link .gitignore ./
 COPY .npmrc ./
 
-RUN npm config set registry https://mirrors.cloud.tencent.com/npm/
 RUN npm install pnpm -g --force
 RUN pnpm install
 
@@ -56,8 +52,7 @@ RUN npm run build-blog-app
 # Stage 3 - App runner                                      #
 #############################################################
 
-FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} as app-runner
-
+FROM node:18-alpine as app-runner
 
 RUN apk add --no-cache tzdata bash && corepack enable
 
