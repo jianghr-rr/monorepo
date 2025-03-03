@@ -4,6 +4,7 @@
   "personalCenter": "Personal Center",
   "sourceCode": "Source Code",
   "algorithm": "Algorithm",
+  "patterns": "Patterns",
   "not_found": {
     "title": "Not found",
     "go_back": "Go back"
