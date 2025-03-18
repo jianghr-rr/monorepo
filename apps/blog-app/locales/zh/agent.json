@@ -1,5 +1,7 @@
 {
-    "agent": "Agent"
-  }
-  
+  "agent": "Agent",
+  "efficiency": "使用效率和质量",
+  "methodology": "开发方法论"
+}
+
   

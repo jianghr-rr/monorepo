@@ -1,4 +1,6 @@
 {
-  "agent": "Agent"
+  "agent": "Agent",
+  "efficiency": "Efficiency",
+  "methodology": "Methodology"
 }
 

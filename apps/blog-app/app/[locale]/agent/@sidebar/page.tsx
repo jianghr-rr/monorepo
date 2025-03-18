@@ -16,11 +16,15 @@ export default async function Page({
   const links = [
     {
       href: '',
-      label: t?.('agent.title'),
+      label: t?.('agent'),
       children: [
         {
-          href: `${mainRouter}/1`,
-          label: t?.('1'),
+          href: `${mainRouter}/efficiency`,
+          label: t?.('efficiency'),
+        },
+        {
+          href: `${mainRouter}/methodology`,
+          label: t?.('methodology'),
         },
       ],
     },

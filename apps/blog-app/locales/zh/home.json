@@ -5,6 +5,7 @@
   "sourceCode": "源码",
   "algorithm": "算法",
   "patterns": "设计模式",
+  "agent": "Agent",
   "not_found": {
     "title": "页面被小鱼吃掉了",
     "go_back": "返回首页"

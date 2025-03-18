@@ -5,6 +5,7 @@
   "sourceCode": "Source Code",
   "algorithm": "Algorithm",
   "patterns": "Patterns",
+  "agent": "Agent",
   "not_found": {
     "title": "Not found",
     "go_back": "Go back"

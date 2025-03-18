@@ -19,6 +19,9 @@ const MainNav = async ({ locale }: { locale: string }) => {
       <NavbarLink as={Link} href="/patterns">
         {t('patterns')}
       </NavbarLink>
+      <NavbarLink as={Link} href="/agent">
+        {t('agent')}
+      </NavbarLink>
     </>
   );
 };
