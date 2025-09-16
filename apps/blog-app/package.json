@@ -52,6 +52,7 @@
     "next-mdx-remote": "5.0.0",
     "nextjs-toploader": "3.7.15",
     "node-cache": "5.1.2",
+    "mermaid": "11.11.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-hook-form": "7.54.0",

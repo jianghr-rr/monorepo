@@ -4,6 +4,7 @@
   "personalCenter": "个人中心",
   "sourceCode": "源码",
   "algorithm": "算法",
+  "react-native": "React Native",
   "not_found": {
     "title": "页面被小鱼吃掉了",
     "go_back": "返回首页"

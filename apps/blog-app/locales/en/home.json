@@ -4,6 +4,7 @@
   "personalCenter": "Personal Center",
   "sourceCode": "Source Code",
   "algorithm": "Algorithm",
+  "react-native": "React Native",
   "not_found": {
     "title": "Not found",
     "go_back": "Go back"

@@ -10,8 +10,8 @@ const MainNav = async ({ locale }: { locale: string }) => {
       <NavbarLink as={Link} href="/">
         {t('home')}
       </NavbarLink>
-      <NavbarLink as={Link} href="/source-code">
-        {t('sourceCode')}
+      <NavbarLink as={Link} href="/react-native">
+        {t('react-native')}
       </NavbarLink>
       <NavbarLink as={Link} href="/algorithm">
         {t('algorithm')}

@@ -1,0 +1,1266 @@
+我先从“入口与渲染链路”开始：同时打开示例入口与核心库目录，定位 AppRegistry、ReactIOS 和 BatchedBridge 的关键文件，并抓取示例的入口 JS。随后基于结果继续深入 `UIManager/requireNativeComponent`。
+
+[7 tools called]
+
+我刚定位了入口文件与核心模块，现在会打开相关实现来串起“SampleApp → AppRegistry → renderApplication → Native 调用 runApplication”的链路。随后给出简短走读与关键代码引用。
+
+[4 tools called]
+
+我已定位并走读入口链路相关文件。现在先用关键代码引用串起“SampleApp → AppRegistry → renderApplication → RCTRootView/RCTBridge”的启动路径，然后进入下一步的 UIManager 深挖。
+
+[1 tool called]
+
+我先打开 UIManager 及 ReactIOS 的挂载实现，补全 JS→Native 的更新路径，然后给出关键调用点。
+
+[4 tools called]
+
+我已完成第2章的走读与深挖，现在先勾选对应待办，然后给你启动链路的关键代码引用和要点总结。
+
+[1 tool called]
+
+# 第2章：入口与渲染链路
+
+1. 入口文件（Examples/SampleApp/index.ios.js）
+```javascript
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ */
+'use strict';
+
+var React = require('react-native');
+var {
+  AppRegistry,
+  StyleSheet,
+  Text,
+  View,
+} = React;
+
+var SampleApp = React.createClass({
+  render: function() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.welcome}>
+          Welcome to React Native!
+        </Text>
+        <Text style={styles.instructions}>
+          To get started, edit index.ios.js{'\n'}
+          Press Cmd+R to reload
+        </Text>
+      </View>
+    );
+  }
+});
+
+var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
+  instructions: {
+    textAlign: 'center',
+    color: '#333333',
+  },
+});
+
+AppRegistry.registerComponent('SampleApp', () => SampleApp);
+
+```
+2. AppRegistry 把组件绑定为 runnable，原生稍后用 runApplication 触发。  
+Libraries/AppRegistry/AppRegistry.js
+```javascript
+/**
+ * Copyright (c) 2015-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @providesModule AppRegistry
+ * @flow
+ */
+'use strict';
+
+var invariant = require('invariant');
+var renderApplication = require('renderApplication');
+
+if (__DEV__) {
+  // In order to use Cmd+P to record/dump perf data, we need to make sure
+  // this module is available in the bundle
+  require('RCTRenderingPerf');
+}
+
+var runnables = {};
+
+type AppConfig = {
+  appKey: string;
+  component: ReactClass<any, any, any>;
+  run?: Function;
+};
+
+/**
+ * `AppRegistry` is the JS entry point to running all React Native apps.  App
+ * root components should register themselves with
+ * `AppRegistry.registerComponent`, then the native system can load the bundle
+ * for the app and then actually run the app when it's ready by invoking
+ * `AppRegistry.runApplication`.
+ *
+ * `AppRegistry` should be `require`d early in the `require` sequence to make
+ * sure the JS execution environment is setup before other modules are
+ * `require`d.
+ */
+var AppRegistry = {
+  registerConfig: function(config: Array<AppConfig>) {
+    for (var i = 0; i < config.length; ++i) {
+      var appConfig = config[i];
+      if (appConfig.run) {
+        AppRegistry.registerRunnable(appConfig.appKey, appConfig.run);
+      } else {
+        AppRegistry.registerComponent(appConfig.appKey, appConfig.component);
+      }
+    }
+  },
+
+  registerComponent: function(appKey: string, getComponentFunc: Function): string {
+    runnables[appKey] = {
+      run: (appParameters) =>
+        renderApplication(getComponentFunc(), appParameters.initialProps, appParameters.rootTag)
+    };
+    return appKey;
+  },
+
+  registerRunnable: function(appKey: string, func: Function): string {
+    runnables[appKey] = {run: func};
+    return appKey;
+  },
+
+  runApplication: function(appKey: string, appParameters: any): void {
+    console.log(
+      'Running application "' + appKey + '" with appParams: ' +
+      JSON.stringify(appParameters) + '. ' +
+      '__DEV__ === ' + __DEV__ +
+      ', development-level warning are ' + (__DEV__ ? 'ON' : 'OFF') +
+      ', performance optimizations are ' + (__DEV__ ? 'OFF' : 'ON')
+    );
+    invariant(
+      runnables[appKey] && runnables[appKey].run,
+      'Application ' + appKey + ' has not been registered.'
+    );
+    runnables[appKey].run(appParameters);
+  },
+};
+
+module.exports = AppRegistry;
+
+```
+
+3. renderApplication 用 ReactIOS.render 把根组件挂到 rootTag（原生传入）  
+Libraries/ReactIOS/renderApplication.js
+```javascript
+/**
+ * Copyright (c) 2015-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @providesModule renderApplication
+ * @flow
+ */
+'use strict';
+
+var React = require('React');
+
+var invariant = require('invariant');
+
+function renderApplication<D, P, S>(
+  RootComponent: ReactClass<D, P, S>,
+  initialProps: P,
+  rootTag: any
+) {
+  invariant(
+    rootTag,
+    'Expect to have a valid rootTag, instead got ', rootTag
+  );
+   React.render(
+    <RootComponent
+      {...initialProps}
+    />,
+    rootTag
+  );
+}
+
+module.exports = renderApplication;
+
+```
+
+4. ReactIOS.render 走 ReactIOSMount，分配 rootNodeID 并进行首次挂载  
+Libraries/ReactIOS/ReactIOS.js
+```javascript
+/**
+ * Copyright (c) 2015-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @providesModule ReactIOS
+ * @flow
+ */
+"use strict";
+
+var ReactChildren = require('ReactChildren');
+var ReactClass = require('ReactClass');
+var ReactComponent = require('ReactComponent');
+var ReactContext = require('ReactContext');
+var ReactCurrentOwner = require('ReactCurrentOwner');
+var ReactElement = require('ReactElement');
+var ReactElementValidator = require('ReactElementValidator');
+var ReactInstanceHandles = require('ReactInstanceHandles');
+var ReactIOSDefaultInjection = require('ReactIOSDefaultInjection');
+var ReactIOSMount = require('ReactIOSMount');
+var ReactPropTypes = require('ReactPropTypes');
+
+var deprecated = require('deprecated');
+var invariant = require('invariant');
+var onlyChild = require('onlyChild');
+
+ReactIOSDefaultInjection.inject();
+
+var createElement = ReactElement.createElement;
+var createFactory = ReactElement.createFactory;
+var cloneElement = ReactElement.cloneElement;
+
+if (__DEV__) {
+  createElement = ReactElementValidator.createElement;
+  createFactory = ReactElementValidator.createFactory;
+  cloneElement = ReactElementValidator.cloneElement;
+}
+
+var resolveDefaultProps = function(element) {
+  // Could be optimized, but not currently in heavy use.
+  var defaultProps = element.type.defaultProps;
+  var props = element.props;
+  for (var propName in defaultProps) {
+    if (props[propName] === undefined) {
+      props[propName] = defaultProps[propName];
+    }
+  }
+};
+
+// Experimental optimized element creation
+var augmentElement = function(element: ReactElement) {
+  if (__DEV__) {
+    invariant(
+      false,
+      'This optimized path should never be used in DEV mode because ' +
+      'it does not provide validation. Check your JSX transform.'
+    );
+  }
+  element._owner = ReactCurrentOwner.current;
+  element._context = ReactContext.current;
+  if (element.type.defaultProps) {
+    resolveDefaultProps(element);
+  }
+  return element;
+};
+
+var render = function(component: ReactComponent, mountInto: number) {
+  ReactIOSMount.renderComponent(component, mountInto);
+};
+
+var ReactIOS = {
+  hasReactIOSInitialized: false,
+  Children: {
+    map: ReactChildren.map,
+    forEach: ReactChildren.forEach,
+    count: ReactChildren.count,
+    only: onlyChild
+  },
+  Component: ReactComponent,
+  PropTypes: ReactPropTypes,
+  createClass: ReactClass.createClass,
+  createElement: createElement,
+  createFactory: createFactory,
+  cloneElement: cloneElement,
+  _augmentElement: augmentElement,
+  render: render,
+  unmountComponentAtNode: ReactIOSMount.unmountComponentAtNode,
+
+ // Hook for JSX spread, don't use this for anything else.
+  __spread: Object.assign,
+
+  unmountComponentAtNodeAndRemoveContainer: ReactIOSMount.unmountComponentAtNodeAndRemoveContainer,
+  isValidClass: ReactElement.isValidFactory,
+  isValidElement: ReactElement.isValidElement,
+
+  // Deprecations (remove for 0.13)
+  renderComponent: deprecated(
+    'React',
+    'renderComponent',
+    'render',
+    this,
+    render
+  ),
+  isValidComponent: deprecated(
+    'React',
+    'isValidComponent',
+    'isValidElement',
+    this,
+    ReactElement.isValidElement
+  )
+};
+
+// Inject the runtime into a devtools global hook regardless of browser.
+// Allows for debugging when the hook is injected on the page.
+/* globals __REACT_DEVTOOLS_GLOBAL_HOOK__ */
+if (
+  typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined' &&
+  typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.inject === 'function') {
+  __REACT_DEVTOOLS_GLOBAL_HOOK__.inject({
+    CurrentOwner: ReactCurrentOwner,
+    InstanceHandles: ReactInstanceHandles,
+    Mount: ReactIOSMount,
+    Reconciler: require('ReactReconciler'),
+    TextComponent: require('ReactIOSTextComponent'),
+  });
+}
+
+module.exports = ReactIOS;
+
+```
+
+5. 初次挂载：生成 markup，并把“视图插入”的命令下发给 UIManager
+Libraries/ReactIOS/ReactIOSMount.js  
+``` javascript
+/**
+ * Copyright (c) 2015-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @providesModule ReactIOSMount
+ * @flow
+ */
+'use strict';
+
+var RCTUIManager = require('NativeModules').UIManager;
+
+var ReactIOSTagHandles = require('ReactIOSTagHandles');
+var ReactPerf = require('ReactPerf');
+var ReactReconciler = require('ReactReconciler');
+var ReactUpdates = require('ReactUpdates');
+
+var emptyObject = require('emptyObject');
+var instantiateReactComponent = require('instantiateReactComponent');
+var invariant = require('invariant');
+
+var TOP_ROOT_NODE_IDS = {};
+
+function instanceNumberToChildRootID(rootNodeID, instanceNumber) {
+  return rootNodeID + '[' + instanceNumber + ']';
+}
+
+/**
+ * Mounts this component and inserts it into the DOM.
+ *
+ * @param {ReactComponent} componentInstance The instance to mount.
+ * @param {number} rootID ID of the root node.
+ * @param {number} container container element to mount into.
+ * @param {ReactReconcileTransaction} transaction
+ */
+function mountComponentIntoNode(
+    componentInstance,
+    rootID,
+    container,
+    transaction) {
+  var markup = ReactReconciler.mountComponent(
+    componentInstance, rootID, transaction, emptyObject
+  );
+  componentInstance._isTopLevel = true;
+  ReactIOSMount._mountImageIntoNode(markup, container);
+}
+
+/**
+ * Batched mount.
+ *
+ * @param {ReactComponent} componentInstance The instance to mount.
+ * @param {number} rootID ID of the root node.
+ * @param {number} container container element to mount into.
+ */
+function batchedMountComponentIntoNode(
+    componentInstance,
+    rootID,
+    container) {
+  var transaction = ReactUpdates.ReactReconcileTransaction.getPooled();
+  transaction.perform(
+    mountComponentIntoNode,
+    null,
+    componentInstance,
+    rootID,
+    container,
+    transaction
+  );
+  ReactUpdates.ReactReconcileTransaction.release(transaction);
+}
+
+/**
+ * As soon as `ReactMount` is refactored to not rely on the DOM, we can share
+ * code between the two. For now, we'll hard code the ID logic.
+ */
+var ReactIOSMount = {
+  instanceCount: 0,
+
+  _instancesByContainerID: {},
+
+  /**
+   * @param {ReactComponent} instance Instance to render.
+   * @param {containerTag} containerView Handle to native view tag
+   */
+  renderComponent: function(
+    descriptor: ReactComponent,
+    containerTag: number
+  ) {
+    var instance = instantiateReactComponent(descriptor);
+
+    if (!ReactIOSTagHandles.reactTagIsNativeTopRootID(containerTag)) {
+      console.error('You cannot render into anything but a top root');
+      return;
+    }
+
+    var topRootNodeID = ReactIOSTagHandles.allocateRootNodeIDForTag(containerTag);
+    ReactIOSTagHandles.associateRootNodeIDWithMountedNodeHandle(
+      topRootNodeID,
+      containerTag
+    );
+    TOP_ROOT_NODE_IDS[topRootNodeID] = true;
+
+    var childRootNodeID = instanceNumberToChildRootID(
+      topRootNodeID,
+      ReactIOSMount.instanceCount++
+    );
+    ReactIOSMount._instancesByContainerID[topRootNodeID] = instance;
+
+    // The initial render is synchronous but any updates that happen during
+    // rendering, in componentWillMount or componentDidMount, will be batched
+    // according to the current batching strategy.
+
+    ReactUpdates.batchedUpdates(
+      batchedMountComponentIntoNode,
+      instance,
+      childRootNodeID,
+      topRootNodeID
+    );
+  },
+
+  /**
+   * @param {View} view View tree image.
+   * @param {number} containerViewID View to insert sub-view into.
+   */
+  _mountImageIntoNode: ReactPerf.measure(
+    // FIXME(frantic): #4441289 Hack to avoid modifying react-tools
+    'ReactComponentBrowserEnvironment',
+    'mountImageIntoNode',
+    function(mountImage, containerID) {
+      // Since we now know that the `mountImage` has been mounted, we can
+      // mark it as such.
+      ReactIOSTagHandles.associateRootNodeIDWithMountedNodeHandle(
+        mountImage.rootNodeID,
+        mountImage.tag
+      );
+      var addChildTags = [mountImage.tag];
+      var addAtIndices = [0];
+      RCTUIManager.manageChildren(
+        ReactIOSTagHandles.mostRecentMountedNodeHandleForRootNodeID(containerID),
+        null,         // moveFromIndices
+        null,         // moveToIndices
+        addChildTags,
+        addAtIndices,
+        null          // removeAtIndices
+      );
+    }
+  ),
+
+  /**
+   * Standard unmounting of the component that is rendered into `containerID`,
+   * but will also execute a command to remove the actual container view
+   * itself. This is useful when a client is cleaning up a React tree, and also
+   * knows that the container will no longer be needed. When executing
+   * asynchronously, it's easier to just have this method be the one that calls
+   * for removal of the view.
+   */
+  unmountComponentAtNodeAndRemoveContainer: function(
+    containerTag: number
+  ) {
+    ReactIOSMount.unmountComponentAtNode(containerTag);
+    // call back into native to remove all of the subviews from this container
+    RCTUIManager.removeRootView(containerTag);
+  },
+
+  /**
+   * Unmount component at container ID by iterating through each child component
+   * that has been rendered and unmounting it. There should just be one child
+   * component at this time.
+   */
+  unmountComponentAtNode: function(containerTag: number): bool {
+    var containerID = ReactIOSTagHandles.tagToRootNodeID[containerTag];
+
+    invariant(
+      TOP_ROOT_NODE_IDS[containerID],
+      'We only currently support removing components from the root node'
+    );
+    var instance = ReactIOSMount._instancesByContainerID[containerID];
+    if (!instance) {
+      console.error('Tried to unmount a component that does not exist');
+      return false;
+    }
+    ReactIOSMount.unmountComponentFromNode(instance, containerID);
+    delete ReactIOSMount._instancesByContainerID[containerID];
+    delete TOP_ROOT_NODE_IDS[containerID];
+    return true;
+  },
+
+  /**
+   * Unmounts a component and sends messages back to iOS to remove its subviews.
+   *
+   * @param {ReactComponent} instance React component instance.
+   * @param {string} containerID ID of container we're removing from.
+   * @final
+   * @internal
+   * @see {ReactIOSMount.unmountComponentAtNode}
+   */
+  unmountComponentFromNode: function(
+    instance: ReactComponent,
+    containerID: string
+  ) {
+    // call back into native to remove all of the subviews from this container
+    // TODO: ReactComponent.prototype.unmountComponent is missing from Flow's
+    // react lib.
+    (instance: any).unmountComponent();
+    var containerTag =
+      ReactIOSTagHandles.mostRecentMountedNodeHandleForRootNodeID(containerID);
+    RCTUIManager.removeSubviewsFromContainerWithID(containerTag);
+  },
+
+  getNode: function<T>(id: T): T {
+    return id;
+  }
+};
+
+ReactIOSMount.renderComponent = ReactPerf.measure(
+  'ReactMount',
+  '_renderNewRootComponent',
+  ReactIOSMount.renderComponent
+);
+
+module.exports = ReactIOSMount;
+
+```
+
+6. Native 侧 RCTRootView 加载 bundle 成功后，触发 JS 侧 runApplication  
+React/Base/RCTRootView.m  
+`[_bridge enqueueJSCall:@"AppRegistry.runApplication"
+                      args:@[moduleName, appParameters]];`
+```C
+/**
+ * Copyright (c) 2015-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+#import "RCTRootView.h"
+
+#import "RCTBridge.h"
+#import "RCTContextExecutor.h"
+#import "RCTDevMenu.h"
+#import "RCTEventDispatcher.h"
+#import "RCTKeyCommands.h"
+#import "RCTLog.h"
+#import "RCTRedBox.h"
+#import "RCTSourceCode.h"
+#import "RCTTouchHandler.h"
+#import "RCTUIManager.h"
+#import "RCTUtils.h"
+#import "RCTWebViewExecutor.h"
+#import "UIView+React.h"
+
+NSString *const RCTReloadNotification = @"RCTReloadNotification";
+
+/**
+ * HACK(t6568049) This should be removed soon, hiding to prevent people from
+ * relying on it
+ */
+@interface RCTBridge (RCTRootView)
+
+- (void)setJavaScriptExecutor:(id<RCTJavaScriptExecutor>)executor;
+
+@end
+
+@implementation RCTRootView
+{
+  RCTDevMenu *_devMenu;
+  RCTBridge *_bridge;
+  RCTTouchHandler *_touchHandler;
+  id<RCTJavaScriptExecutor> _executor;
+  BOOL _registered;
+  NSDictionary *_launchOptions;
+}
+
+static Class _globalExecutorClass;
+
++ (void)initialize
+{
+
+#if TARGET_IPHONE_SIMULATOR
+
+  // Register Cmd-R as a global refresh key
+  [[RCTKeyCommands sharedInstance] registerKeyCommandWithInput:@"r"
+                                                 modifierFlags:UIKeyModifierCommand
+                                                        action:^(UIKeyCommand *command) {
+                                                          [self reloadAll];
+                                                        }];
+
+  // Cmd-D reloads using the web view executor, allows attaching from Safari dev tools.
+  [[RCTKeyCommands sharedInstance] registerKeyCommandWithInput:@"d"
+                                                 modifierFlags:UIKeyModifierCommand
+                                                        action:^(UIKeyCommand *command) {
+                                                          _globalExecutorClass = NSClassFromString(@"RCTWebSocketExecutor");
+                                                          if (!_globalExecutorClass) {
+                                                            RCTLogError(@"WebSocket debugger is not available. Did you forget to include RCTWebSocketExecutor?");
+                                                          }
+                                                          [self reloadAll];
+                                                        }];
+
+#endif
+
+}
+
+- (instancetype)initWithBundleURL:(NSURL *)bundleURL
+                       moduleName:(NSString *)moduleName
+                    launchOptions:(NSDictionary *)launchOptions
+{
+  if ((self = [super init])) {
+    RCTAssert(bundleURL, @"A bundleURL is required to create an RCTRootView");
+    RCTAssert(moduleName, @"A bundleURL is required to create an RCTRootView");
+    _moduleName = moduleName;
+    _launchOptions = launchOptions;
+    [self setUp];
+    [self setScriptURL:bundleURL];
+  }
+  return self;
+}
+
+  /**
+   * HACK(t6568049) Private constructor for testing purposes
+   */
+- (instancetype)_initWithBundleURL:(NSURL *)bundleURL
+                       moduleName:(NSString *)moduleName
+                    launchOptions:(NSDictionary *)launchOptions
+                    moduleProvider:(RCTBridgeModuleProviderBlock)moduleProvider
+{
+  if ((self = [super init])) {
+    _moduleProvider = moduleProvider;
+    _moduleName = moduleName;
+    _launchOptions = launchOptions;
+    [self setUp];
+    [self setScriptURL:bundleURL];
+  }
+  return self;
+}
+
+- (void)setUp
+{
+  // Every root view that is created must have a unique react tag.
+  // Numbering of these tags goes from 1, 11, 21, 31, etc
+  static NSInteger rootViewTag = 1;
+  self.reactTag = @(rootViewTag);
+#ifdef DEBUG
+  self.enableDevMenu = YES;
+#endif
+  self.backgroundColor = [UIColor whiteColor];
+  rootViewTag += 10;
+
+  // Add reload observer
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(reload)
+                                               name:RCTReloadNotification
+                                             object:nil];
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+  return YES;
+}
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+  if (motion == UIEventSubtypeMotionShake && self.enableDevMenu) {
+    if (!_devMenu) {
+      _devMenu = [[RCTDevMenu alloc] initWithRootView:self];
+    }
+    [_devMenu show];
+  }
+}
+
++ (NSArray *)JSMethods
+{
+  return @[
+    @"AppRegistry.runApplication",
+    @"ReactIOS.unmountComponentAtNodeAndRemoveContainer"
+  ];
+}
+
+- (void)dealloc
+{
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+  [_bridge enqueueJSCall:@"ReactIOS.unmountComponentAtNodeAndRemoveContainer"
+                    args:@[self.reactTag]];
+  [self invalidate];
+}
+
+#pragma mark - RCTInvalidating
+
+- (BOOL)isValid
+{
+  return [_bridge isValid];
+}
+
+- (void)invalidate
+{
+  // Clear view
+  [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+
+  [self removeGestureRecognizer:_touchHandler];
+  [_touchHandler invalidate];
+  [_executor invalidate];
+
+  // TODO: eventually we'll want to be able to share the bridge between
+  // multiple rootviews, in which case we'll need to move this elsewhere
+  [_bridge invalidate];
+}
+
+#pragma mark Bundle loading
+
+- (void)bundleFinishedLoading:(NSError *)error
+{
+  if (error != nil) {
+    NSArray *stack = [[error userInfo] objectForKey:@"stack"];
+    if (stack) {
+      [[RCTRedBox sharedInstance] showErrorMessage:[error localizedDescription] withStack:stack];
+    } else {
+      [[RCTRedBox sharedInstance] showErrorMessage:[error localizedDescription] withDetails:[error localizedFailureReason]];
+    }
+  } else {
+
+    [_bridge.uiManager registerRootView:self];
+    _registered = YES;
+
+    NSString *moduleName = _moduleName ?: @"";
+    NSDictionary *appParameters = @{
+      @"rootTag": self.reactTag,
+      @"initialProps": self.initialProperties ?: @{},
+    };
+    [_bridge enqueueJSCall:@"AppRegistry.runApplication"
+                      args:@[moduleName, appParameters]];
+  }
+}
+
+- (void)loadBundle
+{
+  [self invalidate];
+
+  if (!_scriptURL) {
+    return;
+  }
+
+  // Clean up
+  [self removeGestureRecognizer:_touchHandler];
+  [_touchHandler invalidate];
+  [_executor invalidate];
+  [_bridge invalidate];
+
+  _registered = NO;
+
+  // Choose local executor if specified, followed by global, followed by default
+  _executor = [[_executorClass ?: _globalExecutorClass ?: [RCTContextExecutor class] alloc] init];
+
+  /**
+   * HACK(t6568049) Most of the properties passed into the bridge are not used
+   * right now but it'll be changed soon so it's here for convenience.
+   */
+  _bridge = [[RCTBridge alloc] initWithBundlePath:_scriptURL.absoluteString
+                                   moduleProvider:_moduleProvider
+                                    launchOptions:_launchOptions];
+  [_bridge setJavaScriptExecutor:_executor];
+
+  _touchHandler = [[RCTTouchHandler alloc] initWithBridge:_bridge];
+  [self addGestureRecognizer:_touchHandler];
+
+  // Load the bundle
+  NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:_scriptURL completionHandler:
+                                ^(NSData *data, NSURLResponse *response, NSError *error) {
+
+    // Handle general request errors
+    if (error) {
+      if ([[error domain] isEqualToString:NSURLErrorDomain]) {
+        NSDictionary *userInfo = @{
+          NSLocalizedDescriptionKey: @"Could not connect to development server. Ensure node server is running - run 'npm start' from React root",
+          NSLocalizedFailureReasonErrorKey: [error localizedDescription],
+          NSUnderlyingErrorKey: error,
+        };
+        error = [NSError errorWithDomain:@"JSServer"
+                                    code:error.code
+                                userInfo:userInfo];
+      }
+      [self bundleFinishedLoading:error];
+      return;
+    }
+
+    // Parse response as text
+    NSStringEncoding encoding = NSUTF8StringEncoding;
+    if (response.textEncodingName != nil) {
+      CFStringEncoding cfEncoding = CFStringConvertIANACharSetNameToEncoding((CFStringRef)response.textEncodingName);
+      if (cfEncoding != kCFStringEncodingInvalidId) {
+        encoding = CFStringConvertEncodingToNSStringEncoding(cfEncoding);
+      }
+    }
+    NSString *rawText = [[NSString alloc] initWithData:data encoding:encoding];
+
+    // Handle HTTP errors
+    if ([response isKindOfClass:[NSHTTPURLResponse class]] && [(NSHTTPURLResponse *)response statusCode] != 200) {
+      NSDictionary *userInfo;
+      NSDictionary *errorDetails = RCTJSONParse(rawText, nil);
+      if ([errorDetails isKindOfClass:[NSDictionary class]]) {
+        userInfo = @{
+          NSLocalizedDescriptionKey: errorDetails[@"message"] ?: @"No message provided",
+          @"stack": @[@{
+            @"methodName": errorDetails[@"description"] ?: @"",
+            @"file": errorDetails[@"filename"] ?: @"",
+            @"lineNumber": errorDetails[@"lineNumber"] ?: @0
+          }]
+        };
+      } else {
+        userInfo = @{NSLocalizedDescriptionKey: rawText};
+      }
+      error = [NSError errorWithDomain:@"JSServer"
+                                  code:[(NSHTTPURLResponse *)response statusCode]
+                              userInfo:userInfo];
+
+      [self bundleFinishedLoading:error];
+      return;
+    }
+    if (!_bridge.isValid) {
+      return; // Bridge was invalidated in the meanwhile
+    }
+
+    // Success!
+    RCTSourceCode *sourceCodeModule = _bridge.modules[NSStringFromClass([RCTSourceCode class])];
+    sourceCodeModule.scriptURL = _scriptURL;
+    sourceCodeModule.scriptText = rawText;
+
+    [_bridge enqueueApplicationScript:rawText url:_scriptURL onComplete:^(NSError *_error) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        if (_bridge.isValid) {
+          [self bundleFinishedLoading:_error];
+        }
+      });
+    }];
+
+  }];
+
+  [task resume];
+}
+
+- (void)setScriptURL:(NSURL *)scriptURL
+{
+  if ([_scriptURL isEqual:scriptURL]) {
+    return;
+  }
+
+  _scriptURL = scriptURL;
+  [self loadBundle];
+}
+
+- (void)layoutSubviews
+{
+  [super layoutSubviews];
+  if (_registered) {
+    [_bridge.uiManager setFrame:self.frame forRootView:self];
+  }
+}
+
+- (void)reload
+{
+  [self loadBundle];
+}
+
++ (void)reloadAll
+{
+  [[NSNotificationCenter defaultCenter] postNotificationName:RCTReloadNotification object:nil];
+}
+
+- (void)startOrResetInteractionTiming
+{
+  [_touchHandler startOrResetInteractionTiming];
+}
+
+- (NSDictionary *)endAndResetInteractionTiming
+{
+  return [_touchHandler endAndResetInteractionTiming];
+}
+
+@end
+
+```
+
+7. Bridge 注入模块表，提供 JS→Native 与 Native→JS 的方法映射  
+React/Base/RCTBridge.m  
+```C
+
+  // Inject module data into JS context
+  NSString *configJSON = RCTJSONStringify(@{
+                                            @"remoteModuleConfig": RCTRemoteModulesConfig(_modulesByName),
+                                            @"localModulesConfig": RCTLocalModulesConfig()
+                                            }, NULL);
+  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+  [_javaScriptExecutor injectJSONText:configJSON asGlobalObjectNamed:@"__fbBatchedBridgeConfig" callback:^(id err) {
+    dispatch_semaphore_signal(semaphore);
+  }];
+
+  if (dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC)) != 0) {
+    RCTLogError(@"JavaScriptExecutor took too long to inject JSON object");
+  }
+}
+```
+
+8. JS 层的 NativeModules.UIManager 方法对应原生 RCTUIManager 导出的方法  
+createView/updateView/manageChildren 等会被 batched 执行  
+React/Modules/RCTUIManager.m  
+```C
+
+  // Register manager
+  _viewManagerRegistry[reactTag] = manager;
+
+  // Generate default view, used for resetting default props
+  if (!_defaultShadowViews[viewName]) {
+    _defaultShadowViews[viewName] = [manager shadowView];
+  }
+
+  RCTShadowView *shadowView = [manager shadowView];
+  shadowView.viewName = viewName;
+  shadowView.reactTag = reactTag;
+  RCTSetShadowViewProps(props, shadowView, _defaultShadowViews[viewName], manager);
+  _shadowViewRegistry[shadowView.reactTag] = shadowView;
+
+  [self addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry){
+    RCTCAssertMainThread();
+
+    // Generate default view, used for resetting default props
+    if (!uiManager->_defaultViews[viewName]) {
+      // Note the default is setup after the props are read for the first time ever
+      // for this className - this is ok because we only use the default for restoring
+      // defaults, which never happens on first creation.
+      uiManager->_defaultViews[viewName] = [manager view];
+    }
+
+    UIView *view = [manager view];
+    if (view) {
+
+      // Set required properties
+      view.reactTag = reactTag;
+      view.multipleTouchEnabled = YES;
+      view.userInteractionEnabled = YES; // required for touch handling
+      view.layer.allowsGroupOpacity = YES; // required for touch handling
+
+      // Set custom properties
+      RCTSetViewProps(props, view, uiManager->_defaultViews[viewName], manager);
+    }
+    viewRegistry[view.reactTag] = view;
+  }];
+}
+```
+
+9. 核心更新路径（JS → Native）  
+- ReactIOSNativeComponent.mountComponent → RCTUIManager.createView
+- ReactIOSNativeComponent.initializeChildren → RCTUIManager.manageChildren
+- ReactIOSNativeComponent.receiveComponent → RCTUIManager.updateView
+Libraries/ReactIOS/ReactIOSNativeComponent.js  
+```javascript
+
+  /**
+   * Every native component is responsible for allocating its own `tag`, and
+   * issuing the native `createView` command. But it is not responsible for
+   * recording the fact that its own `rootNodeID` is associated with a
+   * `nodeHandle`. Only the code that actually adds its `nodeHandle` (`tag`) as
+   * a child of a container can confidently record that in
+   * `ReactIOSTagHandles`.
+   */
+  initializeChildren: function(children, containerTag, transaction, context) {
+    var mountImages = this.mountChildren(children, transaction, context);
+    // In a well balanced tree, half of the nodes are in the bottom row and have
+    // no children - let's avoid calling out to the native bridge for a large
+    // portion of the children.
+    if (mountImages.length) {
+      var indexes = cachedIndexArray(mountImages.length);
+      // TODO: Pool these per platform view class. Reusing the `mountImages`
+      // array would likely be a jit deopt.
+      var createdTags = [];
+      for (var i = 0; i < mountImages.length; i++) {
+        var mountImage = mountImages[i];
+        var childTag = mountImage.tag;
+        var childID = mountImage.rootNodeID;
+        warning(
+          mountImage && mountImage.rootNodeID && mountImage.tag,
+          'Mount image returned does not have required data'
+        );
+        ReactIOSTagHandles.associateRootNodeIDWithMountedNodeHandle(
+          childID,
+          childTag
+        );
+        createdTags[i] = mountImage.tag;
+      }
+      RCTUIManager
+        .manageChildren(containerTag, null, null, createdTags, indexes, null);
+    }
+  },
+
+  mountComponent: function(rootID, transaction, context) {
+    this._rootNodeID = rootID;
+
+    var tag = ReactIOSTagHandles.allocateTag();
+
+    this.previousFlattenedStyle = {};
+    var updatePayload = this.computeUpdatedProperties(
+      {}, // previous props
+      this._currentElement.props, // next props
+      this.viewConfig.validAttributes
+    );
+    RCTUIManager.createView(tag, this.viewConfig.uiViewClassName, updatePayload);
+
+    this._registerListenersUponCreation(this._currentElement.props);
+    this.initializeChildren(
+      this._currentElement.props.children,
+      tag,
+      transaction,
+      context
+    );
+    return {
+      rootNodeID: rootID,
+      tag: tag
+    };
+  }
+```
+
+10. 布局与批处理  
+React/Modules/RCTUIManager.m  
+```C
+- (void)batchDidComplete
+{
+  // Gather blocks to be executed now that all view hierarchy manipulations have
+  // been completed (note that these may still take place before layout has finished)
+  for (RCTViewManager *manager in _viewManagers.allValues) {
+    RCTViewManagerUIBlock uiBlock = [manager uiBlockToAmendWithShadowViewRegistry:_shadowViewRegistry];
+    if (uiBlock) {
+      [self addUIBlock:uiBlock];
+    }
+  }
+
+  // Set up next layout animation
+  if (_nextLayoutAnimation) {
+    RCTLayoutAnimation *layoutAnimation = _nextLayoutAnimation;
+    [self addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+      uiManager->_layoutAnimation = layoutAnimation;
+    }];
+  }
+
+  // Perform layout
+  for (NSNumber *reactTag in _rootViewTags) {
+    RCTShadowView *rootView = _shadowViewRegistry[reactTag];
+    [self addUIBlock:[self uiBlockWithLayoutUpdateForRootView:rootView]];
+    [self _amendPendingUIBlocksWithStylePropagationUpdateForRootView:rootView];
+  }
+
+  // Clear layout animations
+  if (_nextLayoutAnimation) {
+    [self addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+      uiManager->_layoutAnimation = nil;
+    }];
+    _nextLayoutAnimation = nil;
+  }
+
+  [self flushUIBlocks];
+}
+
+- (void)flushUIBlocks
+{
+  RCTAssert(![NSThread isMainThread], @"Should be called on shadow thread");
+
+  // First copy the previous blocks into a temporary variable, then reset the
+  // pending blocks to a new array. This guards against mutation while
+  // processing the pending blocks in another thread.
+  [_pendingUIBlocksLock lock];
+  NSArray *previousPendingUIBlocks = _pendingUIBlocks;
+  _pendingUIBlocks = [[NSMutableArray alloc] init];
+  [_pendingUIBlocksLock unlock];
+
+  // Execute the previously queued UI blocks
+  dispatch_async(dispatch_get_main_queue(), ^{
+    for (dispatch_block_t block in previousPendingUIBlocks) {
+      block();
+    }
+  });
+}
+```
+
+11. Native→JS 入口（示例）  
+RCTRootView +JSMethods 声明可被调用的 JS 方法；enqueueJSCall 走 BatchedBridge  
+React/Base/RCTRootView.m  
+```C
++ (NSArray *)JSMethods
+{
+  return @[
+    @"AppRegistry.runApplication",
+    @"ReactIOS.unmountComponentAtNodeAndRemoveContainer"
+  ];
+}
+
+```
+
+[7 tools called]
+
+I opened the JS and iOS core files to trace the exact data flow. I’ll show what gets created on registration, how tags are assigned, what iOS receives, and what object JS sees for native modules.
+
+### 1) 注册与启动：JS 如何开始渲染
+- JS 注册根组件
+```javascript
+AppRegistry.registerComponent('SampleApp', () => SampleApp);
+```
+- 原生加载 bundle 成功后，调用 JS 启动该应用，传入 `rootTag` 和 `initialProps`
+```C
+[_bridge enqueueJSCall:@"AppRegistry.runApplication"
+                  args:@[moduleName, { @"rootTag": self.reactTag, @"initialProps": ... }]];
+```
+- JS 侧执行挂载到 `rootTag`
+```javascript
+registerComponent → runnables[appKey].run = appParams => renderApplication(...)
+67:80:Libraries/AppRegistry/AppRegistry.js
+runApplication(appKey, appParameters) → run(appParameters)
+```
+```javascript
+React.render(<RootComponent {...initialProps} />, rootTag);
+```
+
+### 2) tag 如何分配：rootTag 与子视图 tag
+- 原生分配 rootTag：1, 11, 21, ...（步长 10）
+```C
+static NSInteger rootViewTag = 1; ... self.reactTag = @(rootViewTag); ... rootViewTag += 10;
+```
+- JS 分配普通视图 tag，避开 rootTag（保留 1 mod 10）
+```javascript
+allocateTag() // 自增，跳过 reactTagIsNativeTopRootID(tag)
+73:76:Libraries/ReactIOS/ReactIOSTagHandles.js
+reactTagIsNativeTopRootID(tag) → tag % 10 === 1
+```
+- rootTag 与 rootNodeID 映射
+```javascript
+allocateRootNodeIDForTag(containerTag) 并关联 rootNodeID ↔ containerTag
+```
+
+### 3) JS → Native：创建/插入/更新视图的指令
+- 首次挂载：创建子树并插入到 rootTag
+```javascript
+_mountImageIntoNode(markup, containerID)
+ → RCTUIManager.manageChildren(containerTag, addChildTags=[markup.tag], addAtIndices=[0])
+```
+- 原生视图创建（由 JS 触发）
+```javascript
+mountComponent → allocateTag() → RCTUIManager.createView(tag, uiViewClassName, updatePayload)
+125:127:Libraries/ReactIOS/ReactIOSNativeComponent.js
+initializeChildren → RCTUIManager.manageChildren(containerTag, createdTags, indexes)
+195:201:Libraries/ReactIOS/ReactIOSNativeComponent.js
+receiveComponent → RCTUIManager.updateView(handle, className, payload)
+```
+
+### 4) Native 侧如何落地：UIManager 的注册与渲染
+- 注册 rootView，建立三大索引（manager/shadow/view）
+```C
+registerRootView: 保存 rootView 到 viewRegistry；创建 RCTShadowView 到 shadowViewRegistry；记录 root tag
+```
+- 处理 createView：创建 `RCTShadowView` 与 `UIView`，设置 `reactTag` 与 props
+```C
+createAndRegisterViewWithReactTag:viewName:props:
+ → _viewManagerRegistry[reactTag] = manager
+ → shadowView.reactTag = reactTag; 设置属性
+ → 主线程创建 UIView，view.reactTag = reactTag; 设置属性；入 _viewRegistry
+```
+- 处理 manageChildren：插入/移动/删除子视图
+```C
+_manageChildren(...) → container insertReactSubview: atIndex:
+```
+- 批处理与布局：shadow 线程计算，主线程 flush
+```C
+batchDidComplete → 为各 root 生成 UIBlocks 并 flush 到主线程
+```
+
+### 5) Bridge 协议与消息格式
+- 原生向 JS 注入模块配置 `__fbBatchedBridgeConfig`
+```C
+injectJSONText(... asGlobalObjectNamed:"__fbBatchedBridgeConfig")
+```
+- JS 构建 `BatchedBridge` 与 `NativeModules`
+```javascript
+BatchedBridgeFactory.create(MessageQueue, remoteModulesConfig, localModulesConfig)
+14:20:Libraries/BatchedBridge/BatchedBridgedModules/NativeModules.js
+module.exports = require('BatchedBridge').RemoteModules;
+```
+- RemoteModules 的方法是包装为 `messageQueue.call(module, method, args, ...)`
+```javascript
+_createBridgedModule → return (...args) => messageQueue.call(moduleName, memberName, args, onFail, onSucc)
+```
+- 消息队列的具体数组结构（JS→Native 与回调）
+```javascript
+_pushRequestToOutgoingItems(moduleID, methodID, params) → 填充三组并行数组
+431:441:Libraries/Utilities/MessageQueue.js
+flushedQueue() → 返回 [[moduleIDs],[methodIDs],[paramsArrays],[cbIDs],[returnValues]] 或 null
+```
+- 原生取回并执行这些请求
+```C
+_handleBuffer → 逐条 (moduleID, methodID, params) 找到导出方法并 dispatch 到 shadowQueue 执行
+```
+
+### 6) “iOS 给 JS 的原生对象”长什么样
+- JS 并不直接拿到 `UIView`/`NSObject` 实例；拿到的是：
+  - 一个数字型 “node handle”（tag），通过 `findNodeHandle(ref)` 或内部关联使用。
+  - 一个 JS 对象 `NativeModules.UIManager`，其方法映射到桥上的调用；常量以属性直接挂载其上（如 `UIManager.Dimensions`、`UIManager.StyleConstants`）。
+```javascript
+remoteModule[constName] = moduleConfig.constants[constName]; // 常量直接挂到模块对象上
+```
+
+### 7) 最小“流转”示例（首屏）
+- rootTag = 1（原生）
+- JS 分配第一个 `View` 的 tag = 2（避开 1 mod 10）
+- JS 发：
+  - UIManager.createView(2, 'RCTView', propsDiff)
+  - UIManager.manageChildren(1, addChildTags=[2], addAtIndices=[0])
+- iOS：
+  - 创建 `RCTViewManager` 的 `UIView`，设置 `reactTag=2`
+  - 把 2 插到 rootTag=1 的子视图 0 号位
+- 后续更新：
+  - JS diff → UIManager.updateView(2, 'RCTView', partialProps)
+  - iOS 在主线程给 `UIView` 应用变更；shadow 线程维护布局

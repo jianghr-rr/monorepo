@@ -1,0 +1,124 @@
+# 学习React Native源代码大纲
+_Exported on 2025/9/15 at GMT+8 13:21:53 from Cursor (1.5.11)_
+
+---
+
+**User**
+
+我在学习React Native, 这是我下载的源代码，tag0.1.0版本，你作为一个资深的react native开发，你带我将这个版本的源代码看完。
+我是一个前端开发。
+
+先列出学习大纲吧
+
+---
+
+**Cursor**
+
+### 学习大纲（基于 v0.1.0 源码，面向前端开发）
+
+- **0. 预备与参考**
+  - **目标**: 搭建认知地图，明确阅读输出物
+  - **先读**: `README.md`、`docs/GettingStarted.md`、`docs/NativeModulesIOS.md`、`docs/GestureResponderSystem.md`
+  - **输出**: 一张“架构总览图”、一个“启动链路时序图”、每章要点笔记
+
+- **1. 目录与构建块总览**
+  - **关键目录**:
+    - `React/`（iOS 原生核心：Bridge、Views、Modules、Layout）
+    - `Libraries/`（JS 侧核心库与桥接模块）
+    - `packager/`（早期打包器与调试工具）
+    - `Examples/`、`IntegrationTests/`（示例与测试样板）
+  - **建议**: 先纵览子目录职责，再回到全局架构
+
+- **2. 示例入口与渲染链路（JS → Native 首读）**
+  - **阅读顺序**:
+    - `Examples/SampleApp/index.ios.js`
+    - `Libraries/AppRegistry/AppRegistry.js`
+    - `Libraries/ReactIOS/*.js`（JS 侧入口到原生的挂载）
+  - **关注点**: `AppRegistry.registerComponent` 如何创建根视图、如何触发 Bundle 加载与根容器渲染
+
+- **3. Bridge 架构与消息批处理**
+  - **关键文件/路径**:
+    - `React/Base/`（如 `RCTBridge.h/.m`、执行器、消息队列）
+    - `Libraries/BatchedBridge/`（JS 侧 batched bridge 调度）
+    - `Libraries/JavaScriptAppEngine/`（JS 执行环境适配）
+  - **问题清单**: JS 方法调用如何序列化/反序列化？如何批处理/合帧？事件如何反向传递？
+
+- **4. 视图系统与 UIManager**
+  - **关键路径**:
+    - `React/Views/`（`RCTView` 及各原生视图管理器）
+    - `Libraries/ReactIOS/` 与 `Libraries/Components/`（JS 侧组件到 UIManager 指令）
+  - **关注点**: 视图创建/更新命令流、属性映射、事件绑定
+
+- **5. 布局引擎（早期 css-layout）**
+  - **关键路径**:
+    - `React/Layout/`（`css-layout.c/.h`）
+  - **关注点**: Flexbox 规则在 RN 早期的实现、测量与布局计算如何驱动原生视图树
+
+- **6. 核心组件库（JS 层）**
+  - **建议顺序**:
+    - `Libraries/Components/`（`View`, `ScrollView`, `Touchable*`）
+    - `Libraries/Text/`、`Libraries/Image/`
+  - **阅读要点**: 组件 props 如何映射到原生属性；公共基类/工具复用模式
+
+- **7. 动画与交互**
+  - **关键路径**:
+    - `Libraries/Animation/`（动画驱动、timing/spring）
+    - `Libraries/Interaction/`、`docs/GestureResponderSystem.md`
+    - `Libraries/Utilities/`（节流/合批等辅助）
+  - **关注点**: 动画帧调度与批量更新、Responder 决策流程
+
+- **8. 网络、存储与设备能力**
+  - **关键路径**:
+    - 网络：`Libraries/Fetch/`、`Libraries/Network/`
+    - 存储：`Libraries/Storage/`
+    - 设备：`Libraries/Geolocation/`、`Libraries/LinkingIOS/`、`Libraries/Vibration/`
+  - **关注点**: 模块化封装与原生能力桥接的统一模式
+
+- **9. 打包器与开发体验（早期 packager）**
+  - **关键路径**:
+    - `packager/` 根目录与 `packager/react-packager/`
+    - `packager/transformer.js`、`packager/blacklist.js`
+  - **关注点**: 模块解析、打包流程、HMR/调试脚本（`debugger.html`、`webSocketProxy.js`）
+
+- **10. 调试、集成测试与 UIExplorer**
+  - **关键路径**:
+    - 示例：`Examples/UIExplorer/`（组件矩阵与用法范式）
+    - 集成测试：`IntegrationTests/`
+    - 调试：`RCTWebSocketDebugger/`、`packager/debugger.html`
+  - **关注点**: 如何最小化示例复用框架能力；如何快速定位问题
+
+- **11. iOS 原生模块与视图管理器**
+  - **关键路径**:
+    - 模块：`React/Modules/`（如 `RCTAsyncLocalStorage` 等）
+    - 视图：`React/Views/`（`RCTViewManager` 及派生）
+    - 文档：`docs/NativeModulesIOS.md`
+  - **关注点**: `RCTBridgeModule` 协议、方法导出、线程模型、属性导出
+
+- **12. 性能与内存**
+  - **关注点**:
+    - Bridge 批处理与帧内更新
+    - 布局计算开销与测量策略
+    - 图片/文本的特殊优化路径
+  - **路径**: 结合 `Libraries/Image/`、`React/Views/`、`Libraries/BatchedBridge/` 代码与示例验证
+
+- **13. 历史差异与迁移视角（对比现代 RN）**
+  - **话题**: Metro 替代早期 packager、Fabric/TurboModules 与旧 Bridge 的差异、Yoga 替代早期 css-layout
+  - **目的**: 用“演进视角”理解当前最佳实践与早期设计的取舍
+
+- **14. 实战路线（每章小练习）**
+  - **例子**:
+    - 画出 `index.ios.js → AppRegistry → Bridge → RCTRootView` 时序图
+    - 定位一次 `setState` 引发的原生视图更新在 UIManager 的路径
+    - 在 `UIExplorer` 中对某组件加一个原生 prop，贯穿 JS→Native
+
+- **15. 建议阅读顺序与节奏**
+  - 1) 第2章和第3章打通“启动与 Bridge”
+  - 2) 第4-6章建立“渲染与组件”心智模型
+  - 3) 第7-9章覆盖“交互与工具链”
+  - 4) 第10-12章面向“调试与性能”
+  - 5) 第13章做“演进对照”，回看设计取舍
+
+想直接开始第2章（入口与渲染链路）吗？我可以带你从 `Examples/SampleApp/index.ios.js` 走读到 `AppRegistry`，再到 `RCTBridge` 与 `RCTRootView`。
+
+- 上面给出了一份模块化学习大纲，按“入口→Bridge→视图/布局→组件→动画/网络→打包器→调试/性能→演进”的顺序覆盖 v0.1.0 源码各层。
+
