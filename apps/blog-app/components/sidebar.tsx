@@ -41,6 +41,7 @@ const RecursiveNavigation: FC<SideBarProps> = ({ links }) => {
         }
         return (
           <Sidebar.Item
+            className="cursor"
             key={`${link.href}-${index}`}
             onClick={() => router.push(link.href)}
             active={pathname?.includes(link.href)}

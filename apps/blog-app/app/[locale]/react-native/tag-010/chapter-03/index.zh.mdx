@@ -1,0 +1,757 @@
+I'll first locate the core Bridge files and the JS batched bridge implementation to anchor Chapter 3 with concrete references, then pull short code excerpts to explain the flow.
+
+[4 tools called]
+
+I found the native bridge core and the JS batched bridge code. I’ll grab small, focused excerpts to explain how modules are registered, config is injected into JS, and how calls flow both ways.
+
+[1 tool called]
+
+# 第三章：Bridge 架构与消息批处理（v0.1.0）
+
+- 目标: 弄清 JS 与 Native 如何通过 Bridge 通信、如何批处理与刷新消息队列。
+- 心智图: JS 侧 `BatchedBridge → MessageQueue → [并行数组缓冲] → flushedQueue()`；Native 侧 `RCTBridge` 注入配置、执行 JS 调用、解析缓冲并分发到原生模块方法。
+
+### 1) 启动与桥接建立（从你当前打开的 RCTRootView 开始）
+- `RCTRootView` 选择执行器、创建 `RCTBridge`、注入执行器，然后加载脚本：  
+224:235:React/Base/RCTRootView.m  
+```C
+  _executor = [[_executorClass ?: _globalExecutorClass ?: [RCTContextExecutor class] alloc] init];
+  ...
+  _bridge = [[RCTBridge alloc] initWithBundlePath:_scriptURL.absoluteString
+                                   moduleProvider:_moduleProvider
+                                    launchOptions:_launchOptions];
+  [_bridge setJavaScriptExecutor:_executor];
+```
+
+- JS 执行器（默认 `RCTContextExecutor`）创建 JSContext 并注入原生 hook：  
+117:129:React/Executors/RCTContextExecutor.m  
+```C
+- (instancetype)init
+{
+  static NSThread *javaScriptThread;
+  ...
+  javaScriptThread = [[NSThread alloc] initWithTarget:[self class] selector:@selector(runRunLoopThread) object:nil];
+  ...
+  return [self initWithJavaScriptThread:javaScriptThread globalContextRef:NULL];
+}
+```
+142:151:React/Executors/RCTContextExecutor.m  
+```C
+        _context = JSGlobalContextCreateInGroup(group, NULL);
+...
+      [self _addNativeHook:RCTNativeLoggingHook withName:"nativeLoggingHook"];
+      [self _addNativeHook:RCTNoop withName:"noop"];
+```
+
+### 2) 模块注册与配置注入（Native → JS）
+- `RCTBridge` 初始化模块、注入配置为全局 `__fbBatchedBridgeConfig`：  
+567:575:React/Base/RCTBridge.m  
+```C
+NSString *configJSON = RCTJSONStringify(@{
+                                        @"remoteModuleConfig": RCTRemoteModulesConfig(_modulesByName),
+                                        @"localModulesConfig": RCTLocalModulesConfig()
+                                        }, NULL);
+dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+[_javaScriptExecutor injectJSONText:configJSON asGlobalObjectNamed:@"__fbBatchedBridgeConfig" callback:^(id err) {
+```
+577:580:React/Base/RCTBridge.m  
+```C
+if (dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC)) != 0) {
+    RCTLogError(@"JavaScriptExecutor took too long to inject JSON object");
+}
+```
+
+- JS 端读取配置并创建 `BatchedBridge`：
+25:33:Libraries/BatchedBridge/BatchingImplementation/BatchedBridge.js  
+```javascript
+var remoteModulesConfig = __fbBatchedBridgeConfig.remoteModuleConfig;
+var localModulesConfig = __fbBatchedBridgeConfig.localModulesConfig;
+
+var BatchedBridge = BatchedBridgeFactory.create(
+    MessageQueue,
+    remoteModulesConfig,
+    localModulesConfig
+);
+```
+63:79:Libraries/BatchedBridge/BatchingImplementation/BatchedBridgeFactory.js  
+```javascript
+create:
+var messageQueue = new MessageQueue(modulesConfig, localModulesConfig);
+return {
+    callFunction: messageQueue.callFunction.bind(messageQueue),
+    callFunctionReturnFlushedQueue:
+        messageQueue.callFunctionReturnFlushedQueue.bind(messageQueue),
+    invokeCallback: messageQueue.invokeCallback.bind(messageQueue),
+    invokeCallbackAndReturnFlushedQueue:
+        messageQueue.invokeCallbackAndReturnFlushedQueue.bind(messageQueue),
+    flushedQueue: messageQueue.flushedQueue.bind(messageQueue),
+    RemoteModules: mapObject(modulesConfig, this._createBridgedModule.bind(this, messageQueue)),
+}
+```
+
+### 3) JS → Native：请求如何批处理并被执行
+- JS 将调用写入并行数组缓冲；`callFunctionReturnFlushedQueue` 返回本帧待处理的队列：
+285:307:Libraries/Utilities/MessageQueue.js  
+```javascript
+callFunctionReturnFlushedQueue: function(moduleID, methodID, params) {
+    if (this._enableLogging) {
+        this._loggedIncomingItems.push([new Date().getTime(), moduleID, methodID, params]);
+    }
+    return guardReturn(
+        this._callFunction,
+        [moduleID, methodID, params],
+        this._flushedQueueUnguarded,
+        this
+    );
+},
+```
+427:441:Libraries/Utilities/MessageQueue.js  
+```javascript
+_flushedQueueUnguarded: function() {
+    JSTimersExecution.callImmediates();
+    var currentOutgoingItems = this._outgoingItems;
+    this._swapAndReinitializeBuffer();
+    var ret = currentOutgoingItems[REQUEST_MODULE_IDS].length ||
+        currentOutgoingItems[RESPONSE_RETURN_VALUES].length ? currentOutgoingItems : null;
+    return ret;
+},
+```
+
+- Native 加载脚本后主动拉取一次 `flushedQueue`，之后每次 JS 调用也会返回一个队列：
+655:671:React/Base/RCTBridge.m  
+```C
+[_javaScriptExecutor executeApplicationScript:script sourceURL:url onComplete:^(NSError *scriptLoadError) {
+...
+[_javaScriptExecutor executeJSCall:@"BatchedBridge"
+                            method:@"flushedQueue"
+                        arguments:@[]
+                            callback:^(id json, NSError *error) {
+                            [self _handleBuffer:json];
+                            onComplete(error);
+                            }];
+}];
+```
+
+- 队列字段顺序（Native 与 JS 要保持一致）：
+25:35:React/Base/RCTBridge.m  
+```C
+typedef NS_ENUM(NSUInteger, RCTBridgeFields) {
+RCTBridgeFieldRequestModuleIDs = 0,
+    RCTBridgeFieldMethodIDs,
+    RCTBridgeFieldParamss,
+    RCTBridgeFieldResponseCBIDs,
+    RCTBridgeFieldResponseReturnValues,
+    RCTBridgeFieldFlushDateMillis
+};
+```
+
+- Native 解析缓冲并分发到模块方法：
+750:793:React/Base/RCTBridge.m  
+```C
+- (BOOL)_handleRequestNumber:(NSUInteger)i
+                    moduleID:(NSUInteger)moduleID
+                    methodID:(NSUInteger)methodID
+                    params:(NSArray *)params
+{
+...
+NSArray *methods = RCTExportedMethodsByModuleID()[moduleID];
+...
+RCTModuleMethod *method = methods[methodID];
+__weak RCTBridge *weakSelf = self;
+dispatch_async(self.shadowQueue, ^{
+    __strong RCTBridge *strongSelf = weakSelf;
+    if (!strongSelf.isValid) { return; }
+    id module = strongSelf->_modulesByID[moduleID];
+    if (!module) { ...; return; }
+    @try {
+    [method invokeWithBridge:strongSelf module:module arguments:params];
+    } @catch (NSException *exception) {
+    RCTLogError(@"Exception thrown while invoking %@ on target %@ with params %@: %@", method.JSMethodName, module, params, exception);
+    }
+});
+return YES;
+}
+```
+
+### 4) Native → JS：事件与函数调用
+- Native 要调用 JS 函数（包括事件发射），通过 `enqueueJSCall` 调 `BatchedBridge.callFunctionReturnFlushedQueue`：
+641:653:React/Base/RCTBridge.m  
+```C
+- (void)enqueueJSCall:(NSString *)moduleDotMethod args:(NSArray *)args
+{
+NSNumber *moduleID = RCTLocalModuleIDs[moduleDotMethod];
+...
+NSNumber *methodID = RCTLocalMethodIDs[moduleDotMethod];
+...
+[self _invokeAndProcessModule:@"BatchedBridge"
+                        method:@"callFunctionReturnFlushedQueue"
+                    arguments:@[moduleID, methodID, args ?: @[]]];
+}
+```
+
+- 这些回调/事件被 JS `MessageQueue` 接收并执行到对应 JS 模块与方法。
+
+### 5) 线程模型与队列
+- JS 侧：单线程（专用 JS 线程 / JSContext）。Native 侧：方法在 `shadowQueue` 异步执行，避免阻塞 UI：
+70:75:React/Base/RCTBridge.h  
+```C
+@property (nonatomic, readonly) dispatch_queue_t shadowQueue;
+```
+
+### 6) 你需要掌握的要点
+- Bridge 由两端共同遵守的“并行数组协议”承载数据；批量传送减少跨线程/跨边界开销。
+- 配置注入让 JS 端生成“模块代理”，以数字 ID 代替字符串。
+- 所有交互都围绕 “enqueue → flush → handleBuffer → dispatch” 循环。
+
+### 7) 小练习（10 分钟）
+- 在 `UIExplorer` 中随便触发一次按钮事件，定位对应 Native 事件是如何通过 `eventDispatcher` → `enqueueJSCall` 回到 JS 的。
+- 给一个 Native 模块新增一个导出方法（看 `RCTBridgeModule` / `RCT_EXPORT`），观察它如何出现在 `__fbBatchedBridgeConfig` 并被 JS 调用。
+
+我可以接下来带你过一条“事件从 Native 发送到 JS 的完整路径”，或者带你添加一个最小原生模块并在 JS 调用一次。你更想先看哪条路径？
+
+I'll locate the native event dispatcher and touch handler, and the JS event emitters, to trace the path from native events to JS handlers with concrete code cites.
+
+[5 tools called]
+
+I'll open the JS event emitter module and the touch handler to show the exact calls and how they reach JS.
+
+[4 tools called]
+
+I'll pull the native touch handler and root view snippets to cite the exact points where touches are captured and forwarded to JS.
+
+[2 tools called]
+
+I found the touch handler, event dispatcher, and JS emitters. I’ll walk the exact native→JS paths with short code cites.
+
+### 触摸事件（Native → JS → React 事件系统）
+- 捕获与注册（RootView 挂载触摸识别器）
+231:238:React/Base/RCTRootView.m  
+```C
+    _bridge = [[RCTBridge alloc] initWithBundlePath:_scriptURL.absoluteString
+                                    moduleProvider:_moduleProvider
+                                        launchOptions:_launchOptions];
+    [_bridge setJavaScriptExecutor:_executor];
+
+    _touchHandler = [[RCTTouchHandler alloc] initWithBridge:_bridge];
+    [self addGestureRecognizer:_touchHandler];
+```
+- 采集触摸、构建事件、帧对齐分发（CADisplayLink）
+319:323:React/Base/RCTTouchHandler.m  
+```C
+    [self _recordNewTouches:touches];
+    [self _updateAndDispatchTouches:touches eventName:@"topTouchStart" originatingTime:event.timestamp];
+```
+265:273:React/Base/RCTTouchHandler.m  
+```C
+    - (void)_update:(CADisplayLink *)sender
+    {
+    ...
+    for (RCTTouchEvent *touch in _pendingTouches) {
+        _mostRecentEnqueueJS = CACurrentMediaTime();
+        [_bridge enqueueJSCall:@"RCTEventEmitter.receiveTouches"
+                        args:@[touch.eventName, touch.touches, touch.changedIndexes]];
+    }
+```
+- JS 侧接收 touches，转换并派发到顶层事件（再走 React 插件系统 → 组件 props）
+173:209:Libraries/ReactIOS/ReactIOSEventEmitter.js  
+```javascript
+receiveTouches: function(eventTopLevelType, touches, changedIndices) {
+    var changedTouches =
+        eventTopLevelType === topLevelTypes.topTouchEnd ||
+        eventTopLevelType === topLevelTypes.topTouchCancel ?
+        removeTouchesAtIndices(touches, changedIndices) :
+        touchSubsequence(touches, changedIndices);
+
+    for (var jj = 0; jj < changedTouches.length; jj++) {
+        var touch = changedTouches[jj];
+        touch.changedTouches = changedTouches;
+        touch.touches = touches;
+        ...
+        ReactIOSEventEmitter._receiveRootNodeIDEvent(
+        rootNodeID,
+        eventTopLevelType,
+        nativeEvent
+        );
+    }
+}
+```
+
+### 普通输入/UI 事件（Native → JS → React 事件系统）
+- Native 将事件发送到 JS 的通用入口（包括文本、滚动、键盘等）
+28:35:React/Base/RCTEventDispatcher.m  
+```C
++ (NSArray *)JSMethods
+    {
+    return @[
+        @"RCTNativeAppEventEmitter.emit",
+        @"RCTDeviceEventEmitter.emit",
+        @"RCTEventEmitter.receiveEvent",
+    ];
+}
+```
+49:56:React/Base/RCTEventDispatcher.m  
+```C
+- (void)sendInputEventWithName:(NSString *)name body:(NSDictionary *)body
+{
+RCTAssert([body[@"target"] isKindOfClass:[NSNumber class]], ...);
+[_bridge enqueueJSCall:@"RCTEventEmitter.receiveEvent"
+                    args:body ? @[body[@"target"], name, body] : @[body[@"target"], name]];
+}
+```
+- JS 侧接收单个事件并交给 React 顶层事件分发
+136:147:Libraries/ReactIOS/ReactIOSEventEmitter.js  
+```javascript
+receiveEvent: function(tag, topLevelType, nativeEventParam) {
+    var rootNodeID = ReactIOSTagHandles.tagToRootNodeID[tag];
+    ReactIOSEventEmitter._receiveRootNodeIDEvent(
+        rootNodeID,
+        topLevelType,
+        nativeEventParam
+    );
+}
+```
+
+### 设备事件（Native → JS → 直接 EventEmitter）
+- Native 发射 device/app 级事件（无需目标视图）
+37:47:React/Base/RCTEventDispatcher.m  
+```C
+- (void)sendAppEventWithName:(NSString *)name body:(id)body {
+    [_bridge enqueueJSCall:@"RCTNativeAppEventEmitter.emit" args:body ? @[name, body] : @[name]];
+    }
+    - (void)sendDeviceEventWithName:(NSString *)name body:(id)body {
+    [_bridge enqueueJSCall:@"RCTDeviceEventEmitter.emit" args:body ? @[name, body] : @[name]];
+}
+```
+- JS 侧接收为普通事件总线
+14:18:Libraries/Device/RCTDeviceEventEmitter.js  
+```javascript
+var EventEmitter = require('EventEmitter');
+var RCTDeviceEventEmitter = new EventEmitter();
+module.exports = RCTDeviceEventEmitter;
+```
+
+### 一句话总览
+- 触摸：UIKit → `RCTTouchHandler` 聚合并帧对齐 → `enqueueJSCall('RCTEventEmitter.receiveTouches')` → `ReactIOSEventEmitter.receiveTouches` → React 事件系统 → 组件 `onPress/onResponder*`。
+- 普通输入：Native 控件/Manager → `RCTEventDispatcher.sendInputEventWithName` → `receiveEvent` → React 事件系统。
+- 设备事件：Native → `RCT(Device|Native)AppEventEmitter.emit` → JS `DeviceEventEmitter` 监听。
+
+要不要下一步用 `UIExplorer/TouchableExample` 实际点一次，带你从 `touchesBegan` 跟到组件 `onPress` 的处理回调？
+
+I’m going to open the relevant JS event system files (ReactEventEmitterMixin, EventPluginHub, ResponderEventPlugin, Touchable) to cite the chain from receiveTouches → handleTopLevel → plugin extraction → Touchable invoking onPress.
+
+[6 tools called]
+
+- I’ll trace the runtime path from native `touchesBegan` to your component’s `onPress`.
+
+### 路径总览
+1) UIKit → Native 捕获
+- `RCTRootView` 挂上 `RCTTouchHandler`：  
+231:238:React/Base/RCTRootView.m  
+```C
+_bridge = [[RCTBridge alloc] initWithBundlePath:_scriptURL.absoluteString ...];
+[_bridge setJavaScriptExecutor:_executor];
+_touchHandler = [[RCTTouchHandler alloc] initWithBridge:_bridge];
+[self addGestureRecognizer:_touchHandler];
+```
+
+2) Native 构建触摸事件并通过 Bridge 发送到 JS
+- 在 `touchesBegan` 中记录触摸并入列：  
+319:323:React/Base/RCTTouchHandler.m  
+```C
+[self _recordNewTouches:touches];
+[self _updateAndDispatchTouches:touches eventName:@"topTouchStart" originatingTime:event.timestamp];
+```
+- 帧对齐后统一发送到 JS：
+265:273:React/Base/RCTTouchHandler.m  
+```C
+for (RCTTouchEvent *touch in _pendingTouches) {
+  [_bridge enqueueJSCall:@"RCTEventEmitter.receiveTouches"
+                    args:@[touch.eventName, touch.touches, touch.changedIndexes]];
+}
+```
+
+3) JS 接收 touches 并交给 React 顶层事件系统
+- `RCTEventEmitter` 实际是 `ReactIOSEventEmitter`：
+14:17:Libraries/BatchedBridge/BatchedBridgedModules/RCTEventEmitter.js  
+```javascript
+var ReactIOSEventEmitter = require('ReactIOSEventEmitter');
+module.exports = ReactIOSEventEmitter;
+```
+- 触摸接收与分发：
+14:17:Libraries/BatchedBridge/BatchedBridgedModules/RCTEventEmitter.js  
+```javascript
+receiveTouches(eventTopLevelType, touches, changedIndices) {
+  const changedTouches = ...; // 剪裁/移除 ended/cancelled
+  for (const touch of changedTouches) {
+    touch.changedTouches = changedTouches;
+    touch.touches = touches;
+    const rootNodeID = NodeHandle.getRootNodeID(touch.target);
+    ReactIOSEventEmitter._receiveRootNodeIDEvent(
+      rootNodeID, eventTopLevelType, touch
+    );
+  }
+}
+```
+
+4) React 事件插件：Responder 决策与合成事件生成
+- 事件进入 `ResponderEventPlugin.extractEvents`，决定/切换 responder，并发出 `onResponderGrant/Move/Release` 等：
+494:574:Libraries/vendor/react/browser/eventPlugins/ResponderEventPlugin.js  
+```javascript
+extractEvents(topLevelType, topLevelTarget, topLevelTargetID, nativeEvent) {
+  ResponderTouchHistoryStore.recordTouchTrack(topLevelType, nativeEvent);
+  const extracted = canTriggerTransfer(...) ? setResponderAndExtractTransfer(...) : null;
+  // 当前 responder 上分发 responderStart/Move/End
+  if (incrementalTouch) {
+    const gesture = ResponderSyntheticEvent.getPooled(...);
+    EventPropagators.accumulateDirectDispatches(gesture);
+    extracted = accumulate(extracted, gesture);
+  }
+  // 结束时分发 responderRelease
+  ...
+  return extracted;
+}
+```
+
+5) Touchable 混入：把 responder 回调转换成 press 语义
+- 触摸组件如 `TouchableOpacity/Highlight/WithoutFeedback` 使用 `Touchable.Mixin`，将 responder 事件接入状态机：
+88:92:Libraries/Components/Touchable/TouchableWithoutFeedback.js  
+```javascript
+onResponderTerminationRequest: this.touchableHandleResponderTerminationRequest,
+onResponderGrant: this.touchableHandleResponderGrant,
+onResponderMove: this.touchableHandleResponderMove,
+onResponderRelease: this.touchableHandleResponderRelease,
+onResponderTerminate: this.touchableHandleResponderTerminate
+```
+- 状态机在释放时触发 `touchableHandlePress`，进而调用你的 `onPress`：
+638:650:Libraries/vendor/react_contrib/interactions/Touchable/Touchable.js  
+```javascript
+if (IsPressingIn[curState] && signal === Signals.RESPONDER_RELEASE) {
+  const shouldInvokePress = !IsLongPressingIn[curState] || pressIsLongButStillCallOnPress;
+  if (shouldInvokePress && this.touchableHandlePress) {
+    this.touchableHandlePress(e);
+  }
+}
+```
+- 具体组件把 `touchableHandlePress` 代理到 props：
+112:114:Libraries/Components/Touchable/TouchableOpacity.js  
+```javascript
+this.props.onPress && this.props.onPress();
+```
+146:148:Libraries/Components/Touchable/TouchableHighlight.js  
+```javascript
+this.props.onPress && this.props.onPress();
+```
+57:57:Libraries/Components/Touchable/TouchableWithoutFeedback.js  
+```javascript
+this.props.onPress && this.props.onPress(e);
+```
+
+### 串起来的一句话
+- touchesBegan → `RCTTouchHandler` 记录/缓冲 → `enqueueJSCall('RCTEventEmitter.receiveTouches')` → `ReactIOSEventEmitter.receiveTouches` → `ResponderEventPlugin` 选出/通知 responder → `onResponderRelease` 时 `Touchable` 状态机触发 `touchableHandlePress` → 调用组件 `props.onPress`。
+
+要不要我再补一条从 `topTouchEnd` 触发 `onPress` 的关键帧表，把每一步的参数形态也列出来，方便你之后做 Hook/埋点？
+
+### 从 topTouchEnd 到 props.onPress 的关键帧表
+
+| 步骤 | 发生时刻/线程 | 调用点 | 参数/载荷形态 | 说明 |
+|---|---|---|---|---|
+| 1 | Native：UIKit 回调 | touchesEnded | `touches: NSSet<UITouch>`，`event.timestamp: CFTimeInterval` | iOS 产生触摸结束事件 |
+| 2 | Native：采集与入列 | `_updateAndDispatchTouches(touches, "topTouchEnd", timestamp)` | - 更新每个触点的 react 形态：`{ target:Number, identifier:Number, pageX, pageY, locationX, locationY, timestamp, touches:null, changedTouches:null }`- `changedIndexes: Array<Number>` | 将结束的触点索引加入 `changedIndexes`，拷贝 `_reactTouches` 作为 `reactTouches` |
+| 3 | Native：帧对齐 flush | `_update`（CADisplayLink tick）→ `enqueueJSCall("RCTEventEmitter.receiveTouches", args)` | `args: [eventName:"topTouchEnd", touches:Array<Object>, changedIndexes:Array<Number>]` | 同一帧将 pending 的触摸事件统一过桥到 JS |
+| 4 | JS：接收 touches | `ReactIOSEventEmitter.receiveTouches(eventTopLevelType, touches, changedIndices)` | 入参同 3；内部构造：- `changedTouches = removeTouchesAtIndices(touches, changedIndices)`（end/cancel 时）- 对每个 `touch`：设置 `touch.changedTouches = changedTouches`，`touch.touches = touches` | 对于 end：`touches` 数组会移除已结束的触点；`changedTouches` 包含刚结束的触点 |
+| 5 | JS：顶层事件分发 | `_receiveRootNodeIDEvent(rootNodeID, "topTouchEnd", nativeEvent = touch)` | `rootNodeID = NodeHandle.getRootNodeID(touch.target)`；`nativeEvent` 为单个 touch 对象（附带 `changedTouches/touches`） | 进入 React 顶层事件系统（EventPluginHub） |
+| 6 | React Responder 判定 | `ResponderEventPlugin.extractEvents(...)` | 依据 `ResponderTouchHistoryStore` 与当前 responder 状态，生成：- `responderEnd`（增量事件）- 如无活跃触点且非 cancel → `responderRelease`（最终事件） | `responderRelease` 是触发 press 语义的关键信号 |
+| 7 | 组件：Touchable 状态机 | `touchableHandleResponderRelease(e)` → `_receiveSignal(RESPONDER_RELEASE, e)` | `e.nativeEvent` 形态（典型）：`{ pageX, pageY, locationX, locationY, timestamp, target:Number, identifier:Number, touches:Array<Object>, changedTouches:Array<Object> }` | 如果释放时仍处于可“按下”状态（IsPressingIn），则触发 press |
+| 8 | 触发 onPress | `_performSideEffectsForTransition(..., RESPONDER_RELEASE, e)` → `touchableHandlePress(e)` → `props.onPress(e)` | 事件对象 `e` 透传到你的回调；`Touchable*` 组件内部调用 `this.props.onPress(...)` | 最终你的组件收到 `onPress` 调用 |
+
+### 关键代码定位（节选）
+
+- Native 结束事件入列与帧对齐发送
+334:339:React/Base/RCTTouchHandler.m  
+```C
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+  [super touchesEnded:touches withEvent:event];
+  [self _updateAndDispatchTouches:touches eventName:@"topTouchEnd" originatingTime:event.timestamp];
+  [self _recordRemovedTouches:touches];
+}
+```
+219:233:React/Base/RCTTouchHandler.m  
+```C
+- (void)_updateAndDispatchTouches:(NSSet *)touches eventName:(NSString *)eventName originatingTime:(CFTimeInterval)originatingTime
+{
+  ...
+  for (UITouch *touch in touches) {
+    NSInteger index = [_nativeTouches indexOfObject:touch];
+    ...
+    [self _updateReactTouchAtIndex:index];
+    [changedIndexes addObject:@(index)];
+  }
+  ...
+  NSMutableArray *reactTouches = [[NSMutableArray alloc] initWithCapacity:_reactTouches.count];
+  for (NSDictionary *touch in _reactTouches) {
+    [reactTouches addObject:[touch copy]];
+  }
+  RCTTouchEvent *touch = [RCTTouchEvent touchWithEventName:eventName
+                                              touches:reactTouches
+                                       changedIndexes:changedIndexes
+                                      originatingTime:originatingTime];
+  [_pendingTouches addObject:touch];
+}
+```
+265:273:React/Base/RCTTouchHandler.m  
+```C
+- (void)_update:(CADisplayLink *)sender
+{
+  ...
+  for (RCTTouchEvent *touch in _pendingTouches) {
+    _mostRecentEnqueueJS = CACurrentMediaTime();
+    [_bridge enqueueJSCall:@"RCTEventEmitter.receiveTouches"
+                      args:@[touch.eventName, touch.touches, touch.changedIndexes]];
+  }
+```
+
+- JS 端接收与规范化
+173:209:Libraries/ReactIOS/ReactIOSEventEmitter.js  
+```javascript
+receiveTouches(eventTopLevelType, touches, changedIndices) {
+  var changedTouches =
+    eventTopLevelType === topLevelTypes.topTouchEnd ||
+    eventTopLevelType === topLevelTypes.topTouchCancel ?
+    removeTouchesAtIndices(touches, changedIndices) :
+    touchSubsequence(touches, changedIndices);
+
+  for (var jj = 0; jj < changedTouches.length; jj++) {
+    var touch = changedTouches[jj];
+    touch.changedTouches = changedTouches;
+    touch.touches = touches;
+    var rootNodeID = null;
+    var target = nativeEvent.target;
+    ...
+    ReactIOSEventEmitter._receiveRootNodeIDEvent(rootNodeID, eventTopLevelType, nativeEvent);
+  }
+}
+```
+
+- Responder 决策触发 release
+542:561:Libraries/vendor/react/browser/eventPlugins/ResponderEventPlugin.js  
+```javascript
+var isResponderRelease =
+  responderID &&
+  !isResponderTerminate &&
+  isEndish(topLevelType) &&
+  noResponderTouches(nativeEvent);
+if (finalTouch) {
+  var finalEvent =
+    ResponderSyntheticEvent.getPooled(finalTouch, responderID, nativeEvent);
+  ...
+  changeResponder(null);
+}
+```
+
+- Touchable 将 release 转换成 press 并调用 props.onPress
+638:650:Libraries/vendor/react_contrib/interactions/Touchable/Touchable.js  
+```javascript
+if (IsPressingIn[curState] && signal === Signals.RESPONDER_RELEASE) {
+  ...
+  if (shouldInvokePress && this.touchableHandlePress) {
+    this.touchableHandlePress(e);
+  }
+}
+```
+112:114:Libraries/Components/Touchable/TouchableOpacity.js  
+```javascript
+this.props.onPressIn && this.props.onPressIn();
+this.props.onPressOut && this.props.onPressOut();
+this.props.onPress && this.props.onPress();
+```
+
+### 事件对象形态速查（onPress 的 e.nativeEvent）
+- 必有字段：`pageX, pageY, locationX, locationY, timestamp, target:Number, identifier:Number`
+- 列表字段：
+  - `changedTouches: Array<Object>` 包含刚刚结束的触点（end/cancel 时）
+  - `touches: Array<Object>` 当前仍在屏幕上的活跃触点（end 后通常为空或不含结束触点）
+
+需要我再给一份“可拷贝的 TypeScript 类型定义”来约束 `onPress` 事件对象吗？
+
+I'll search where JS accesses native modules (e.g., NativeModules) and how modules are declared so we wire our new one correctly.
+
+[4 tools called]
+
+### 最小原生模块 + JS 调用（基于 v0.1.0）
+
+- 目标：新增一个 `HelloManager` 原生模块，导出方法 `greet(name, callback)`，JS 调用后得到 `"Hello, <name>!"`。
+
+### 1) 新建两个原生文件（放在示例 App 里，便于直接编译）
+- 路径建议：`Examples/SampleApp/iOS/RCTHelloManager.h/.m`
+- 添加到 Xcode 的 SampleApp 目标（Target: SampleApp），确保参与编译。
+
+```C
+// RCTHelloManager.h
+#import <Foundation/Foundation.h>
+#import "RCTBridgeModule.h"
+
+@interface RCTHelloManager : NSObject <RCTBridgeModule>
+@end
+```
+
+```C
+// RCTHelloManager.m
+#import "RCTHelloManager.h"
+
+@implementation RCTHelloManager
+
++ (NSString *)moduleName
+{
+  return @"HelloManager"; // JS: NativeModules.HelloManager
+}
+
+- (void)greet:(NSString *)name callback:(RCTResponseSenderBlock)callback
+{
+  RCT_EXPORT(); // 导出到 JS，JS 方法名默认为 "greet"
+  NSString *msg = [NSString stringWithFormat:@"Hello, %@!", name ?: @"World"];
+  if (callback) {
+    callback(@[msg]); // 回调参数数组
+  }
+}
+
+@end
+```
+
+提示：
+- v0.1.0 的导出使用 `RCT_EXPORT()` 放在方法体内；JS 方法名取 selector 的首段（冒号前）。
+- 自定义模块名通过 `+moduleName` 暴露为 `HelloManager`（否则默认是类名）。
+
+### 2) JS 侧调用（以 SampleApp 为例）
+在 `Examples/SampleApp/index.ios.js` 里加入一次调用（例如 componentDidMount 或按钮点击）：
+
+```javascript
+var React = require('React');
+var { AppRegistry, Text, View, TouchableOpacity, NativeModules } = React;
+var HelloManager = NativeModules.HelloManager;
+
+var SampleApp = React.createClass({
+  getInitialState() { return { msg: '' }; },
+
+  componentDidMount() {
+    HelloManager.greet('React Native', (msg) => {
+      this.setState({ msg });
+      console.log('HelloManager:', msg);
+    });
+  },
+
+  render() {
+    return (
+      <View style={{marginTop: 80, padding: 20}}>
+        <TouchableOpacity onPress={() => {
+          HelloManager.greet('Jiang', (msg) => this.setState({ msg }));
+        }}>
+          <Text style={{fontSize: 18, color: 'blue'}}>Tap to greet</Text>
+        </TouchableOpacity>
+        <Text style={{marginTop: 20, fontSize: 16}}>{this.state.msg}</Text>
+      </View>
+    );
+  }
+});
+
+AppRegistry.registerComponent('SampleApp', () => SampleApp);
+```
+
+### 3) 构建与验证
+- 用 Xcode 打开 `Examples/SampleApp/SampleApp.xcodeproj`，确认 `RCTHelloManager.h/.m` 已添加到 SampleApp 目标。
+- 运行 SampleApp。启动后应看到日志与页面文案更新；点击按钮再次触发调用。
+
+如需换到 UIExplorer 演示，也可把两个 .h/.m 放到 `Examples/UIExplorer/UIExplorer/`，并在某个示例页里 `require('NativeModules').HelloManager` 调用，原理一致。
+
+### Bridge 的核心数据结构（v0.1.0）
+
+- 本质上有两层结构：
+  - **模块配置（一次性注入）**: `__fbBatchedBridgeConfig`
+  - **消息批（每次 flush 传输）**: 平行数组的“批量队列”
+
+### 1) 模块配置：__fbBatchedBridgeConfig
+
+- JS 读取位置：
+1:37:Libraries/BatchedBridge/BatchingImplementation/BatchedBridge.js  
+```javascript
+var remoteModulesConfig = __fbBatchedBridgeConfig.remoteModuleConfig;
+var localModulesConfig = __fbBatchedBridgeConfig.localModulesConfig;
+```
+- Native 构造结构（注释中给出模块形态示例）：
+353:377:React/Base/RCTBridge.m  
+```C
+/**
+ * This constructs the remote modules configuration data structure,
+ * which represents the native modules and methods that will be called
+ * by JS. A numeric ID is assigned to each module and method, which will
+ * be used to communicate via the bridge. The structure of each
+ * module is as follows:
+ *
+ * "ModuleName1": {
+ *   "moduleID": 0,
+ *   "methods": {
+ *     "methodName1": {
+ *       "methodID": 0,
+ *       "type": "remote"
+ *     },
+ *     ...
+ *   },
+ *   "constants": {
+ *     ...
+ *   }
+ * },
+ * etc...
+ */
+```
+- 含义：
+  - **remoteModuleConfig**: JS 调 Native（每个模块含 `moduleID`、`methods` 映射到 `methodID` 与 `type`、`constants`）。
+  - **localModulesConfig**: Native 调 JS 的模块/方法（用于反向调用）。
+  - 该配置通过注入全局变量供 JS 端构建“远程模块代理”。
+
+### 2) 消息批（批量队列）：平行数组
+
+- 阵列字段定义（Native 按索引解析）：
+25:35:React/Base/RCTBridge.m  
+```C
+typedef NS_ENUM(NSUInteger, RCTBridgeFields) {
+  RCTBridgeFieldRequestModuleIDs = 0,
+  RCTBridgeFieldMethodIDs,
+  RCTBridgeFieldParamss,
+  RCTBridgeFieldResponseCBIDs,
+  RCTBridgeFieldResponseReturnValues,
+  RCTBridgeFieldFlushDateMillis
+};
+```
+- JS 侧实现采用“平行数组”装载请求/响应；每次 `flushedQueue()` 返回“当前批次”的二维数组（没有则返回 null）。简化示例：
+```C
+[
+  [m0, m1, ...],                // REQUEST_MODULE_IDS
+  [fn0, fn1, ...],              // REQUEST_METHOD_IDS
+  [ [args0], [args1], ... ],    // REQUEST_PARAMSS
+  [cbId0, cbId1, ...],          // RESPONSE_CBIDS
+  [ret0, ret1, ...],            // RESPONSE_RETURN_VALUES
+  flushTimestampMillis          // FLUSH_DATE_MILLIS
+]
+```
+- 典型调用方向与载荷：
+  - JS→Native：JS 调用某模块方法时会把 `moduleID/methodID/args` 追加到“请求三数组”，`flushedQueue()` 时一并返回给 Native。
+  - Native→JS：Native 执行完并要调用 JS 回调时，写入“响应两数组”（`RESPONSE_CBIDS/RESPONSE_RETURN_VALUES`），同样通过下一次 flush 返回给对端。
+- JS 侧索引常量与 flush 行为（节选）：
+427:441:Libraries/Utilities/MessageQueue.js  
+```javascript
+_flushedQueueUnguarded: function() {
+  JSTimersExecution.callImmediates();
+  var currentOutgoingItems = this._outgoingItems;
+  this._swapAndReinitializeBuffer();
+  var ret = currentOutgoingItems[REQUEST_MODULE_IDS].length ||
+    currentOutgoingItems[RESPONSE_RETURN_VALUES].length ? currentOutgoingItems : null;
+  return ret;
+}
+```
+
+### 3) 名称↔ID 映射（两端一致）
+
+- Native 端维护 `RCTModuleNamesByID`、`RCTExportedMethodsByModuleID()` 等；JS 端将 `remoteModulesConfig/localModulesConfig` 解析成 `moduleName→moduleID`、`methodName→methodID` 的映射，并用 `BatchedBridgeFactory` 生成可调用的代理方法。
+
+### 4) 一句话概括
+- Bridge 把“模块/方法元信息”作为一次性配置注入（包含 ID 映射），把“实际调用/回调数据”按帧或批次用“平行数组队列”传输，最大化减少字符串与对象序列化成本，且便于一次性批量处理。

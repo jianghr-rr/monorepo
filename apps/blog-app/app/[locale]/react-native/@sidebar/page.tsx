@@ -31,6 +31,10 @@ export default async function Page({
               href: `${mainRouter}/${tag010Router}/chapter-02`,
               label: t?.('chapter-02'),
             },
+            {
+              href: `${mainRouter}/${tag010Router}/chapter-03`,
+              label: t?.('chapter-03'),
+            },
           ]
         },
       ],
